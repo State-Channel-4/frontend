@@ -86,7 +86,7 @@ const Feedback = () => {
                   placeholder="Type your feedback here..."
                   className="max-h-60"
                   value={Message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  onChange={(e) =>{ setMessage(e.target.value); setError(null)}}
                 />
                 <p
                   className={cn(
