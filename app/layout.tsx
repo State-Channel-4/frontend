@@ -1,10 +1,13 @@
-import "@/styles/globals.css"
-import { Metadata } from "next"
+import "@/styles/globals.css";
+import { Metadata } from "next";
 
-import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
-import { cn } from "@/lib/utils"
-import { SiteHeader } from "@/components/site-header"
+
+
+import { siteConfig } from "@/config/site";
+import { fontSans } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
+import Feedback from "@/components/feedback";
+import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider"
 
 import AnalyticWrapper from "./analytics"
@@ -45,6 +48,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <div className="relative flex h-screen flex-col">
               <SiteHeader />
               <AnalyticWrapper>{children}</AnalyticWrapper>
+              <Feedback />
             </div>
           </ThemeProvider>
         </body>
