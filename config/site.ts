@@ -31,6 +31,10 @@ export const siteConfig = {
       title: "Sign up",
       href: "/sign-up",
     },
+    {
+      title: "FAQs",
+      href: "https://www.notion.so/pse-team/FAQs-267043c288ad419d9b104e065a87aa1e",
+    },
   ],
   links: {
     discord: "https://discord.gg/wuPYfbYdXy",
@@ -39,8 +43,6 @@ export const siteConfig = {
     docs: "https://github.com/State-Channel-4/Channel4-pocv2",
     home: "/",
     me: "/me",
-    signIn: "/sign-in",
-    signUp: "/sign-up",
     account: "/account",
     discover: "/discover",
     submitUrl: "/submit-url",
