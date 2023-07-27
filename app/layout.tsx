@@ -10,11 +10,14 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 import AnalyticWrapper from "./analytics"
 
-
 export const metadata: Metadata = {
+  metadataBase: new URL("https://channel4.wtf"),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
+  },
+  openGraph: {
+    images: ["/opengraph-image.png"],
   },
   description: siteConfig.description,
   twitter: {
