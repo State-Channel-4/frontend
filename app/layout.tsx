@@ -1,14 +1,16 @@
 import "@/styles/globals.css";
-import { Metadata } from "next"
+import { Metadata } from "next";
 
-import { siteConfig } from "@/config/site";
-import { fontSans } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
-import Feedback from "@/components/feedback";
-import { SiteHeader } from "@/components/site-header";
-import { ThemeProvider } from "@/components/theme-provider";
 
-import AnalyticWrapper from "./analytics";
+
+import { siteConfig } from "@/config/site"
+import { fontSans } from "@/lib/fonts"
+import { cn } from "@/lib/utils"
+import Feedback from "@/components/feedback"
+import { SiteHeader } from "@/components/site-header"
+import { ThemeProvider } from "@/components/theme-provider"
+
+import AnalyticWrapper from "./analytics"
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
     title: "Channel4",
     description: "The React Framework for the Web",
     creator: "@StateChannel_4",
-    images: ["social-image.png"],
+    images: "social-image.png",
   },
   openGraph: {
     images: ["social-image.png"],
