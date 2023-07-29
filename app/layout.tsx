@@ -16,7 +16,7 @@ import AnalyticWrapper from "./analytics";
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://channel4.wtf"),
+  metadataBase: new URL("https://poc2.channel4.wtf"),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
