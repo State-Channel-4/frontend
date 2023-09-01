@@ -14,9 +14,9 @@ import { feedbackMessages } from "./utils"
 
 const Discover = () => {
   const { password, token, userId } = usePasswordStore()
-  const { currentSite, isLoading, error, userLikes, likeOrUnlike, changeSite, selectedTags } = useMix();
+  const { currentSite, isLoading, error, userLikes, likeOrUnlike, changeSite, selectedTags, hasNextPage, mixEnded } = useMix();
 
-  if (error) {
+  if (error.message !== "") {
     return (
       <p className="mx-auto flex w-full items-center justify-center p-6">
         {feedbackMessages["not-found"]}
@@ -38,8 +38,9 @@ const Discover = () => {
     )
   }
 
+
   return (
-    <section className="container grid grid-cols-1 gap-10 pb-8 pt-6 xl:grid-cols-3">
+    currentSite && (<section className="container grid grid-cols-1 gap-10 pb-8 pt-6 xl:grid-cols-3">
       <div className="col-span-1 xl:col-span-2">
         <SiteFrame site={currentSite} />
       </div>
@@ -49,9 +50,9 @@ const Discover = () => {
             <p className="font-mono text-sm uppercase tracking-widest text-yellow-300">
               now showing
             </p>
-            <p className="text-2xl font-semibold">{currentSite.title}</p>
+            <p className="text-2xl font-semibold">{currentSite?.title}</p>
             <p className="text-primary/70 text-sm">
-              by {currentSite.submittedBy}
+              by {currentSite?.submittedBy}
             </p>
             <p className="p-2"></p>
             <div className="flex items-center gap-2">
@@ -63,16 +64,16 @@ const Discover = () => {
             <Button
               className={cn(
                 buttonVariants({ size: "lg", variant: "default" }),
-                "rounded-full font-bold uppercase transition-all duration-500 active:scale-75"
+                "rounded-full font-bold uppercase transition-all duration-500 active:scale-75 disabled:opacity-50 disabled:cursor-not-allowed disabled:text-primary"
               )}
-              // disabled={mixCompleted}
+              disabled={mixEnded || false}
               loading={isLoading}
               loadingText="Checking for more content"
               role="button"
               aria-label="Next"
               onClick={changeSite}
             >
-              Watch something else
+              {!mixEnded ? 'Watch something else' : 'Mix ended, choose other tags'}
             </Button>
             <p className="p-1"></p>
             <hr className="bg-c4-gradient-main h-1 w-full border" />
@@ -94,7 +95,7 @@ const Discover = () => {
         )}
       </div>
     </section>
-  )
+    ))
 }
 
 export default Discover
