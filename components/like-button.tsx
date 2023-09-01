@@ -1,25 +1,26 @@
-import { ThumbsUpIcon } from "lucide-react"
-import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
-import Link from "next/link"
 import { C4Content } from "@/types"
+import { ThumbsUpIcon } from "lucide-react"
+import Link from "next/link"
+import { Button } from "./ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 interface LikeButtonProps {
   signedIn: boolean,
   likeOrUnlike: (arg0: string) => void
-  site: C4Content
+  site: C4Content | null
   userLikes: string[]
 }
 
 const LikeButton = ({ signedIn, likeOrUnlike, site, userLikes }: LikeButtonProps) => {
-  const isLiked = userLikes.includes(site._id)
+  if (!site) return null
+  const isLiked = userLikes.includes(site?._id)
 
   const LikeButtonContent = () => (
     <Button
       variant="default"
       size="sm"
-      className="group inline-flex items-center gap-2 self-start rounded-full px-4 py-2 text-sm transition-all duration-300"
+      className="group inline-flex items-center gap-2 self-start rounded-full px-4 py-2 text-sm transition-all duration-300 text-secondary"
       onClick={signedIn ? (e) => likeOrUnlike(site._id) : undefined}
     >
       <ThumbsUpIcon
@@ -30,7 +31,7 @@ const LikeButton = ({ signedIn, likeOrUnlike, site, userLikes }: LikeButtonProps
         )}
         aria-label="Like"
       />
-      <p className="text-primary">
+      <p>
         {isLiked ? "Liked" : "Like"}
       </p>
       <p>•</p>
