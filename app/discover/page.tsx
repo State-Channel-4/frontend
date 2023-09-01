@@ -11,6 +11,7 @@ import LikeButton from "@/components/like-button"
 import useMix from "../hooks/useMix"
 import SiteFrame from "./SiteFrame"
 import { feedbackMessages } from "./utils"
+import { ExternalLink } from "lucide-react"
 
 const Discover = () => {
   const { password, token, userId } = usePasswordStore()
@@ -57,6 +58,17 @@ const Discover = () => {
             <p className="p-2"></p>
             <div className="flex items-center gap-2">
               <LikeButton likeOrUnlike={likeOrUnlike} userLikes={userLikes} signedIn={password && token && userId ? true : false} site={currentSite} />
+
+              <Link href={currentSite?.url} passHref target="_blank" rel="noopener noreferrer">
+                <Button variant={"ghost"} size="sm">
+                  Go to site
+                  <ExternalLink
+                    size={16}
+                    aria-label="Go to site"
+                  />
+                </Button>
+              </Link>
+
             </div>
 
             <p className="p-1"></p>
