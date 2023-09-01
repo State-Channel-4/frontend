@@ -1,4 +1,4 @@
-import { TagMap } from "@/types";
+import { Tag, TagMap } from "@/types";
 import { Wallet } from "ethers";
 
 import { getRawTransactionToSign } from "@/lib/utils";
@@ -17,7 +17,7 @@ export const fetchMix = async (
       throw new Error(`Request failed with status ${response.status}`);
     }
     const data = await response.json();
-    return data.urls;
+    return data;
   } catch (error) {
     let message = "Unknown error";
     if (error instanceof Error) message = error.message;
@@ -69,9 +69,11 @@ export const createMixParams = (
   mixLimit: number
 ) => {
   const mixParams = new URLSearchParams();
-  tags.forEach((tag) => {
-    mixParams.append("tags", tag._id);
-  });
+  if (tags.size > 0) {
+    tags.forEach((tag: Tag, key: string) => {
+      mixParams.append("tags", tag._id);
+    });
+  }
 
   mixParams.append("page", currentPage.toString() || "1");
   mixParams.append("limit", mixLimit.toString());

@@ -1,6 +1,8 @@
+'use client';
+
 import { useEncryptedStore } from "@/store/encrypted";
 import { usePasswordStore } from "@/store/password";
-import { C4Content, TagMap } from "@/types";
+import { C4Content, Tag, TagMap } from "@/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchMix, updateLikesInApi } from "../discover/utils";
 
@@ -15,21 +17,24 @@ const useMix = () => {
   const [userLikes, setUserLikes] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [mix, setMix] = useState<C4Content[] | null>(null);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
 
   const mixLimit = 100;
 
   const getMix = useCallback(async () => {
     setIsLoading(true);
     try {
-      const mixData = await fetchMix(
+      const mixResponse = await fetchMix(
         selectedTags.current,
         currentPage,
         mixLimit
       );
-      if (mixData.message) {
-        setError({ message: mixData.message });
+      if (mixResponse.message) {
+        setError({ message: mixResponse.message });
       } else {
-        setMix(mixData);
+        setMix(mixResponse.urls);
+        setCurrentSite(mixResponse.urls[0]);
+        setHasNextPage(mixResponse.hasNextPage);
       }
     } catch (error) {
       setError({ message: "Error handling mix" });
@@ -43,9 +48,11 @@ const useMix = () => {
     if (!tagsFromStore) return;
     try {
       const parsedTags = JSON.parse(tagsFromStore);
-      if (parsedTags instanceof Object) {
-        selectedTags.current = new Map(Object.entries(parsedTags));
-      }
+      parsedTags.forEach((data: [string, Tag]) => {
+        const [key, value] = data;
+        selectedTags.current.set(key, value);
+      });
+
     } catch (error) {
       console.error("Error parsing JSON:", error);
     }
@@ -85,7 +92,7 @@ const useMix = () => {
     [currentSite, userLikes, encrypted, password, token, userId]
   );
 
-  const changeSite = useCallback(() => {
+  const changeSite = () => {
     if (!mix) return;
     if (mixIndex >= mix.length - 1) {
       setCurrentPage(currentPage + 1);
@@ -95,16 +102,18 @@ const useMix = () => {
       setMixIndex(newMixIndex);
       setCurrentSite(mix[newMixIndex]);
     }
-  }, []);
+  };
 
   return {
     currentSite,
+    hasNextPage,
     isLoading,
     error,
     userLikes,
     likeOrUnlike,
     changeSite,
-    selectedTags
+    selectedTags,
+    mixEnded: mix && !hasNextPage && mixIndex >= mix?.length - 1,
   };
 };
 
