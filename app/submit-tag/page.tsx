@@ -44,7 +44,6 @@ const SubmitTag = () => {
         userId: userId,
       }),
     }).then((res) => res.json())
-    console.log(response)
     setName(null)
     setIsLoading(false)
   }

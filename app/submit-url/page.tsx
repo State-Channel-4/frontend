@@ -75,7 +75,6 @@ const SubmitUrl = () => {
         userId: userId,
       }),
     }).then((res) => res.json())
-    console.log(response)
     setTitle(null)
     setUrl(null)
     setSelectedTags(new Map())
