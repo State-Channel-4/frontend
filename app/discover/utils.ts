@@ -65,17 +65,15 @@ export const feedbackMessages = {
 
 export const createMixParams = (
   tags: TagMap,
-  currentPage: number,
+  currentPage: number = 1,
   mixLimit: number
 ) => {
   const mixParams = new URLSearchParams();
-  if (tags.size > 0) {
-    tags.forEach((tag: Tag, key: string) => {
-      mixParams.append("tags", tag._id);
-    });
-  }
 
-  mixParams.append("page", currentPage.toString() || "1");
+  const tagIds = tags.size > 0 ? Array.from(tags, ([key, tag]) => tag._id) : ["all"];
+  tagIds.forEach(tagId => mixParams.append("tags", tagId));
+
+  mixParams.append("page", currentPage.toString());
   mixParams.append("limit", mixLimit.toString());
 
   return mixParams;
