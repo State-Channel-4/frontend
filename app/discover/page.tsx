@@ -8,14 +8,14 @@ import TagList from "@/components/ui/tag-list"
 import { cn } from "@/lib/utils"
 
 import LikeButton from "@/components/like-button"
+import { ExternalLink } from "lucide-react"
 import useMix from "../hooks/useMix"
 import SiteFrame from "./SiteFrame"
 import { feedbackMessages } from "./utils"
-import { ExternalLink } from "lucide-react"
 
 const Discover = () => {
   const { password, token, userId } = usePasswordStore()
-  const { currentSite, isLoading, error, userLikes, likeOrUnlike, changeSite, selectedTags, hasNextPage, mixEnded } = useMix();
+  const { currentSite, isLoading, error, userLikes, likeOrUnlike, changeSite, selectedTags, mixEnded } = useMix();
 
   if (error.message !== "") {
     return (

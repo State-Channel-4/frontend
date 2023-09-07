@@ -3,7 +3,7 @@
 import { useEncryptedStore } from "@/store/encrypted";
 import { usePasswordStore } from "@/store/password";
 import { C4Content, Tag, TagMap } from "@/types";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { fetchMix, updateLikesInApi } from "../discover/utils";
 
 const useMix = () => {
@@ -32,18 +32,24 @@ const useMix = () => {
       if (mixResponse.message) {
         setError({ message: mixResponse.message });
       } else {
-        setMix(mixResponse.urls);
-        setCurrentSite(mixResponse.urls[0]);
+        if (mixIndex > 0 && mix) {
+          // If the index is greater than 0, that means we are adding to the mix, so we need to keep the rest of previous mix
+          const newMix = [...mix.slice(mixIndex), ...mixResponse.urls];
+          setMix(newMix);
+        } else {
+          setMix(mixResponse.urls);
+        }
+        setCurrentSite(mix ? mix[0] : null);
         setHasNextPage(mixResponse.hasNextPage);
       }
     } catch (error) {
-      setError({ message: "Error handling mix" });
+      setError({ message: "Something went wrong getting a mix" });
     } finally {
       setIsLoading(false);
     }
   }, [currentPage, mixLimit, selectedTags]);
 
-  const getTagsFromStore = useCallback(() => {
+  const getTagsFromStore = useMemo(() => {
     const tagsFromStore = sessionStorage.getItem("c4.tags");
     if (!tagsFromStore) return;
     try {
@@ -60,9 +66,9 @@ const useMix = () => {
 
   useEffect(() => {
     // TODO: Get user likes from API
-    getTagsFromStore();
+    // getTagsFromStore();
     getMix();
-  }, [getMix, getTagsFromStore]);
+  }, [getMix]);
 
   const likeOrUnlike = useCallback(
     async (contentId: string) => {
@@ -75,7 +81,15 @@ const useMix = () => {
 
       setUserLikes(newUserLikes);
 
-      currentSite.likes += isLiked ? -1 : 1;
+      setCurrentSite((prevSite) => {
+        if (prevSite) {
+          return {
+            ...prevSite,
+            likes: prevSite.likes + (isLiked ? -1 : 1)
+          };
+        }
+        return prevSite;
+      });
 
       try {
         await updateLikesInApi(
@@ -94,13 +108,17 @@ const useMix = () => {
 
   const changeSite = () => {
     if (!mix) return;
-    if (mixIndex >= mix.length - 1) {
-      setCurrentPage(currentPage + 1);
+    const newMixIndex = mixIndex + 1
+
+    // Get more content if we are almost at the end of the mix
+    if (newMixIndex >= mix.length - 3) {
+      setCurrentPage(currentPage + 1)
       getMix();
-    } else {
-      const newMixIndex = mixIndex + 1;
-      setMixIndex(newMixIndex);
-      setCurrentSite(mix[newMixIndex]);
+    }
+
+    if (newMixIndex < mix.length) {
+      setMixIndex(mixIndex);
+      setCurrentSite(mix[newMixIndex])
     }
   };
 
