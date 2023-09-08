@@ -33,9 +33,9 @@ const TagRow = ({
           {Array.from(shownTags).map(([key, tag]) => (
             <button
               className={cn(
-                "border-primary/30 text-primary flex cursor-default items-center justify-center gap-2 rounded-full border-2 px-3 py-1 text-sm font-medium transition",
+                "flex cursor-default items-center justify-center gap-2 rounded-full border-2 border-primary/30 px-3 py-1 text-sm font-medium text-primary transition",
                 selectable &&
-                  "hover:bg-primary/30 focus:bg-primary/40 focus-visible:ring-offset-muted hover:cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2",
+                  "hover:cursor-pointer hover:bg-primary/30 focus:bg-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-muted",
                 selectable && selectedTags.size > 0 && selectedTags.has(tag._id)
                   ? "border-yellow-400"
                   : ""

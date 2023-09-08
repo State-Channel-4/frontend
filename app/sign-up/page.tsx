@@ -76,7 +76,7 @@ const SignUp = () => {
 
   return (
     <div className="mx-7 flex h-full flex-col lg:container">
-      <div className="bg-c4-gradient-main my-5 flex h-40 justify-evenly rounded-br-3xl rounded-tl-3xl">
+      <div className="my-5 flex h-40 justify-evenly rounded-br-3xl rounded-tl-3xl bg-c4-gradient-main">
         <Image priority src={Channel4IconBlack} alt="Channel 4 icon black" />
         <Image
           priority
@@ -122,7 +122,7 @@ const SignUp = () => {
             <input
               type={"password"}
               onChange={onPasswordChangeHandler}
-              className="bg-gray w-full rounded-sm px-2 py-1"
+              className="w-full rounded-sm bg-gray px-2 py-1"
             />
           </div>
           <Button

@@ -29,7 +29,7 @@ export function BottomNavigation({ iconColor = "#D0D1D2" }: Props) {
   return (
     <div className="fixed bottom-0 left-0 w-screen">
       {isMenuOpen ? (
-        <nav className="bg-c4-gradient-green flex flex-col gap-6 rounded-t-3xl px-3 py-8 font-semibold text-black">
+        <nav className="flex flex-col gap-6 rounded-t-3xl bg-c4-gradient-green px-3 py-8 font-semibold text-black">
           <Link href={siteConfig.links.signUp} onClick={handleURLClick}>
             Sign Up
           </Link>
@@ -48,7 +48,7 @@ export function BottomNavigation({ iconColor = "#D0D1D2" }: Props) {
         <nav className="flex w-screen justify-between px-3 py-5 lg:container lg:px-0">
           <Link
             href={siteConfig.links.discover}
-            className="bg-gray flex w-60 cursor-pointer items-center justify-center rounded-lg p-2 drop-shadow-md"
+            className="flex w-60 cursor-pointer items-center justify-center rounded-lg bg-gray p-2 drop-shadow-md"
           >
             <Image priority src={Channel4Icon} alt="Channel 4 Icon" />
             <h1 className="font-title ml-3 text-base font-semibold tracking-wide text-white">

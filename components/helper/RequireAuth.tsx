@@ -19,7 +19,7 @@ const RequireAuth = ({ children }: Props) => {
   const { userId, token } = usePasswordStore()
   if (!token || !userId) {
     return (
-      <div className="mx-7 my-10 flex flex-col justify-center lg:container items-center text-center">
+      <div className="mx-7 my-10 flex flex-col items-center justify-center text-center lg:container">
         <h2 className="my-5">
           Sign in{" "}
           <Link href={siteConfig.links.signIn} className="text-green-500">
