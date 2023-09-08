@@ -116,7 +116,7 @@ const SignIn = () => {
 
   return (
     <div className="mx-7 flex flex-col justify-center lg:container">
-      <div className="bg-c4-gradient-main my-5 flex h-40 justify-evenly rounded-br-3xl rounded-tl-3xl">
+      <div className="my-5 flex h-40 justify-evenly rounded-br-3xl rounded-tl-3xl bg-c4-gradient-main">
         <Image
           priority
           className="relative top-12 z-10"
@@ -142,7 +142,7 @@ const SignIn = () => {
               type={"password"}
               value={password || ""}
               onChange={onPasswordChangeHandler}
-              className="bg-gray w-full rounded-sm px-2 py-1"
+              className="w-full rounded-sm bg-gray px-2 py-1"
             />
           </div>
           <Button
@@ -181,7 +181,7 @@ const SignIn = () => {
                 type={"text"}
                 value={key || ""}
                 onChange={onLoadKeyChangeHandler}
-                className="bg-gray h-40 w-full rounded-sm px-2"
+                className="h-40 w-full rounded-sm bg-gray px-2"
               />
               <Button
                 variant="outline"

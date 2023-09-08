@@ -54,15 +54,15 @@ const Feedback = () => {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="absolute bottom-3 right-3 rounded-lg bg-slate-900 font-medium transition-transform transform-gpu hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background text-primary text-md"
+          className="text-md absolute bottom-3 right-3 transform-gpu rounded-lg bg-slate-900 font-medium text-primary transition-transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
         >
           💬 Tell us what you think
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 text-primary border-2 bg-slate-900">
+      <PopoverContent className="w-80 border-2 bg-slate-900 text-primary">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h3 className="font-bold leading-none text-lg">
+            <h3 className="text-lg font-bold leading-none">
               Tell us what you think
             </h3>
             <div>
@@ -73,7 +73,7 @@ const Feedback = () => {
               <Link href="https://discord.gg/76UrYgVyEx" className="p-0">
                 <Button
                   variant={"link"}
-                  className="p-0 pl-1 h-full text-purple-300"
+                  className="h-full p-0 pl-1 text-purple-300"
                 >
                   Discord
                 </Button>
@@ -102,7 +102,7 @@ const Feedback = () => {
             <Button
               variant={"default"}
               size={"sm"}
-              className="bg-c4-gradient-blue hover:bg-purple-600 hover:scale-105 text-white disabled:opacity-60"
+              className="bg-c4-gradient-blue text-white hover:scale-105 hover:bg-purple-600 disabled:opacity-60"
               onClick={() => sendFeedback()}
               disabled={processingFeedback || feedbackSent}
             >

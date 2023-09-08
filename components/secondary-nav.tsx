@@ -21,7 +21,7 @@ export function SecondaryNav({ items }: SecondaryNavProps) {
                   href={item.href}
                   target={item.title === "FAQs" ? "_blank" : "_self"}
                   className={cn(
-                    "text-muted-foreground flex items-center text-lg font-semibold sm:text-sm",
+                    "flex items-center text-lg font-semibold text-muted-foreground sm:text-sm",
                     item.disabled && "cursor-not-allowed opacity-80"
                   )}
                 >

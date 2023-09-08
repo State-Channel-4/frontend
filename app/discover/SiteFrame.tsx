@@ -11,8 +11,8 @@ const SiteFrame: React.FC<SiteFrameProps> = ({ site }) => {
   if (!site) return null;
 
   return (
-    <section className="bg-c4-gradient-main h-[768px] rounded-2xl pe-2 ps-2">
-      <div className="bg-secondary relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl">
+    <section className="h-[768px] rounded-2xl bg-c4-gradient-main pe-2 ps-2">
+      <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-secondary">
         <iframe src={site.url} title={site.title} className="h-full w-full" />
       </div>
     </section>

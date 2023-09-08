@@ -57,7 +57,7 @@ const Account = () => {
     <RequireAuth>
       <section className="mx-auto flex max-w-xl flex-col gap-6 p-6">
         <h2 className="text-left font-semibold">My account</h2>
-        <div className="bg-c4-gradient-separator h-0.5"></div>
+        <div className="h-0.5 bg-c4-gradient-separator"></div>
         <div className="flex h-full flex-col gap-8 rounded-lg bg-slate-900 p-6">
           <Row>
             <p className="font-semibold">Submitted URLs</p>

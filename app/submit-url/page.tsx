@@ -84,7 +84,7 @@ const SubmitUrl = () => {
   return (
     <RequireAuth>
       <div className="mx-7 flex flex-col justify-center lg:container">
-        <div className="bg-c4-gradient-main my-5 flex h-40 justify-center rounded-br-3xl rounded-tl-3xl">
+        <div className="my-5 flex h-40 justify-center rounded-br-3xl rounded-tl-3xl bg-c4-gradient-main">
           <Image priority src={Channel4IconBlack} alt="Channel 4 icon black" />
         </div>
         <h2 className="my-5">
@@ -97,7 +97,7 @@ const SubmitUrl = () => {
             type={"text"}
             value={title || ""}
             onChange={onTitleChangeHandler}
-            className="bg-gray h-12 w-full rounded-lg px-2 py-1"
+            className="h-12 w-full rounded-lg bg-gray px-2 py-1"
           />
         </div>
         <div className="space-y-2 pb-4">
@@ -106,7 +106,7 @@ const SubmitUrl = () => {
             type={"text"}
             value={url || ""}
             onChange={onUrlChangeHandler}
-            className="bg-gray h-12 w-full rounded-lg px-2 py-1"
+            className="h-12 w-full rounded-lg bg-gray px-2 py-1"
           />
         </div>
         <div className="space-y-2 pb-4">

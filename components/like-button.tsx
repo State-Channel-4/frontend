@@ -18,9 +18,9 @@ const LikeButton = ({ signedIn, likeOrUnlike, site, userLikes }: LikeButtonProps
 
   const LikeButtonContent = () => (
     <Button
-      variant="default"
+      variant="secondary"
       size="sm"
-      className="group inline-flex items-center gap-2 self-start rounded-full px-4 py-2 text-sm transition-all duration-300 text-secondary"
+      className="group inline-flex items-center gap-2 self-start rounded-full px-4 py-2 text-sm transition-all duration-300"
       onClick={signedIn ? (e) => likeOrUnlike(site._id) : undefined}
     >
       <ThumbsUpIcon
@@ -49,7 +49,7 @@ const LikeButton = ({ signedIn, likeOrUnlike, site, userLikes }: LikeButtonProps
           <LikeButtonContent />
         </PopoverTrigger>
         <PopoverContent
-          className="flex px-2 py-1 w-full bg-c4-gradient-blue rounded-xl"
+          className="flex w-full rounded-xl bg-c4-gradient-blue px-2 py-1"
           side="top"
         >
           <Link href="/sign-in" passHref>
