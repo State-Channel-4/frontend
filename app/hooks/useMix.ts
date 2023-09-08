@@ -3,75 +3,138 @@
 import { useEncryptedStore } from "@/store/encrypted";
 import { usePasswordStore } from "@/store/password";
 import { C4Content, Tag, TagMap } from "@/types";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { fetchMix, updateLikesInApi } from "../discover/utils";
+
+type MixState = {
+  currentSite: C4Content | null
+  selectedTags: TagMap
+  isLoading: boolean
+  error: { message: string }
+  mixIndex: number
+  userLikes: string[]
+  currentPage: number
+  mix: C4Content[] | null
+  hasNextPage: boolean
+  mixLimit: number
+}
+
+type Action =
+  | { type: "SET_ERROR"; message: string }
+  | { type: "SET_LOADING"; isLoading: boolean }
+  | { type: "SET_MIX"; mix: C4Content[]; hasNextPage: boolean }
+  | { type: "SET_TAGS"; tags: TagMap }
+  | { type: "SET_LIKES"; likes: string[]; currentSite: C4Content | null }
+  | { type: "CHANGE_SITE", currentSite: C4Content | null, mixIndex: number }
+  | { type: "SET_CURRENT_PAGE", currentPage: number }
+
+const initialState: MixState = {
+  currentSite: null,
+  selectedTags: new Map(),
+  isLoading: true,
+  error: { message: "" },
+  mixIndex: -1,
+  userLikes: [],
+  currentPage: 1,
+  mix: null,
+  hasNextPage: false,
+  mixLimit: 100,
+}
+
+const mixReducer = (state: MixState, action: Action): MixState => {
+  switch (action.type) {
+    case "SET_ERROR":
+      return { ...state, error: { message: action.message } };
+    case "SET_LOADING":
+      return { ...state, isLoading: action.isLoading };
+    case "SET_MIX":
+      return {
+        ...state,
+        mix: action.mix,
+        currentSite: action.mix[0],
+        hasNextPage: action.hasNextPage,
+      };
+    case "SET_TAGS":
+      return { ...state, selectedTags: action.tags };
+    case "SET_LIKES":
+      return {
+        ...state,
+        userLikes: action.likes,
+        currentSite: action.currentSite,
+      };
+    case "CHANGE_SITE":
+      return {
+        ...state,
+        currentSite: action.currentSite,
+        mixIndex: action.mixIndex,
+      };
+    case "SET_CURRENT_PAGE":
+      return { ...state, currentPage: action.currentPage };
+    default:
+      return state;
+  }
+}
 
 const useMix = () => {
   const { encrypted } = useEncryptedStore();
   const { password, token, userId } = usePasswordStore();
-  const [currentSite, setCurrentSite] = useState<C4Content | null>(null);
-  const selectedTags = useRef<TagMap>(new Map());
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<{ message: string }>({ message: "" });
-  const [mixIndex, setMixIndex] = useState<number>(0);
-  const [userLikes, setUserLikes] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [mix, setMix] = useState<C4Content[] | null>(null);
-  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
+  const [state, dispatch] = useReducer(mixReducer, initialState);
 
-  const mixLimit = 100;
-
-  const getMix = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const mixResponse = await fetchMix(
-        selectedTags.current,
-        currentPage,
-        mixLimit
-      );
-      if (mixResponse.message) {
-        setError({ message: mixResponse.message });
-      } else {
-        if (mixIndex > 0 && mix) {
-          // If the index is greater than 0, that means we are adding to the mix, so we need to keep the rest of previous mix
-          const newMix = [...mix.slice(mixIndex), ...mixResponse.urls];
-          setMix(newMix);
-        } else {
-          setMix(mixResponse.urls);
-        }
-        setCurrentSite(mix ? mix[0] : null);
-        setHasNextPage(mixResponse.hasNextPage);
-      }
-    } catch (error) {
-      setError({ message: "Something went wrong getting a mix" });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [currentPage, mixLimit, selectedTags]);
-
-  const getTagsFromStore = useMemo(() => {
+  const getTagsFromStore = () => {
+    if (typeof window === "undefined") return;
     const tagsFromStore = sessionStorage.getItem("c4.tags");
     if (!tagsFromStore) return;
     try {
       const parsedTags = JSON.parse(tagsFromStore);
       parsedTags.forEach((data: [string, Tag]) => {
-        const [key, value] = data;
-        selectedTags.current.set(key, value);
+        const [tagId, tag] = data;
+        state.selectedTags.set(tagId, tag);
       });
 
     } catch (error) {
       console.error("Error parsing JSON:", error);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    // TODO: Get user likes from API
-    // getTagsFromStore();
+    getTagsFromStore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getMix = async () => {
+    try {
+      const { selectedTags: currentTags, currentPage, mixLimit } = state;
+      const mixResponse = await fetchMix(currentTags, currentPage, mixLimit);
+      if (mixResponse.message) {
+        dispatch({ type: "SET_ERROR", message: mixResponse.message });
+      } else {
+        const newMix = state.mixIndex > 0 && state.mix
+          ? [...state.mix.slice(state.mixIndex), ...mixResponse.urls]
+          : mixResponse.urls;
+
+        dispatch({
+          type: "SET_MIX",
+          mix: newMix,
+          hasNextPage: mixResponse.hasNextPage
+        });
+        // set the first site
+        dispatch({ type: "CHANGE_SITE", currentSite: newMix[0], mixIndex: 0 });
+      }
+    } catch (error) {
+      dispatch({ type: "SET_ERROR", message: "Something went wrong getting a mix" });
+    } finally {
+      dispatch({ type: "SET_LOADING", isLoading: false });
+    }
+  };
+
+  useEffect(() => {
     getMix();
-  }, [getMix]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.selectedTags, state.currentPage]);
 
   const likeOrUnlike = useCallback(
     async (contentId: string) => {
+      const { currentSite, userLikes } = state;
       if (!currentSite) return;
 
       const isLiked = userLikes.includes(contentId);
@@ -79,16 +142,13 @@ const useMix = () => {
         ? userLikes.filter((item) => item !== contentId)
         : [...userLikes, contentId];
 
-      setUserLikes(newUserLikes);
-
-      setCurrentSite((prevSite) => {
-        if (prevSite) {
-          return {
-            ...prevSite,
-            likes: prevSite.likes + (isLiked ? -1 : 1)
-          };
+      dispatch({
+        type: "SET_LIKES",
+        likes: newUserLikes,
+        currentSite: state.currentSite && {
+          ...state.currentSite,
+          likes: state.currentSite.likes + (isLiked ? -1 : 1)
         }
-        return prevSite;
       });
 
       try {
@@ -103,35 +163,36 @@ const useMix = () => {
         console.error(error);
       }
     },
-    [currentSite, userLikes, encrypted, password, token, userId]
+    [state, encrypted, password, token, userId]
   );
 
   const changeSite = () => {
+    const { mix, mixIndex, currentPage } = state;
     if (!mix) return;
     const newMixIndex = mixIndex + 1
 
     // Get more content if we are almost at the end of the mix
     if (newMixIndex >= mix.length - 3) {
-      setCurrentPage(currentPage + 1)
+      dispatch({ type: "SET_CURRENT_PAGE", currentPage: currentPage + 1 });
+      if (!state.hasNextPage) dispatch({ type: 'SET_TAGS', tags: new Map() })
       getMix();
     }
 
     if (newMixIndex < mix.length) {
-      setMixIndex(mixIndex);
-      setCurrentSite(mix[newMixIndex])
+      dispatch({ type: "CHANGE_SITE", currentSite: mix[newMixIndex], mixIndex: newMixIndex });
     }
   };
 
   return {
-    currentSite,
-    hasNextPage,
-    isLoading,
-    error,
-    userLikes,
+    currentSite: state.currentSite,
+    hasNextPage: state.hasNextPage,
+    isLoading: state.isLoading,
+    error: state.error,
+    userLikes: state.userLikes,
     likeOrUnlike,
     changeSite,
-    selectedTags,
-    mixEnded: mix && !hasNextPage && mixIndex >= mix?.length - 1,
+    selectedTags: state.selectedTags,
+    mixEnded: state.mix && !state.hasNextPage && state.mixIndex >= state.mix?.length - 1,
   };
 };
 
