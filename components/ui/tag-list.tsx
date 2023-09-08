@@ -2,13 +2,13 @@
 
 import { Tag, TagMap } from "@/types"
 import { CheckCircle2, PlusCircle } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { memo, useCallback, useMemo, useState } from "react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 
-import { buttonVariants } from "./button"
+import { useRouter } from "next/navigation"
+import { Button, buttonVariants } from "./button"
 
 interface TagButtonProps {
   tag: Tag;
@@ -32,10 +32,10 @@ const TagButton = memo(({ tag, selectedTags, onSelect, selectable }: TagButtonPr
   return (
     <button
       className={cn(
-        "border-primary/30 text-primary flex cursor-default items-center justify-center gap-2 rounded-full border-2 px-3 py-1 text-sm font-medium transition",
+        "flex cursor-default items-center justify-center gap-2 rounded-full border-2 border-primary/30 px-3 py-1 text-sm font-medium text-primary transition",
         selectable &&
-        "hover:bg-primary/30 focus:bg-primary/40 focus-visible:ring-offset-muted hover:cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2",
-        isSelected ? "border-yellow-400" : ""
+        "hover:cursor-pointer hover:bg-primary/30 focus:bg-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-muted",
+        isSelected && selectable ? "border-yellow-400" : ""
       )}
       tabIndex={0}
       onClick={() => onSelect(tag)}
@@ -49,16 +49,27 @@ const TagButton = memo(({ tag, selectedTags, onSelect, selectable }: TagButtonPr
           )}
         </span>
       )}
-      {tag.name}
+      {tag.name.toLowerCase()}
     </button>
   )
-})
+},)
+
+TagButton.displayName = 'TagButton';
 
 const TagList = ({ tags, title, selectable = false }: TagListProps) => {
-  const router = useRouter()
-  const [selectedTags, setSelectedTags] = useState<TagMap>(new Map())
+  const router = useRouter();
+  const storedTags = () => {
+    if (selectable) {
+      const sessionTags = sessionStorage.getItem('c4.tags');
+      return sessionTags ? new Map(JSON.parse(sessionTags)) : new Map();
+    }
+    return new Map();
+  };
+
+  const [selectedTags, setSelectedTags] = useState<TagMap>(storedTags);
 
   const handleSelectedTags = useCallback((selectedTag: Tag) => {
+    if (!selectable) return;
     setSelectedTags((currentTags) => {
       const newTags = new Map(currentTags)
       if (newTags.has(selectedTag._id)) {
@@ -66,9 +77,9 @@ const TagList = ({ tags, title, selectable = false }: TagListProps) => {
       } else {
         newTags.set(selectedTag._id, selectedTag)
       }
-      return newTags
-    })
-  }, [])
+      return newTags;
+    });
+  }, [selectable]);
 
   const handleDiscover = () => {
     if (selectedTags.size > 0) {
@@ -80,6 +91,7 @@ const TagList = ({ tags, title, selectable = false }: TagListProps) => {
     router.push(siteConfig.links.discover)
   }
 
+
   return (
     <section>
       {!tags && (
@@ -89,34 +101,34 @@ const TagList = ({ tags, title, selectable = false }: TagListProps) => {
           </h2>
         </div>
       )}
-      {tags && (
-        <div className="flex flex-col gap-2">
-          {title && <h2 className="text-lg font-semibold">{title}</h2>}
-          <div className="flex flex-wrap gap-2">
-            {Array.from(tags).map(([key, tag]) => (
-              <TagButton
-                key={key}
-                tag={tag}
-                selectedTags={selectedTags}
-                onSelect={handleSelectedTags}
-                selectable={selectable}
-              />
-            ))}
-          </div>
+
+      {tags && <div className="flex flex-col gap-2">
+        {title && <h4 className="text-base font-semibold">{title}</h4>}
+        <div className="flex flex-wrap gap-2">
+          {Array.from(tags).map(([key, tag]) => (
+            <TagButton
+              key={key}
+              tag={tag}
+              selectedTags={selectedTags}
+              onSelect={handleSelectedTags}
+              selectable={selectable}
+            />
+          ))}
         </div>
-      )}
+      </div>}
+
       {selectable && (
         <>
           <div className="p-4"></div>
-          <button
+          <Button
             className={cn(
               buttonVariants({ size: "lg" }),
               "bg-c4-gradient-main font-bold transition hover:scale-105"
             )}
-            onClick={() => handleDiscover()}
+            onClick={handleDiscover}
           >
             Start your journey ✨
-          </button>
+          </Button>
         </>
       )}
     </section>

@@ -1,4 +1,4 @@
-import { Tag, TagMap } from "@/types";
+import { TagMap } from "@/types";
 import { Wallet } from "ethers";
 
 import { getRawTransactionToSign } from "@/lib/utils";
@@ -58,8 +58,7 @@ export const updateLikesInApi = async (
 };
 
 export const feedbackMessages = {
-  "not-found": "No content found for the selected tags. Please try again.",
-  "no-tags": "No tags selected. Please select at least one tag.",
+  "not-found": "Oops! We couldn't find any content... Let's try again — maybe some other tags.",
   loading: "Loading content...",
 };
 
@@ -70,7 +69,7 @@ export const createMixParams = (
 ) => {
   const mixParams = new URLSearchParams();
 
-  const tagIds = tags.size > 0 ? Array.from(tags, ([key, tag]) => tag._id) : ["all"];
+  const tagIds = tags.size > 0 ? Array.from(tags, ([tagId, tagName]) => tagId) : ["all"];
   tagIds.forEach(tagId => mixParams.append("tags", tagId));
 
   mixParams.append("page", currentPage.toString());

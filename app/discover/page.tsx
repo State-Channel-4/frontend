@@ -8,7 +8,7 @@ import TagList from "@/components/ui/tag-list"
 import { cn } from "@/lib/utils"
 
 import LikeButton from "@/components/like-button"
-import { ExternalLink } from "lucide-react"
+import { ExternalLink, Tag } from "lucide-react"
 import useMix from "../hooks/useMix"
 import SiteFrame from "./SiteFrame"
 import { feedbackMessages } from "./utils"
@@ -19,9 +19,14 @@ const Discover = () => {
 
   if (error.message !== "") {
     return (
-      <p className="mx-auto flex w-full items-center justify-center p-6">
-        {feedbackMessages["not-found"]}
-      </p>
+      <div className="mx-auto flex w-full flex-col items-center justify-center space-y-3 p-6">
+        <p className="text-lg">{feedbackMessages["not-found"]}</p>
+        <Link href="/" passHref>
+          <Button variant={'default'} size="lg">
+            Go home
+          </Button>
+        </Link>
+      </div>
     )
   }
   if (isLoading) {
@@ -31,17 +36,9 @@ const Discover = () => {
       </p>
     )
   }
-  if (!selectedTags.current || selectedTags.current.size === 0) {
-    return (
-      <p className="mx-auto flex w-full items-center justify-center p-6">
-        {feedbackMessages["no-tags"]}
-      </p>
-    )
-  }
-
 
   return (
-    currentSite && (<section className="container grid grid-cols-1 gap-10 pb-8 pt-6 xl:grid-cols-3">
+    !isLoading && !error.message && currentSite && (<section className="container grid grid-cols-1 gap-10 pb-8 pt-6 xl:grid-cols-3">
       <div className="col-span-1 xl:col-span-2">
         <SiteFrame site={currentSite} />
       </div>
@@ -52,7 +49,7 @@ const Discover = () => {
               now showing
             </p>
             <p className="text-2xl font-semibold">{currentSite?.title}</p>
-            <p className="text-primary/70 text-sm">
+            <p className="text-sm text-primary/70">
               by {currentSite?.submittedBy}
             </p>
             <p className="p-2"></p>
@@ -76,7 +73,7 @@ const Discover = () => {
             <Button
               className={cn(
                 buttonVariants({ size: "lg", variant: "default" }),
-                "rounded-full font-bold uppercase transition-all duration-500 active:scale-75 disabled:opacity-50 disabled:cursor-not-allowed disabled:text-primary"
+                "rounded-full font-bold uppercase transition-all duration-500 active:scale-75 disabled:cursor-not-allowed disabled:text-primary disabled:opacity-50"
               )}
               disabled={mixEnded || false}
               loading={isLoading}
@@ -88,23 +85,15 @@ const Discover = () => {
               {!mixEnded ? 'Watch something else' : 'Mix ended, choose other tags'}
             </Button>
             <p className="p-1"></p>
-            <hr className="bg-c4-gradient-main h-1 w-full border" />
+            <hr className="h-1 w-full border bg-c4-gradient-main" />
           </div>
-        )}
-
-        {selectedTags.current.size > 0 && (
-          <>
-            <p className="text-primary text-xs uppercase tracking-widest">
-              viewing shows from
-            </p>
-            <TagList tags={selectedTags.current} />
-            <Link href="/" passHref>
-              <Button variant={"ghost"} size="sm">
-                Choose other tags
-              </Button>
-            </Link>
-          </>
-        )}
+        )} 
+        <TagList tags={new Map(currentSite?.tags.map(tag => [tag._id, tag]))} selectable={false} title="Tags" />
+        <Link href="/" passHref>
+          <Button variant={"ghost"} size="sm">
+            Choose tags
+          </Button>
+        </Link>
       </div>
     </section>
     ))
