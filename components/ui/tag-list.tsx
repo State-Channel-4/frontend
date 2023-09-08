@@ -7,7 +7,7 @@ import { memo, useCallback, useMemo, useState } from "react"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 
-import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button, buttonVariants } from "./button"
 
 interface TagButtonProps {
@@ -57,7 +57,6 @@ const TagButton = memo(({ tag, selectedTags, onSelect, selectable }: TagButtonPr
 TagButton.displayName = 'TagButton';
 
 const TagList = ({ tags, title, selectable = false }: TagListProps) => {
-  const router = useRouter();
   const storedTags = () => {
     if (selectable) {
       const sessionTags = sessionStorage.getItem('c4.tags');
@@ -77,20 +76,18 @@ const TagList = ({ tags, title, selectable = false }: TagListProps) => {
       } else {
         newTags.set(selectedTag._id, selectedTag)
       }
+
+      if (newTags.size > 0) {
+        sessionStorage.setItem(
+          "c4.tags",
+          JSON.stringify(Array.from(newTags.entries()))
+        )
+      } else {
+        sessionStorage.removeItem('c4.tags');
+      }
       return newTags;
     });
   }, [selectable]);
-
-  const handleDiscover = () => {
-    if (selectedTags.size > 0) {
-      sessionStorage.setItem(
-        "c4.tags",
-        JSON.stringify(Array.from(selectedTags.entries()))
-      )
-    }
-    router.push(siteConfig.links.discover)
-  }
-
 
   return (
     <section>
@@ -120,15 +117,15 @@ const TagList = ({ tags, title, selectable = false }: TagListProps) => {
       {selectable && (
         <>
           <div className="p-4"></div>
-          <Button
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "bg-c4-gradient-main font-bold transition hover:scale-105"
-            )}
-            onClick={handleDiscover}
-          >
-            Start your journey ✨
-          </Button>
+          <Link href={siteConfig.links.discover} passHref>
+            <Button
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "bg-c4-gradient-main font-bold transition hover:scale-105"
+              )}
+            >
+              Start your journey ✨
+            </Button></Link>
         </>
       )}
     </section>
