@@ -15,7 +15,7 @@ import { feedbackMessages } from "./utils"
 
 const Discover = () => {
   const { password, token, userId } = usePasswordStore()
-  const { currentSite, isLoading, error, userLikes, likeOrUnlike, changeSite, selectedTags, mixEnded } = useMix();
+  const { currentSite, isLoading, error, userLikes, likeOrUnlike, changeSite } = useMix();
 
   if (error.message !== "") {
     return (
@@ -75,25 +75,19 @@ const Discover = () => {
                 buttonVariants({ size: "lg", variant: "default" }),
                 "rounded-full font-bold uppercase transition-all duration-500 active:scale-75 disabled:cursor-not-allowed disabled:text-primary disabled:opacity-50"
               )}
-              disabled={mixEnded || false}
               loading={isLoading}
               loadingText="Checking for more content"
               role="button"
               aria-label="Next"
               onClick={changeSite}
             >
-              {!mixEnded ? 'Watch something else' : 'Mix ended, choose other tags'}
+              Watch something else
             </Button>
             <p className="p-1"></p>
             <hr className="h-1 w-full border bg-c4-gradient-main" />
           </div>
-        )} 
-        <TagList tags={new Map(currentSite?.tags.map(tag => [tag._id, tag]))} selectable={false} title="Tags" />
-        <Link href="/" passHref>
-          <Button variant={"ghost"} size="sm">
-            Choose tags
-          </Button>
-        </Link>
+        )}
+        {currentSite.tags.length > 0 && <TagList tags={new Map(currentSite?.tags.map(tag => [tag._id, tag]))} selectable={false} title="Tags" />}
       </div>
     </section>
     ))

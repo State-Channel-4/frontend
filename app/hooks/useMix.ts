@@ -17,6 +17,7 @@ type MixState = {
   mix: C4Content[] | null
   hasNextPage: boolean
   mixLimit: number
+  mixIndexLimit: number // the number that will act as a trigger to get more content
 }
 
 type Action =
@@ -39,6 +40,7 @@ const initialState: MixState = {
   mix: null,
   hasNextPage: false,
   mixLimit: 100,
+  mixIndexLimit: -3 
 }
 
 const mixReducer = (state: MixState, action: Action): MixState => {
@@ -101,24 +103,16 @@ const useMix = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getMix = async () => {
+  const fetchMixContent = async () => {
     try {
-      const { selectedTags: currentTags, currentPage, mixLimit } = state;
+      const { selectedTags: currentTags, currentPage, mixLimit, } = state;
+      // if the selected tags are the same as the current tags and we have a mix, don't get a new mix
+      if (JSON.stringify(currentTags) === JSON.stringify(state.selectedTags) && state.mix && state.mixIndex < state.mix.length + state.mixIndexLimit) return;
       const mixResponse = await fetchMix(currentTags, currentPage, mixLimit);
       if (mixResponse.message) {
         dispatch({ type: "SET_ERROR", message: mixResponse.message });
       } else {
-        const newMix = state.mixIndex > 0 && state.mix
-          ? [...state.mix.slice(state.mixIndex), ...mixResponse.urls]
-          : mixResponse.urls;
-
-        dispatch({
-          type: "SET_MIX",
-          mix: newMix,
-          hasNextPage: mixResponse.hasNextPage
-        });
-        // set the first site
-        dispatch({ type: "CHANGE_SITE", currentSite: newMix[0], mixIndex: 0 });
+        handleMixResponse(state, mixResponse);
       }
     } catch (error) {
       dispatch({ type: "SET_ERROR", message: "Something went wrong getting a mix" });
@@ -127,10 +121,26 @@ const useMix = () => {
     }
   };
 
+  function handleMixResponse(state: MixState, mixResponse: any,) {
+    const newMix = state.mix && state.mixIndex >= state.mix.length + state.mixIndexLimit
+      ? [...state.mix.slice(state.mixIndex), ...mixResponse.urls]
+      : mixResponse.urls;
+
+    dispatch({
+      type: "SET_MIX",
+      mix: newMix,
+      hasNextPage: mixResponse.hasNextPage
+    });
+    // set the first site
+    dispatch({ type: "CHANGE_SITE", currentSite: newMix[0], mixIndex: 0 });
+  }
+
+
+
   useEffect(() => {
-    getMix();
+    fetchMixContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.selectedTags, state.currentPage]);
+  }, [state.selectedTags]);
 
   const likeOrUnlike = useCallback(
     async (contentId: string) => {
@@ -167,15 +177,15 @@ const useMix = () => {
   );
 
   const changeSite = () => {
-    const { mix, mixIndex, currentPage } = state;
+    const { mix, mixIndex, currentPage, selectedTags } = state;
     if (!mix) return;
     const newMixIndex = mixIndex + 1
 
     // Get more content if we are almost at the end of the mix
-    if (newMixIndex >= mix.length - 3) {
+    if (newMixIndex >= mix.length + state.mixIndexLimit) {
       dispatch({ type: "SET_CURRENT_PAGE", currentPage: currentPage + 1 });
-      if (!state.hasNextPage) dispatch({ type: 'SET_TAGS', tags: new Map() })
-      getMix();
+      if (selectedTags.size > 0 && !state.hasNextPage) dispatch({ type: 'SET_TAGS', tags: new Map() })
+      fetchMixContent();
     }
 
     if (newMixIndex < mix.length) {
@@ -191,9 +201,9 @@ const useMix = () => {
     userLikes: state.userLikes,
     likeOrUnlike,
     changeSite,
-    selectedTags: state.selectedTags,
-    mixEnded: state.mix && !state.hasNextPage && state.mixIndex >= state.mix?.length - 1,
   };
+
 };
 
 export default useMix;
+
