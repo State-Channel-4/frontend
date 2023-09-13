@@ -28,7 +28,7 @@ const Account = () => {
           setShownAddress(prefix + postfix)
         }
         const { user } = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/user/${userId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
           {
             method: "GET",
             headers: {

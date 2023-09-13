@@ -135,8 +135,6 @@ const useMix = () => {
     dispatch({ type: "CHANGE_SITE", currentSite: newMix[0], mixIndex: 0 });
   }
 
-
-
   useEffect(() => {
     fetchMixContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
