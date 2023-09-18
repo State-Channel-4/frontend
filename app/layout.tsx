@@ -1,19 +1,15 @@
-import "@/styles/globals.css";
-import { Metadata } from "next";
+import "@/styles/globals.css"
+import { Metadata } from "next"
 
+import { siteConfig } from "@/config/site"
+import { fontSans } from "@/lib/fonts"
+import { cn } from "@/lib/utils"
+import Feedback from "@/components/feedback"
+import { SiteHeader } from "@/components/site-header"
+import { ThemeProvider } from "@/components/theme-provider"
+import Toolbar from "@/components/toolbar"
 
-
-import { siteConfig } from "@/config/site";
-import { fontSans } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
-import Feedback from "@/components/feedback";
-import { SiteHeader } from "@/components/site-header";
-import { ThemeProvider } from "@/components/theme-provider";
-
-
-
-import AnalyticWrapper from "./analytics";
-
+import AnalyticWrapper from "./analytics"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://app.channel4.wtf"),
@@ -58,10 +54,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <div className="relative flex h-screen flex-col">
+            <div className="relative flex h-screen flex-col p-6">
               <SiteHeader />
-              <AnalyticWrapper>{children}</AnalyticWrapper>
-              <Feedback />
+              <AnalyticWrapper>
+                <div className="border-2xl">{children}</div>
+              </AnalyticWrapper>
+              <Toolbar />
+              {/* <Feedback /> */}
             </div>
           </ThemeProvider>
         </body>
