@@ -14,6 +14,17 @@ module.exports = {
     },
     extend: {
       colors: {
+        "shark-50": "#f6f7f9",
+        "shark-100": "#edeef1",
+        "shark-200": "#d6dae1",
+        "shark-300": "#b2bac7",
+        "shark-400": "#8894a8",
+        "shark-500": "#6a778d",
+        "shark-600": "#546075",
+        "shark-700": "#454e5f",
+        "shark-800": "#3c4350",
+        "shark-900": "#353a45",
+        "shark-950": "#21242b",
         dark: "#151616",
         gray: "#282A2D",
         light: "#373A3E",

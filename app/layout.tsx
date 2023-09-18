@@ -49,15 +49,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "h-screen bg-background font-sans antialiased",
+            "h-screen bg-shark-950 font-sans antialiased",
             fontSans.variable
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <div className="relative flex h-screen flex-col p-6">
-              <SiteHeader />
+            <div className="relative flex h-screen flex-col pt-6 px-6">
+              {/* <SiteHeader /> */}
               <AnalyticWrapper>
-                <div className="border-2xl">{children}</div>
+                <div className="border border-shark-600 h-full w-full rounded-2xl">
+                  {children}
+                </div>
               </AnalyticWrapper>
               <Toolbar />
               {/* <Feedback /> */}

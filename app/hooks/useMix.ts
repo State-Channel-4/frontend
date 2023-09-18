@@ -5,6 +5,7 @@ import { usePasswordStore } from "@/store/password";
 import { C4Content, Tag, TagMap } from "@/types";
 import { useCallback, useEffect, useReducer } from "react";
 import { fetchMix, updateLikesInApi } from "../discover/utils";
+import { singletonHook } from "react-singleton-hook";
 
 type MixState = {
   currentSite: C4Content | null
@@ -40,7 +41,7 @@ const initialState: MixState = {
   mix: null,
   hasNextPage: false,
   mixLimit: 100,
-  mixIndexLimit: -3 
+  mixIndexLimit: -3
 }
 
 const mixReducer = (state: MixState, action: Action): MixState => {
@@ -203,5 +204,6 @@ const useMix = () => {
 
 };
 
+// export const useMix = singletonHook(initialState, useMixImpl);
 export default useMix;
 
