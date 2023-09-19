@@ -8,9 +8,9 @@ export default function DiscoverLayout({
   return (
     <>
       {children}
-      <div className="block md:hidden">
+      {/* <div className="block md:hidden">
         <BottomNavigation />
-      </div>
+      </div> */}
     </>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import useMix from "@/contexts/MixContext"
 import { usePasswordStore } from "@/store/password"
 import { ExternalLink, Tag } from "lucide-react"
 
@@ -9,13 +10,13 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import TagList from "@/components/ui/tag-list"
 import LikeButton from "@/components/like-button"
 
-import useMix from "../hooks/useMix"
 import SiteFrame from "./SiteFrame"
 import { feedbackMessages } from "./utils"
 
 const Discover = () => {
   const { password, token, userId } = usePasswordStore()
-  const { currentSite, isLoading, error, userLikes, likeOrUnlike } = useMix()
+  const { changeSite, currentSite, isLoading, error, userLikes, likeOrUnlike } =
+    useMix()
 
   if (error.message !== "") {
     return (
@@ -41,11 +42,9 @@ const Discover = () => {
     !isLoading &&
     !error.message &&
     currentSite && (
-      <section className="container grid grid-cols-1 gap-10 pb-8 pt-6 xl:grid-cols-3">
-        <div className="col-span-1 xl:col-span-2">
-          <SiteFrame site={currentSite} />
-        </div>
-        <div className="col-span-1 flex max-w-[900px] flex-col items-start justify-end gap-4">
+      <section>
+        <SiteFrame site={currentSite} />
+        {/* <div className="col-span-1 flex max-w-[900px] flex-col items-start justify-end gap-4">
           {currentSite && (
             <div className="flex w-full flex-col gap-1 rounded-lg">
               <p className="font-mono text-sm uppercase tracking-widest text-yellow-300">
@@ -79,7 +78,7 @@ const Discover = () => {
 
               <p className="p-1"></p>
 
-              {/* <Button
+              <Button
                 className={cn(
                   buttonVariants({ size: "lg", variant: "default" }),
                   "rounded-full font-bold uppercase transition-all duration-500 active:scale-75 disabled:cursor-not-allowed disabled:text-primary disabled:opacity-50"
@@ -91,19 +90,21 @@ const Discover = () => {
                 onClick={changeSite}
               >
                 Watch something else
-              </Button> */}
+              </Button>
               <p className="p-1"></p>
               <hr className="h-1 w-full border bg-c4-gradient-main" />
             </div>
           )}
           {currentSite.tags.length > 0 && (
             <TagList
-              tags={new Map(currentSite?.tags.map((tag) => [tag._id, tag]))}
+              tags={
+                new Map(currentSite?.tags.map((tag: any) => [tag._id, tag]))
+              }
               selectable={false}
               title="Tags"
             />
           )}
-        </div>
+        </div> */}
       </section>
     )
   )

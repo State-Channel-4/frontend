@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import { MixProvider } from "@/contexts/MixContext"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -54,16 +55,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <div className="relative flex h-screen flex-col pt-6 px-6">
-              {/* <SiteHeader /> */}
-              <AnalyticWrapper>
-                <div className="border border-shark-600 h-full w-full rounded-2xl">
+            <MixProvider>
+              <div className="relative flex h-screen flex-col pt-6 px-6">
+                <AnalyticWrapper className="border border-shark-600 w-full overflow-auto rounded-2xl">
                   {children}
-                </div>
-              </AnalyticWrapper>
-              <Toolbar />
-              {/* <Feedback /> */}
-            </div>
+                </AnalyticWrapper>
+                <Toolbar />
+              </div>
+            </MixProvider>
           </ThemeProvider>
         </body>
       </html>

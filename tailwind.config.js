@@ -13,6 +13,10 @@ module.exports = {
       },
     },
     extend: {
+      boxShadow: {
+        menuShadow:
+          "1px 5px 4px 0px #00000040 inset, 0px -1px 4px 0px #8B8B8B40 inset",
+      },
       colors: {
         "shark-50": "#f6f7f9",
         "shark-100": "#edeef1",

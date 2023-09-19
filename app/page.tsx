@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
+import landingPageBG from "@/assets/landing-background.png"
 import { Tag, TagMap } from "@/types"
 import { Loader2 } from "lucide-react"
 import useSWR from "swr"
@@ -42,9 +44,10 @@ export default function IndexPage() {
     },
   })
 
-  return (
-    <section className="container grid items-center gap-6 py-8">
-      {/* <div className="flex max-w-[800px] flex-col items-start space-y-3">
+  return <Image alt="Preview" className="h-full" src={landingPageBG} />
+}
+
+/* <div className="flex max-w-[800px] flex-col items-start space-y-3">
         <h1 className="text-3xl font-extrabold leading-tight sm:text-3xl md:text-5xl lg:text-6xl">
           Your journey starts here!
         </h1>
@@ -61,7 +64,4 @@ export default function IndexPage() {
         tags={tags}
         title={"Choose some tags (optional)"}
         selectable
-      />)} */}
-    </section>
-  )
-}
+      />)} */
