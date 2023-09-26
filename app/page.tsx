@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import { redirect } from "next/navigation"
+import landingPageBGMobile from "@/assets/landing-background-mobile.png"
 import landingPageBG from "@/assets/landing-background.png"
 import { Tag, TagMap } from "@/types"
 import { Loader2 } from "lucide-react"
@@ -44,7 +46,22 @@ export default function IndexPage() {
     },
   })
 
-  return <Image alt="Preview" className="h-full" src={landingPageBG} />
+  redirect("/landing")
+
+  return (
+    <>
+      <Image
+        alt="Preview"
+        className="h-full object-cover xs:block hidden"
+        src={landingPageBG}
+      />
+      <Image
+        alt="Preview"
+        className="h-full object-fill block xs:hidden"
+        src={landingPageBGMobile}
+      />
+    </>
+  )
 }
 
 /* <div className="flex max-w-[800px] flex-col items-start space-y-3">

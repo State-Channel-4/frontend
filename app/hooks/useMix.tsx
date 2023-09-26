@@ -1,19 +1,11 @@
 "use client"
 
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-} from "react"
-import { usePathname } from "next/navigation"
+import { useCallback, useEffect, useReducer } from "react"
 import { useEncryptedStore } from "@/store/encrypted"
 import { usePasswordStore } from "@/store/password"
 import { C4Content, Tag, TagMap } from "@/types"
 
-import { fetchMix, updateLikesInApi } from "../app/discover/utils"
+import { fetchMix, updateLikesInApi } from "../(discover)/discover/utils"
 
 type MixState = {
   currentSite: C4Content | null
@@ -52,9 +44,6 @@ const initialState: MixState = {
   mixIndexLimit: -3,
 }
 
-// TODO: Remove any
-const MixContext = createContext<any>({})
-
 const mixReducer = (state: MixState, action: Action): MixState => {
   switch (action.type) {
     case "SET_ERROR":
@@ -89,24 +78,10 @@ const mixReducer = (state: MixState, action: Action): MixState => {
   }
 }
 
-interface IProps {
-  children: React.ReactNode
-}
-
-export const MixProvider = ({ children }: IProps) => {
-  const [state, dispatch] = useReducer(mixReducer, initialState)
-  return (
-    <MixContext.Provider value={[state, dispatch]}>
-      {children}
-    </MixContext.Provider>
-  )
-}
-
 const useMix = () => {
   const { encrypted } = useEncryptedStore()
   const { password, token, userId } = usePasswordStore()
-  // const [state, dispatch] = useReducer(mixReducer, initialState)
-  const [state, dispatch] = useContext(MixContext)
+  const [state, dispatch] = useReducer(mixReducer, initialState)
 
   const getTagsFromStore = () => {
     if (typeof window === "undefined") return
@@ -180,9 +155,8 @@ const useMix = () => {
       if (!currentSite) return
 
       const isLiked = userLikes.includes(contentId)
-      // TODO: Remove any
       const newUserLikes = isLiked
-        ? userLikes.filter((item: any) => item !== contentId)
+        ? userLikes.filter((item) => item !== contentId)
         : [...userLikes, contentId]
 
       dispatch({

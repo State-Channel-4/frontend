@@ -1,23 +1,22 @@
 "use client"
 
 import Link from "next/link"
-import useMix from "@/contexts/MixContext"
-import { usePasswordStore } from "@/store/password"
-import { ExternalLink, Tag } from "lucide-react"
+import { C4Content } from "@/types"
 
-import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
-import TagList from "@/components/ui/tag-list"
-import LikeButton from "@/components/like-button"
+import { Button } from "@/components/ui/button"
 
 import SiteFrame from "./SiteFrame"
 import { feedbackMessages } from "./utils"
 
-const Discover = () => {
-  const { password, token, userId } = usePasswordStore()
-  const { changeSite, currentSite, isLoading, error, userLikes, likeOrUnlike } =
-    useMix()
+interface DiscoverPageProps {
+  currentSite: C4Content | null
+  error: {
+    message: string
+  }
+  isLoading: boolean
+}
 
+const Discover = ({ currentSite, error, isLoading }: DiscoverPageProps) => {
   if (error.message !== "") {
     return (
       <div className="mx-auto flex w-full flex-col items-center justify-center space-y-3 p-6">
@@ -42,7 +41,7 @@ const Discover = () => {
     !isLoading &&
     !error.message &&
     currentSite && (
-      <section>
+      <section className="h-full">
         <SiteFrame site={currentSite} />
         {/* <div className="col-span-1 flex max-w-[900px] flex-col items-start justify-end gap-4">
           {currentSite && (

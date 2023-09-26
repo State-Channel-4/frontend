@@ -2,15 +2,11 @@
 
 import { useEffect } from "react"
 
-import { cn } from "@/lib/utils"
-
 // import { useSwetrix } from "@swetrix/nextjs"
 
 export default function AnalyticWrapper({
-  className,
   children,
 }: {
-  className: string
   children: React.ReactNode
 }) {
   useEffect(() => {
@@ -27,5 +23,5 @@ export default function AnalyticWrapper({
       if (s.parentNode) s.parentNode.insertBefore(g, s)
     })()
   }, [])
-  return <div className={cn("flex-1", className)}>{children}</div>
+  return <>{children}</>
 }
