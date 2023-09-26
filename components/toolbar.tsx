@@ -24,11 +24,11 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
   }, [path])
 
   return (
-    <div className="flex items-center justify-between gap-4 relative px-8 py-6">
+    <div className="flex items-center justify-between gap-4 relative px-4 py-2 sm:px-8 sm:py-6">
       <div className="flex gap-4 items-center flex-shrink flex-grow min-w-0">
-        <div className="cursor-pointer shadow-menuShadow rounded-full p-4 shrink-0">
+        <div className="cursor-pointer shadow-menuShadow rounded-full sm:p-4 p-2.5 shrink-0">
           <Image
-            className="w-10 h-10"
+            className="h-6 w-6 sm:w-10 sm:h-10"
             priority
             src={Channel4Icon}
             alt="Channel 4 icon black"
