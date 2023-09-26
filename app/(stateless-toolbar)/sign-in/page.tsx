@@ -3,15 +3,14 @@
 import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import BustOfWomanWithFlowers from "@/assets/bust-of-woman-with-flowers.svg"
+import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
 import { useEncryptedStore } from "@/store/encrypted"
 import { usePasswordStore } from "@/store/password"
 import { Wallet } from "ethers"
 
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/button"
-
-import BustOfWomanWithFlowers from "../../assets/bust-of-woman-with-flowers.svg"
-import Channel4IconBlack from "../../assets/channel-4-icon-black.svg"
 
 const SignIn = () => {
   const router = useRouter()
