@@ -37,7 +37,9 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
         <div className="min-w-0">
           <div className="font-medium truncate">
             {isDiscover
-              ? currentSite?.title ?? "Site name not avaialable."
+              ? isLoading
+                ? "Loading sites..."
+                : currentSite?.title ?? "Site name not avaialable."
               : "Weclome to Channel 4"}
           </div>
           {isDiscover && !isLoading && (
