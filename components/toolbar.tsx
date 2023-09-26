@@ -24,18 +24,18 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
   }, [path])
 
   return (
-    <div className="flex items-center justify-between gap-4 relative px-4 py-2 sm:px-8 sm:py-6">
-      <div className="flex gap-4 items-center flex-shrink flex-grow min-w-0">
-        <div className="cursor-pointer shadow-menuShadow rounded-full sm:p-4 p-2.5 shrink-0">
+    <div className="relative flex items-center justify-between gap-4 px-4 py-2 sm:px-8 sm:py-6">
+      <div className="flex min-w-0 items-center gap-4">
+        <div className="shrink-0 cursor-pointer rounded-full p-2.5 shadow-menuShadow sm:p-4">
           <Image
-            className="h-6 w-6 sm:w-10 sm:h-10"
+            className="h-6 w-6 sm:h-10 sm:w-10"
             priority
             src={Channel4Icon}
             alt="Channel 4 icon black"
           />
         </div>
         <div className="min-w-0">
-          <div className="font-medium truncate">
+          <div className="truncate font-medium">
             {isDiscover
               ? isLoading
                 ? "Loading sites..."
@@ -43,19 +43,19 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
               : "Weclome to Channel 4"}
           </div>
           {isDiscover && !isLoading && (
-            <div className="text-shark-300 text-xs truncate">See details</div>
+            <div className="truncate text-xs text-shark-300">See details</div>
           )}
         </div>
       </div>
-      <div className="flex items-center gap-8 shrink-0">
+      <div className="flex shrink-0 items-center gap-8">
         {isDiscover && !isLoading && (
-          <div className="flex gap-2 items-center cursor-pointer relative text-sm">
-            <Image alt="Like" className="w-4 h-4" src={EmptyHeart} />
+          <div className="relative flex cursor-pointer items-center gap-2 text-sm">
+            <Image alt="Like" className="h-4 w-4" src={EmptyHeart} />
             <div>{currentSite?.likes}</div>
           </div>
         )}
         <Button
-          className="h-auto bg-c4-gradient-green hover:bg-c4-gradient-green-rev sm:px-16 py-2 px-6"
+          className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev sm:px-16"
           onClick={() =>
             isDiscover && changeSite ? changeSite() : router.push("discover")
           }

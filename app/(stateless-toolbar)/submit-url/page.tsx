@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
 import { useEncryptedStore } from "@/store/encrypted"
 import { usePasswordStore } from "@/store/password"
 import { Tag, TagMap } from "@/types"
@@ -11,8 +12,6 @@ import { getRawTransactionToSign } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import TagRow from "@/components/ui/tag-row"
 import RequireAuth from "@/components/helper/RequireAuth"
-
-import Channel4IconBlack from "../../assets/channel-4-icon-black.svg"
 
 const SubmitUrl = () => {
   const { encrypted } = useEncryptedStore()

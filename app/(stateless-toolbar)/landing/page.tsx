@@ -7,12 +7,12 @@ export default function Landing() {
     <>
       <Image
         alt="Preview"
-        className="h-full object-cover xs:block hidden max-w-full"
+        className="hidden h-full max-w-full object-cover xs:block"
         src={landingPageBG}
       />
       <Image
         alt="Preview"
-        className="h-full object-fill block xs:hidden"
+        className="block h-full object-fill xs:hidden"
         src={landingPageBGMobile}
       />
     </>

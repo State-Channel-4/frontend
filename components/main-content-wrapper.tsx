@@ -7,8 +7,8 @@ export default function MainContentWrapper({
 }): JSX.Element {
   return (
     // TODO: Remove hacky height fix once background image is replaced with countdown component
-    <div className="p-4 sm:pb-0 sm:pt-6 sm:px-8 flex-1 h-[calc(100vh-136px)]">
-      <div className="border border-shark-600 w-full overflow-auto rounded-2xl h-full">
+    <div className="h-[calc(100vh-136px)] flex-1 p-4 sm:px-8 sm:pb-0 sm:pt-6">
+      <div className="h-full w-full overflow-auto rounded-2xl border border-shark-600">
         {children}
       </div>
     </div>

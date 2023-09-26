@@ -54,7 +54,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <div className="h-screen flex flex-col">
+            <div className="flex h-screen flex-col">
               <AnalyticWrapper>{children}</AnalyticWrapper>
             </div>
           </ThemeProvider>
