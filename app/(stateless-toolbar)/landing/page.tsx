@@ -7,7 +7,7 @@ export default function Landing() {
     <>
       <Image
         alt="Preview"
-        className="h-full object-cover xs:block hidden"
+        className="h-full object-cover xs:block hidden max-w-full"
         src={landingPageBG}
       />
       <Image
