@@ -16,11 +16,7 @@ export default function DiscoverLayout({
   return (
     <>
       <MainContentWrapper>
-        <Discover
-          currentSite={currentSite}
-          error={error}
-          isLoading={isLoading}
-        />
+        <Discover params={{ currentSite, error, isLoading }} />
       </MainContentWrapper>
       <Toolbar
         changeSite={changeSite}

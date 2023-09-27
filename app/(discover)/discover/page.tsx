@@ -9,14 +9,18 @@ import SiteFrame from "./SiteFrame"
 import { feedbackMessages } from "./utils"
 
 interface DiscoverPageProps {
-  currentSite: C4Content | null
-  error: {
-    message: string
+  params: {
+    currentSite: C4Content | null
+    error: {
+      message: string
+    }
+    isLoading: boolean
   }
-  isLoading: boolean
 }
 
-const Discover = ({ currentSite, error, isLoading }: DiscoverPageProps) => {
+const Discover = ({
+  params: { currentSite, error, isLoading },
+}: DiscoverPageProps) => {
   if (error.message !== "") {
     return (
       <div className="mx-auto flex w-full flex-col items-center justify-center space-y-3 p-6">
