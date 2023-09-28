@@ -2,7 +2,7 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
+import { fontDM, fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import Feedback from "@/components/feedback"
 import { SiteHeader } from "@/components/site-header"
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body
           className={cn(
             "h-screen bg-shark-950 font-sans antialiased",
-            fontSans.variable
+            fontSans.variable, fontDM.variable
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
