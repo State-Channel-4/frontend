@@ -15,14 +15,14 @@ const LINKS = [
 
 export default function MainMenu({ onClose }: MainMenuProps) {
   // Hardcode signedIn variable for now
-  const signedIn = false
+  const signedIn = true
 
   return (
     <div className="absolute bottom-[calc(100%)] left-4 w-[351px] rounded-2xl border border-shark-700 bg-shark-950 p-6 sm:bottom-[calc(100%+8px)] sm:left-10">
       {signedIn && (
         <Link href="/submit-url">
           <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
-            <div className="w-full bg-c4-rainbow bg-clip-text text-transparent">
+            <div className="w-full bg-c4-gradient-separator bg-clip-text text-transparent">
               Add website
             </div>
             <Image alt="Browser" src={browserIcon} />

@@ -101,8 +101,6 @@ module.exports = {
           "linear-gradient(91.38deg, #37FF4B  -4.98%, #E5F344 98.82%)",
         "c4-gradient-blue":
           "linear-gradient(91.38deg, #4D89FF -4.98%, #8F00FF 98.82%)",
-        "c4-rainbow":
-          "linear-gradient(257deg, #FB2BFF 9.09%, #E5F344 38.43%, #37FF4B 67.14%, #4D89FF 97.12%, #8F00FF 131.56%)",
       },
       borderColor: {
         DEFAULT: "hsl(var(--border))",
