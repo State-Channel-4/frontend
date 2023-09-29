@@ -33,7 +33,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
     <div className="relative flex items-center justify-between gap-4 px-4 py-2 sm:px-8 sm:py-6">
       <div className="flex min-w-0 items-center gap-4">
         <div
-          className="shrink-0 cursor-pointer rounded-full p-2.5 shadow-menuShadow sm:p-4 select-none"
+          className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow sm:p-4"
           onClick={() => setShowMenu(!showMenu)}
         >
           <Image

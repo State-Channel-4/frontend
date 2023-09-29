@@ -18,11 +18,11 @@ export default function MainMenu({ onClose }: MainMenuProps) {
   const signedIn = false
 
   return (
-    <div className="absolute border border-shark-700 sm:left-10 left-4 sm:bottom-[calc(100%+8px)] bottom-[calc(100%)] w-[351px] rounded-2xl bg-shark-950 p-6">
+    <div className="absolute bottom-[calc(100%)] left-4 w-[351px] rounded-2xl border border-shark-700 bg-shark-950 p-6 sm:bottom-[calc(100%+8px)] sm:left-10">
       {signedIn && (
         <Link href="/submit-url">
-          <div className="transition-all p-4 border-b border-shark-800 hover:border-green flex items-center justify-between">
-            <div className="bg-c4-rainbow text-transparent bg-clip-text w-full">
+          <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
+            <div className="w-full bg-c4-rainbow bg-clip-text text-transparent">
               Add website
             </div>
             <Image alt="Browser" src={browserIcon} />
@@ -32,19 +32,19 @@ export default function MainMenu({ onClose }: MainMenuProps) {
       <div className="mb-10">
         {LINKS.map(({ link, name }) => (
           <Link href={link}>
-            <div className="hover:text-shark-200 text-shark-300 transition-all p-4 border-b border-shark-800 hover:border-green">
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
               {name}
             </div>
           </Link>
         ))}
       </div>
       {signedIn && (
-        <div className="cursor-pointer hover:text-shark-200 text-shark-300 transition-all p-4">
+        <div className="cursor-pointer p-4 text-shark-300 transition-all hover:text-shark-200">
           Log Out
         </div>
       )}
       <div
-        className="cursor-pointer hover:text-shark-200 hover:text-shark-200 text-shark-300 transition-colors p-4 flex items-center justify-between"
+        className="flex cursor-pointer items-center justify-between p-4 text-shark-300 transition-colors hover:text-shark-200"
         onClick={() => onClose()}
       >
         <div>Close menu</div>
