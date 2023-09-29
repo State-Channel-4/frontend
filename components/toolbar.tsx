@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import EmptyHeart from "@/assets/empty-heart.svg"
@@ -23,6 +23,10 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
 
   const isDiscover = useMemo(() => {
     return path === "/discover"
+  }, [path])
+
+  useEffect(() => {
+    setShowMenu(false)
   }, [path])
 
   return (
