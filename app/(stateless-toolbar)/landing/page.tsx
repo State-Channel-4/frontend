@@ -4,13 +4,13 @@ import EthereumIcon from '/assets/ethereum-stroke.svg'
 
 export default function Landing() {
   return (
-    <main className="min-h-full bg-[hsl(124,61%,36%)]">
-      <div className="container flex h-full max-w-7xl flex-col items-center justify-center space-y-24 px-3 py-8 lg:flex-row lg:justify-between lg:space-x-6 lg:px-16 xl:px-24">
+    <main className="min-h-full bg-[hsl(124,61%,36%)] lg:h-full">
+      <div className="container flex h-full max-w-7xl flex-col items-center justify-center space-y-16 px-3 py-8 lg:flex-row lg:justify-between lg:space-x-6 lg:px-16 xl:px-24">
         <article className="flex flex-col items-center text-center">
-          <p className="font-dm font-medium tracking-wide">THESE WEBSITES HAVE BEEN ADDED BY</p>
-          <h3 className="text-4xl font-bold">USERS LIKE YOU</h3>
-          <div id="spacer" className="p-8"></div>
-          <p className="max-w-md font-dm text-sm font-medium tracking-wide">THIS PROJECT USES STATE CHANNELS & RANDOM CONTENT FOR YOUR ENTERTAINMENT</p>
+          <p className="font-dm font-medium tracking-wide xl:text-lg">THESE WEBSITES HAVE BEEN ADDED BY</p>
+          <h3 className="text-4xl font-bold xl:text-6xl">USERS LIKE YOU</h3>
+          <div id="spacer" className="p-8 xl:p-24"></div>
+          <p className="max-w-md font-dm text-sm font-medium tracking-wide lg:text-base">THIS PROJECT USES STATE CHANNELS & RANDOM CONTENT FOR YOUR ENTERTAINMENT</p>
           <div id="spacer" className="p-2"></div>
           <section>
             <div className="grid max-w-[360px] grid-cols-6 grid-rows-[1fr_2rem] border-2 border-primary">
