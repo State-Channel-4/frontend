@@ -1,12 +1,13 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import EmptyHeart from "@/assets/empty-heart.svg"
 import { C4Content } from "@/types"
 
 import Channel4Icon from "../assets/channel-4-icon-v2.svg"
+import MainMenu from "./main-menu"
 import { Button } from "./ui/button"
 
 interface ToolbarProps {
@@ -16,6 +17,7 @@ interface ToolbarProps {
 }
 
 const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
+  const [showMenu, setShowMenu] = useState(false)
   const path = usePathname()
   const router = useRouter()
 
@@ -26,7 +28,10 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
   return (
     <div className="relative flex items-center justify-between gap-4 px-4 py-2 sm:px-8 sm:py-6">
       <div className="flex min-w-0 items-center gap-4">
-        <div className="shrink-0 cursor-pointer rounded-full p-2.5 shadow-menuShadow sm:p-4">
+        <div
+          className="shrink-0 cursor-pointer rounded-full p-2.5 shadow-menuShadow sm:p-4 select-none"
+          onClick={() => setShowMenu(!showMenu)}
+        >
           <Image
             className="h-6 w-6 sm:h-10 sm:w-10"
             priority
@@ -63,6 +68,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
           {isDiscover ? "Next" : "Start watching"}
         </Button>
       </div>
+      {showMenu && <MainMenu onClose={() => setShowMenu(false)} />}
     </div>
   )
 }

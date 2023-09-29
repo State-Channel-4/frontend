@@ -31,6 +31,7 @@ module.exports = {
         "shark-950": "#21242b",
         dark: "#151616",
         gray: "#282A2D",
+        green: "#5BF34E",
         light: "#373A3E",
         "gray-light": "#9EA3A7",
         border: "hsl(var(--border))",
