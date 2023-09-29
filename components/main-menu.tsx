@@ -18,7 +18,7 @@ export default function MainMenu({ onClose }: MainMenuProps) {
   const signedIn = false
 
   return (
-    <div className="absolute sm:left-10 left-4 sm:bottom-[calc(100%+8px)] bottom-[calc(100%)] w-[351px] rounded-2xl bg-shark-950 p-6">
+    <div className="absolute border border-shark-700 sm:left-10 left-4 sm:bottom-[calc(100%+8px)] bottom-[calc(100%)] w-[351px] rounded-2xl bg-shark-950 p-6">
       {signedIn && (
         <Link href="/submit-url">
           <div className="transition-all p-4 border-b border-shark-800 hover:border-green flex items-center justify-between">
