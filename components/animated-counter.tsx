@@ -1,14 +1,15 @@
 'use client'
 import { motion } from 'framer-motion'
 
+
 const CountdownTimer = ({ from }: { from: number }) => {
   return (
-    <section className='h-[380px] w-[450px] overflow-hidden'>
+    <section className='h-[180px] w-[270px] overflow-hidden rounded-full lg:h-[300px] lg:w-[400px] xl:h-[360px] xl:w-[440px]'>
       <motion.div
         initial={{ y: 0 }}
-        animate={{ y: "-92%" }}
+        animate={{ y: "-91.42%" }}
         transition={{
-          duration: 10,
+          duration: from,
           ease: [0.42, 0, 0.58, 1],
           times: [0, 0.2, 0.5, 0.8, 1],
           delay: 0.1
@@ -17,7 +18,7 @@ const CountdownTimer = ({ from }: { from: number }) => {
       >
         {Array.from({ length: from + 1 }, (_, i) => from - i).map((num) => (
           <div key={num}>
-            <h1 className='text-[200px] leading-[180px] lg:text-[280px] lg:leading-[250px] xl:text-[350px] xl:leading-[330px]'>{num}</h1>
+            <h1 className='text-[180px] leading-[180px] lg:text-[280px] lg:leading-[250px] xl:text-[350px] xl:leading-[330px]'>{num}</h1>
 
             <style jsx>{`
             h1 {
