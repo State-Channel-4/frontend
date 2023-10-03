@@ -6,11 +6,10 @@ const CountdownTimer = ({ from }: { from: number }) => {
     <section className='h-[180px] w-[270px] overflow-hidden rounded-full lg:h-[300px] lg:w-[400px] xl:h-[360px] xl:w-[440px]'>
       <motion.div
         initial={{ y: 0 }}
-        animate={{ y: ["-0.2%", "-9%", "-18%", "-27%", "-37%", "-45%", "-55%", "-64%", "-73%", "-82%", "-91%"] }}
+        animate={{ y: ["-0.2%", "-9%", "-18%", "-27%", "-37%", "-46%", "-55%", "-64%", "-73%", "-82%", "-91%"] }}
         transition={{
           duration: from,
-          ease: [0.42, 0, 0.58, 1],
-          times: [0, 0.2, 0.5, 0.8, 1],
+          ease: [.37, .09, .3, 1],
           delay: 0.6
         }}
         className='relative flex flex-col items-center overflow-hidden'
