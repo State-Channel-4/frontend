@@ -16,21 +16,36 @@ export default function MainMenu({ onClose }: MainMenuProps) {
   return (
     <div className="absolute bottom-[calc(100%)] left-4 w-[351px] rounded-2xl border border-shark-700 bg-shark-950 p-6 sm:bottom-[calc(100%+8px)] sm:left-10">
       {signedIn && (
-        <Link href="/submit-url">
-          <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
-            <div className="w-full bg-c4-gradient-separator bg-clip-text text-transparent">
-              Add website
+        <div className="mb-6">
+          <Link href={siteConfig.mainNav.addSite.href}>
+            <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
+              <div className="w-full bg-c4-gradient-separator bg-clip-text text-transparent">
+                {siteConfig.mainNav.addSite.title}
+              </div>
+              <Image alt="Browser" src={browserIcon} />
             </div>
-            <Image alt="Browser" src={browserIcon} />
-          </div>
-        </Link>
+          </Link>
+          <Link href={siteConfig.mainNav.dashboard.href}>
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+              {siteConfig.mainNav.dashboard.title}
+            </div>
+          </Link>
+        </div>
       )}
-      <div className="mb-10">
-        <Link href={siteConfig.mainNav.signIn.href}>
-          <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
-            {siteConfig.mainNav.signIn.title}
-          </div>
-        </Link>
+      <div className="mb-6">
+        {signedIn ? (
+          <Link href={siteConfig.mainNav.changeTags.href}>
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+              {siteConfig.mainNav.changeTags.title}
+            </div>
+          </Link>
+        ) : (
+          <Link href={siteConfig.mainNav.signIn.href}>
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+              {siteConfig.mainNav.signIn.title}
+            </div>
+          </Link>
+        )}
         <Link href={siteConfig.mainNav.stats.href}>
           <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
             {siteConfig.mainNav.stats.title}
@@ -41,6 +56,13 @@ export default function MainMenu({ onClose }: MainMenuProps) {
             {siteConfig.mainNav.about.title}
           </div>
         </Link>
+        {signedIn && (
+          <Link href={siteConfig.mainNav.feedback.href}>
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+              {siteConfig.mainNav.feedback.title}
+            </div>
+          </Link>
+        )}
       </div>
       {signedIn && (
         <div className="cursor-pointer p-4 text-shark-300 transition-all hover:text-shark-200">
