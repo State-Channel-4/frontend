@@ -6,15 +6,22 @@ import xIcon from "@/assets/x-icon.svg"
 import { siteConfig } from "@/config/site"
 
 interface MainMenuProps {
+  open: boolean
   onClose: () => void
 }
 
-export default function MainMenu({ onClose }: MainMenuProps) {
+export default function MainMenu({ open, onClose }: MainMenuProps) {
   // Hardcode signedIn variable for now
   const signedIn = true
 
   return (
-    <div className="absolute bottom-[calc(100%)] left-4 w-[351px] rounded-2xl border border-shark-700 bg-shark-950 p-6 sm:bottom-[calc(100%+8px)] sm:left-10">
+    <div
+      className="absolute bottom-[calc(100%)] left-4 sm:w-[351px] transition-all w-full rounded-2xl border border-shark-700 bg-shark-950 p-6 sm:bottom-[calc(100%+8px)] sm:left-10"
+      style={{
+        opacity: open ? 1 : 0,
+        transform: open ? "translateY(0px)" : "translateY(45px)",
+      }}
+    >
       {signedIn && (
         <div className="mb-6">
           <Link href={siteConfig.mainNav.addSite.href}>
