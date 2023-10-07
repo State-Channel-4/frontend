@@ -4,10 +4,7 @@ import { Metadata } from "next"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import Feedback from "@/components/feedback"
-import { SiteHeader } from "@/components/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
-import Toolbar from "@/components/toolbar"
 
 import AnalyticWrapper from "./analytics"
 
