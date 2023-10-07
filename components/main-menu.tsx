@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import browserIcon from "@/assets/browser-icon.svg"
 import xIcon from "@/assets/x-icon.svg"
+import { useWallet } from "@/contexts/WalletContext"
 
 interface MainMenuProps {
   onClose: () => void
@@ -17,8 +18,11 @@ export default function MainMenu({ onClose }: MainMenuProps) {
   // Hardcode signedIn variable for now
   const signedIn = true
 
+  const { connect, disconnect } = useWallet()
+
   return (
     <div className="absolute bottom-[calc(100%)] left-4 w-[351px] rounded-2xl border border-shark-700 bg-shark-950 p-6 sm:bottom-[calc(100%+8px)] sm:left-10">
+      <div onClick={() => connect()}>Test</div>
       {signedIn && (
         <Link href="/submit-url">
           <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
@@ -39,7 +43,10 @@ export default function MainMenu({ onClose }: MainMenuProps) {
         ))}
       </div>
       {signedIn && (
-        <div className="cursor-pointer p-4 text-shark-300 transition-all hover:text-shark-200">
+        <div
+          className="cursor-pointer p-4 text-shark-300 transition-all hover:text-shark-200"
+          onClick={() => disconnect()}
+        >
           Log Out
         </div>
       )}
