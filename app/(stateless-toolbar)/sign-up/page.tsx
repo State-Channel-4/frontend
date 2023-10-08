@@ -99,7 +99,7 @@ const SignUp = () => {
             loading={isLoading}
             loadingText="Generating key..."
             onClick={clickDownloadKeyHandler}
-            className="rounded-full border-green-500 py-6 text-green-500"
+            className="border-green-500 text-green-500 rounded-full py-6"
           >
             Download my private key
           </Button>
@@ -107,7 +107,7 @@ const SignUp = () => {
             <Button
               variant="outline"
               onClick={clickAllDoneHandler}
-              className="mt-4 rounded-full border-green-500 py-6 text-green-500 hover:border-green-500"
+              className="border-green-500 text-green-500 hover:border-green-500 mt-4 rounded-full py-6"
             >
               All done
             </Button>
@@ -129,7 +129,7 @@ const SignUp = () => {
             loading={isLoading}
             disabled={isLoading}
             onClick={clickCreateAccountHandler}
-            className="w-full rounded-full border-green-500 py-6 text-green-500"
+            className="border-green-500 text-green-500 w-full rounded-full py-6"
           >
             Create account
           </Button>

@@ -16,7 +16,7 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
 
   return (
     <div
-      className="absolute left-5 bottom-[calc(100%+20px)] sm:w-[351px] transition-all w-[calc(100%-40px)] rounded-2xl border border-shark-700 bg-shark-950 duration-300 p-6 sm:bottom-[calc(100%+12px)] sm:left-12"
+      className="absolute bottom-[calc(100%+20px)] left-5 w-[calc(100%-40px)] rounded-2xl border border-shark-700 bg-shark-950 p-6 transition-all duration-300 sm:bottom-[calc(100%+12px)] sm:left-12 sm:w-[351px]"
       style={{
         opacity: open ? 1 : 0,
         pointerEvents: open ? "auto" : "none",
