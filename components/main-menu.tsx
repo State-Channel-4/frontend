@@ -12,10 +12,7 @@ interface MainMenuProps {
 }
 
 export default function MainMenu({ open, onClose }: MainMenuProps) {
-  // Hardcode signedIn variable for now
-  const signedIn = true
-
-  const { connect, disconnect } = useWallet()
+  const { connect, disconnect, isConnected } = useWallet()
 
   return (
     <div
@@ -26,8 +23,7 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
         transform: open ? "translateY(0px)" : "translateY(45px)",
       }}
     >
-      <div onClick={() => connect()}>Test</div>
-      {signedIn && (
+      {isConnected && (
         <div className="mb-6">
           <Link href={siteConfig.mainNav.addSite.href}>
             <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
@@ -45,18 +41,22 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
         </div>
       )}
       <div className="mb-6">
-        {signedIn ? (
+        {isConnected ? (
           <Link href={siteConfig.mainNav.changeTags.href}>
             <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
               {siteConfig.mainNav.changeTags.title}
             </div>
           </Link>
         ) : (
-          <Link href={siteConfig.mainNav.signIn.href}>
-            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
-              {siteConfig.mainNav.signIn.title}
-            </div>
-          </Link>
+          <div
+            className="border-b border-shark-800 cursor-pointer p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200"
+            onClick={() => {
+              connect()
+              onClose()
+            }}
+          >
+            Sign In / Sign Up
+          </div>
         )}
         <Link href={siteConfig.mainNav.stats.href}>
           <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
@@ -68,7 +68,7 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
             {siteConfig.mainNav.about.title}
           </div>
         </Link>
-        {signedIn && (
+        {isConnected && (
           <Link href={siteConfig.mainNav.feedback.href}>
             <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
               {siteConfig.mainNav.feedback.title}
@@ -76,10 +76,13 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
           </Link>
         )}
       </div>
-      {signedIn && (
+      {isConnected && (
         <div
           className="cursor-pointer p-4 text-shark-300 transition-all hover:text-shark-200"
-          onClick={() => disconnect()}
+          onClick={() => {
+            disconnect()
+            onClose()
+          }}
         >
           Log Out
         </div>
