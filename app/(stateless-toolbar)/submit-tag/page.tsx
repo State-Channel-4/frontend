@@ -71,7 +71,7 @@ const SubmitTag = () => {
           loading={isLoading}
           disabled={isLoading}
           onClick={onClickCreateHandler}
-          className="rounded-full border-green-500 py-6 text-green-500"
+          className="border-green-500 text-green-500 rounded-full py-6"
         >
           Share it with the world
         </Button>

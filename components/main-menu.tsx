@@ -4,43 +4,77 @@ import browserIcon from "@/assets/browser-icon.svg"
 import xIcon from "@/assets/x-icon.svg"
 import { useWallet } from "@/contexts/WalletContext"
 
+import { siteConfig } from "@/config/site"
+
 interface MainMenuProps {
+  open: boolean
   onClose: () => void
 }
 
-const LINKS = [
-  { link: "/sign-in", name: "Sign In / Sign Up" },
-  { link: "/stats", name: "Stats" },
-  { link: "/about", name: "About" },
-]
-
-export default function MainMenu({ onClose }: MainMenuProps) {
+export default function MainMenu({ open, onClose }: MainMenuProps) {
   // Hardcode signedIn variable for now
   const signedIn = true
 
   const { connect, disconnect } = useWallet()
 
   return (
-    <div className="absolute bottom-[calc(100%)] left-4 w-[351px] rounded-2xl border border-shark-700 bg-shark-950 p-6 sm:bottom-[calc(100%+8px)] sm:left-10">
+    <div
+      className="absolute bottom-[calc(100%+20px)] left-5 w-[calc(100%-40px)] rounded-2xl border border-shark-700 bg-shark-950 p-6 transition-all duration-300 sm:bottom-[calc(100%+12px)] sm:left-12 sm:w-[351px]"
+      style={{
+        opacity: open ? 1 : 0,
+        pointerEvents: open ? "auto" : "none",
+        transform: open ? "translateY(0px)" : "translateY(45px)",
+      }}
+    >
       <div onClick={() => connect()}>Test</div>
       {signedIn && (
-        <Link href="/submit-url">
-          <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
-            <div className="w-full bg-c4-gradient-separator bg-clip-text text-transparent">
-              Add website
-            </div>
-            <Image alt="Browser" src={browserIcon} />
-          </div>
-        </Link>
-      )}
-      <div className="mb-10">
-        {LINKS.map(({ link, name }) => (
-          <Link href={link}>
-            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
-              {name}
+        <div className="mb-6">
+          <Link href={siteConfig.mainNav.addSite.href}>
+            <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
+              <div className="w-full bg-c4-gradient-separator bg-clip-text text-transparent">
+                {siteConfig.mainNav.addSite.title}
+              </div>
+              <Image alt="Browser" src={browserIcon} />
             </div>
           </Link>
-        ))}
+          <Link href={siteConfig.mainNav.dashboard.href}>
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+              {siteConfig.mainNav.dashboard.title}
+            </div>
+          </Link>
+        </div>
+      )}
+      <div className="mb-6">
+        {signedIn ? (
+          <Link href={siteConfig.mainNav.changeTags.href}>
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+              {siteConfig.mainNav.changeTags.title}
+            </div>
+          </Link>
+        ) : (
+          <Link href={siteConfig.mainNav.signIn.href}>
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+              {siteConfig.mainNav.signIn.title}
+            </div>
+          </Link>
+        )}
+        <Link href={siteConfig.mainNav.stats.href}>
+          <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+            {siteConfig.mainNav.stats.title}
+          </div>
+        </Link>
+        <Link href={siteConfig.mainNav.about.href}>
+          <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+            {siteConfig.mainNav.about.title}
+          </div>
+        </Link>
+        {signedIn && (
+          <Link href={siteConfig.mainNav.feedback.href}>
+            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+              {siteConfig.mainNav.feedback.title}
+            </div>
+          </Link>
+        )}
       </div>
       {signedIn && (
         <div

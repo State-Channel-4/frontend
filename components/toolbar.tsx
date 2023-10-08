@@ -72,7 +72,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
           {isDiscover ? "Next" : "Start watching"}
         </Button>
       </div>
-      {showMenu && <MainMenu onClose={() => setShowMenu(false)} />}
+      <MainMenu onClose={() => setShowMenu(false)} open={showMenu} />
     </div>
   )
 }
