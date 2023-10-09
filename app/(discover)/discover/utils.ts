@@ -1,6 +1,7 @@
 import { TagMap } from "@/types";
 import { Wallet } from "ethers";
 
+import { createProxyUrls } from "@/app/utils";
 import { getRawTransactionToSign } from "@/lib/utils";
 
 export const fetchMix = async (
@@ -17,7 +18,8 @@ export const fetchMix = async (
       throw new Error(`Request failed with status ${response.status}`);
     }
     const data = await response.json();
-    return data;
+    const mixWithProxyUrls = createProxyUrls(data.urls);
+    return { urls: mixWithProxyUrls };
   } catch (error) {
     let message = "Unknown error";
     if (error instanceof Error) message = error.message;
@@ -77,3 +79,4 @@ export const createMixParams = (
 
   return mixParams;
 };
+
