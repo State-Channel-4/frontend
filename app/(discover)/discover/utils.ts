@@ -5,10 +5,9 @@ import { getRawTransactionToSign } from "@/lib/utils";
 
 export const fetchMix = async (
   tags: TagMap,
-  page: number,
   limit: number
 ) => {
-  const mixParams = createMixParams(tags, page, limit);
+  const mixParams = createMixParams(tags, limit);
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/mix?${mixParams.toString()}`
@@ -64,15 +63,12 @@ export const feedbackMessages = {
 
 export const createMixParams = (
   tags: TagMap,
-  currentPage: number = 1,
   mixLimit: number
 ) => {
   const mixParams = new URLSearchParams();
 
   const tagIds = tags.size > 0 ? Array.from(tags, ([tagId, tagName]) => tagId) : ["all"];
   tagIds.forEach(tagId => mixParams.append("tags", tagId));
-
-  mixParams.append("page", currentPage.toString());
   mixParams.append("limit", mixLimit.toString());
 
   return mixParams;

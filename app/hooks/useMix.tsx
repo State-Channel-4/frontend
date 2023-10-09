@@ -14,9 +14,7 @@ type MixState = {
   error: { message: string }
   mixIndex: number
   userLikes: string[]
-  currentPage: number
   mix: C4Content[] | null
-  hasNextPage: boolean
   mixLimit: number
   mixIndexLimit: number // the number that will act as a trigger to get more content
 }
@@ -24,11 +22,10 @@ type MixState = {
 type Action =
   | { type: "SET_ERROR"; message: string }
   | { type: "SET_LOADING"; isLoading: boolean }
-  | { type: "SET_MIX"; mix: C4Content[]; hasNextPage: boolean }
+  | { type: "SET_MIX"; mix: C4Content[]; }
   | { type: "SET_TAGS"; tags: TagMap }
   | { type: "SET_LIKES"; likes: string[]; currentSite: C4Content | null }
-  | { type: "CHANGE_SITE"; currentSite: C4Content | null; mixIndex: number }
-  | { type: "SET_CURRENT_PAGE"; currentPage: number }
+  | { type: "CHANGE_SITE", currentSite: C4Content | null, mixIndex: number }
 
 const initialState: MixState = {
   currentSite: null,
@@ -37,9 +34,7 @@ const initialState: MixState = {
   error: { message: "" },
   mixIndex: -1,
   userLikes: [],
-  currentPage: 1,
   mix: null,
-  hasNextPage: false,
   mixLimit: 100,
   mixIndexLimit: -3,
 }
@@ -55,8 +50,7 @@ const mixReducer = (state: MixState, action: Action): MixState => {
         ...state,
         mix: action.mix,
         currentSite: action.mix[0],
-        hasNextPage: action.hasNextPage,
-      }
+      };
     case "SET_TAGS":
       return { ...state, selectedTags: action.tags }
     case "SET_LIKES":
@@ -70,9 +64,7 @@ const mixReducer = (state: MixState, action: Action): MixState => {
         ...state,
         currentSite: action.currentSite,
         mixIndex: action.mixIndex,
-      }
-    case "SET_CURRENT_PAGE":
-      return { ...state, currentPage: action.currentPage }
+      };
     default:
       return state
   }
@@ -105,15 +97,10 @@ const useMix = () => {
 
   const fetchMixContent = async () => {
     try {
-      const { selectedTags: currentTags, currentPage, mixLimit } = state
+      const { selectedTags: currentTags, mixLimit, } = state;
       // if the selected tags are the same as the current tags and we have a mix, don't get a new mix
-      if (
-        JSON.stringify(currentTags) === JSON.stringify(state.selectedTags) &&
-        state.mix &&
-        state.mixIndex < state.mix.length + state.mixIndexLimit
-      )
-        return
-      const mixResponse = await fetchMix(currentTags, currentPage, mixLimit)
+      if (JSON.stringify(currentTags) === JSON.stringify(state.selectedTags) && state.mix && state.mixIndex < state.mix.length + state.mixIndexLimit) return;
+      const mixResponse = await fetchMix(currentTags, mixLimit);
       if (mixResponse.message) {
         dispatch({ type: "SET_ERROR", message: mixResponse.message })
       } else {
@@ -138,8 +125,7 @@ const useMix = () => {
     dispatch({
       type: "SET_MIX",
       mix: newMix,
-      hasNextPage: mixResponse.hasNextPage,
-    })
+    });
     // set the first site
     dispatch({ type: "CHANGE_SITE", currentSite: newMix[0], mixIndex: 0 })
   }
@@ -184,16 +170,13 @@ const useMix = () => {
   )
 
   const changeSite = () => {
-    const { mix, mixIndex, currentPage, selectedTags } = state
-    if (!mix) return
+    const { mix, mixIndex, selectedTags } = state;
+    if (!mix) return;
     const newMixIndex = mixIndex + 1
 
     // Get more content if we are almost at the end of the mix
     if (newMixIndex >= mix.length + state.mixIndexLimit) {
-      dispatch({ type: "SET_CURRENT_PAGE", currentPage: currentPage + 1 })
-      if (selectedTags.size > 0 && !state.hasNextPage)
-        dispatch({ type: "SET_TAGS", tags: new Map() })
-      fetchMixContent()
+      fetchMixContent();
     }
 
     if (newMixIndex < mix.length) {
@@ -207,7 +190,6 @@ const useMix = () => {
 
   return {
     currentSite: state.currentSite,
-    hasNextPage: state.hasNextPage,
     isLoading: state.isLoading,
     error: state.error,
     userLikes: state.userLikes,
