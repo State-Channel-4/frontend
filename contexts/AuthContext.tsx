@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import Channel4Icon from "@/assets/channel-4-icon-v2.svg"
 import { usePasswordStore } from "@/store/password"
 import { Web3Auth } from "@web3auth/modal"
-import { BrowserProvider } from "ethers"
+import { ECDSAProvider, getRPCProviderOwner } from "@zerodev/sdk"
 
 type AuthContextType = {
   initializingW3A: boolean
@@ -31,8 +31,10 @@ export const WalletProvider: React.FC<{ children: JSX.Element }> = ({
       const web3AuthProvider = await web3Auth?.connect()
       if (web3AuthProvider) {
         // Create ethers provider from web3 auth provider
-        const provider = new BrowserProvider(web3AuthProvider)
-        const signer = await provider.getSigner()
+        const signer = await ECDSAProvider.init({
+          projectId: process.env.NEXT_PUBLIC_API_ZERO_DEV_ID!,
+          owner: getRPCProviderOwner(web3AuthProvider),
+        })
         const signedMessage = await signer.signMessage(
           process.env.NEXT_PUBLIC_API_LOGIN_SECRET!
         )
