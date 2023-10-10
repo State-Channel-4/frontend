@@ -1,6 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import { WalletProvider } from "@/contexts/WalletContext"
+import { WalletProvider } from "@/contexts/AuthContext"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"

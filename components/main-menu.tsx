@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import browserIcon from "@/assets/browser-icon.svg"
 import xIcon from "@/assets/x-icon.svg"
-import { useWallet } from "@/contexts/WalletContext"
+import { useAuth } from "@/contexts/AuthContext"
 
 import { siteConfig } from "@/config/site"
 
@@ -12,7 +12,7 @@ interface MainMenuProps {
 }
 
 export default function MainMenu({ open, onClose }: MainMenuProps) {
-  const { connect, disconnect, isConnected } = useWallet()
+  const { initializingW3A, signIn, signedIn, signOut } = useAuth()
 
   return (
     <div
@@ -23,77 +23,84 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
         transform: open ? "translateY(0px)" : "translateY(45px)",
       }}
     >
-      {isConnected && (
-        <div className="mb-6">
-          <Link href={siteConfig.mainNav.addSite.href}>
-            <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
-              <div className="w-full bg-c4-gradient-separator bg-clip-text text-transparent">
-                {siteConfig.mainNav.addSite.title}
+      {initializingW3A ? (
+        // TODO: Add spinner component
+        <div className="flex justify-center">Initializing Web3Auth...</div>
+      ) : (
+        <>
+          {signedIn && (
+            <div className="mb-6">
+              <Link href={siteConfig.mainNav.addSite.href}>
+                <div className="flex items-center justify-between border-b border-shark-800 p-4 transition-all hover:border-green">
+                  <div className="w-full bg-c4-gradient-separator bg-clip-text text-transparent">
+                    {siteConfig.mainNav.addSite.title}
+                  </div>
+                  <Image alt="Browser" src={browserIcon} />
+                </div>
+              </Link>
+              <Link href={siteConfig.mainNav.dashboard.href}>
+                <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+                  {siteConfig.mainNav.dashboard.title}
+                </div>
+              </Link>
+            </div>
+          )}
+          <div className="mb-6">
+            {signedIn ? (
+              <Link href={siteConfig.mainNav.changeTags.href}>
+                <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+                  {siteConfig.mainNav.changeTags.title}
+                </div>
+              </Link>
+            ) : (
+              <div
+                className="border-b border-shark-800 cursor-pointer p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200"
+                onClick={() => {
+                  signIn()
+                  onClose()
+                }}
+              >
+                Sign In / Sign Up
               </div>
-              <Image alt="Browser" src={browserIcon} />
+            )}
+            <Link href={siteConfig.mainNav.stats.href}>
+              <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+                {siteConfig.mainNav.stats.title}
+              </div>
+            </Link>
+            <Link href={siteConfig.mainNav.about.href}>
+              <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+                {siteConfig.mainNav.about.title}
+              </div>
+            </Link>
+            {signedIn && (
+              <Link href={siteConfig.mainNav.feedback.href}>
+                <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
+                  {siteConfig.mainNav.feedback.title}
+                </div>
+              </Link>
+            )}
+          </div>
+          {signedIn && (
+            <div
+              className="cursor-pointer p-4 text-shark-300 transition-all hover:text-shark-200"
+              onClick={() => {
+                signOut()
+                onClose()
+              }}
+            >
+              Log Out
             </div>
-          </Link>
-          <Link href={siteConfig.mainNav.dashboard.href}>
-            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
-              {siteConfig.mainNav.dashboard.title}
-            </div>
-          </Link>
-        </div>
-      )}
-      <div className="mb-6">
-        {isConnected ? (
-          <Link href={siteConfig.mainNav.changeTags.href}>
-            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
-              {siteConfig.mainNav.changeTags.title}
-            </div>
-          </Link>
-        ) : (
+          )}
           <div
-            className="border-b border-shark-800 cursor-pointer p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200"
-            onClick={() => {
-              connect()
-              onClose()
-            }}
+            className="flex cursor-pointer items-center justify-between p-4 text-shark-300 transition-colors hover:text-shark-200"
+            onClick={() => onClose()}
           >
-            Sign In / Sign Up
+            <div>Close menu</div>
+            <Image alt="X" src={xIcon} />
           </div>
-        )}
-        <Link href={siteConfig.mainNav.stats.href}>
-          <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
-            {siteConfig.mainNav.stats.title}
-          </div>
-        </Link>
-        <Link href={siteConfig.mainNav.about.href}>
-          <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
-            {siteConfig.mainNav.about.title}
-          </div>
-        </Link>
-        {isConnected && (
-          <Link href={siteConfig.mainNav.feedback.href}>
-            <div className="border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-green hover:text-shark-200">
-              {siteConfig.mainNav.feedback.title}
-            </div>
-          </Link>
-        )}
-      </div>
-      {isConnected && (
-        <div
-          className="cursor-pointer p-4 text-shark-300 transition-all hover:text-shark-200"
-          onClick={() => {
-            disconnect()
-            onClose()
-          }}
-        >
-          Log Out
-        </div>
+        </>
       )}
-      <div
-        className="flex cursor-pointer items-center justify-between p-4 text-shark-300 transition-colors hover:text-shark-200"
-        onClick={() => onClose()}
-      >
-        <div>Close menu</div>
-        <Image alt="X" src={xIcon} />
-      </div>
     </div>
   )
 }
