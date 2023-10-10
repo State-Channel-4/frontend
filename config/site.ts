@@ -14,7 +14,7 @@ export const siteConfig = {
       href: '/submit-url',
     },
     changeTags: {
-      title: "Change Tags",
+      title: "Change tags",
       href: "/submit-tag",
     },
     dashboard: {
@@ -22,7 +22,7 @@ export const siteConfig = {
       href: '/dashboard'
     },
     feedback: {
-      title: 'Send Feedback',
+      title: 'Send feedback',
       href: '/feedback'
     },
     landing: {
