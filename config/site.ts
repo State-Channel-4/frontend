@@ -30,7 +30,7 @@ export const siteConfig = {
       href: '/landing'
     },
     signIn: {
-      title: 'Sign In / Sign Up',
+      title: 'Sign in / Sign up',
       href: '/sign-in'
     },
     stats: {
