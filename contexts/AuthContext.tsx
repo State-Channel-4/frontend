@@ -20,7 +20,7 @@ const AuthContext = createContext<AuthContextType>({
   signOut: () => undefined,
 })
 
-export const WalletProvider: React.FC<{ children: JSX.Element }> = ({
+export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
   const [web3Auth, setWeb3Auth] = useState<Web3Auth | null>(null)

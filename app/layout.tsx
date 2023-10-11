@@ -1,6 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import { WalletProvider } from "@/contexts/AuthContext"
+import { AuthProvider } from "@/contexts/AuthContext"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -52,11 +52,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <WalletProvider>
+            <AuthProvider>
               <div className="flex h-screen flex-col">
                 <AnalyticWrapper>{children}</AnalyticWrapper>
               </div>
-            </WalletProvider>
+            </AuthProvider>
           </ThemeProvider>
         </body>
       </html>
