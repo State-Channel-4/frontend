@@ -18,6 +18,7 @@ module.exports = {
           "1px 5px 4px 0px #00000040 inset, 0px -1px 4px 0px #8B8B8B40 inset",
       },
       colors: {
+        "c4-green": "#5BF34E",
         "shark-50": "#f6f7f9",
         "shark-100": "#edeef1",
         "shark-200": "#d6dae1",
@@ -31,7 +32,6 @@ module.exports = {
         "shark-950": "#21242b",
         dark: "#151616",
         gray: "#282A2D",
-        green: "#5BF34E",
         light: "#373A3E",
         "gray-light": "#9EA3A7",
         border: "hsl(var(--border))",
