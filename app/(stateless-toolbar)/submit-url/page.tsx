@@ -122,7 +122,7 @@ const SubmitUrl = () => {
           loading={isLoading}
           disabled={isLoading}
           onClick={onClickShareItHandler}
-          className="border-green-500 text-green-500 rounded-full py-6"
+          className="rounded-full border-green-500 py-6 text-green-500"
         >
           Share it with the world
         </Button>

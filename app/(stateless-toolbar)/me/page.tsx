@@ -70,7 +70,7 @@ const Account = () => {
           <Row>
             <p className="font-semibold">Network</p>
             <div className="inline-flex items-center gap-2">
-              <div className="bg-green-500 h-2 w-2 rounded-full"></div>
+              <div className="h-2 w-2 rounded-full bg-green-500"></div>
               <p>Sepolia</p>
             </div>
           </Row>
