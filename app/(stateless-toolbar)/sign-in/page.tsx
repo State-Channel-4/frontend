@@ -149,7 +149,7 @@ const SignIn = () => {
             loading={isLoading}
             disabled={isLoading}
             onClick={clickLetMeInHandler}
-            className="border-green-500 text-green-500 w-full rounded-full py-6"
+            className="w-full rounded-full border-green-500 py-6 text-green-500"
           >
             Let me in
           </Button>
@@ -157,7 +157,7 @@ const SignIn = () => {
             variant="outline"
             disabled={isLoading}
             onClick={clickDeleteHandler}
-            className="text-green-500 w-full rounded-full border-transparent py-6"
+            className="w-full rounded-full border-transparent py-6 text-green-500"
           >
             Delete local key
           </Button>
@@ -169,7 +169,7 @@ const SignIn = () => {
             loading={isLoading}
             disabled={isLoading}
             onClick={clickStartJourneyHandler}
-            className="border-green-500 text-green-500 rounded-full py-6"
+            className="rounded-full border-green-500 py-6 text-green-500"
           >
             Start your journey
           </Button>
@@ -187,7 +187,7 @@ const SignIn = () => {
                 loading={isLoading}
                 disabled={isLoading}
                 onClick={clickLoadKeyHandler}
-                className="border-green-500 text-green-500 rounded-full py-6"
+                className="rounded-full border-green-500 py-6 text-green-500"
               >
                 Load key
               </Button>
@@ -196,7 +196,7 @@ const SignIn = () => {
                 loading={isLoading}
                 disabled={isLoading}
                 onClick={clickCancelKeyHandler}
-                className="text-green-500 hover:border-green-500 mt-4 rounded-full border-transparent py-6"
+                className="mt-4 rounded-full border-transparent py-6 text-green-500 hover:border-green-500"
               >
                 Cancel
               </Button>
@@ -208,7 +208,7 @@ const SignIn = () => {
                 loading={isLoading}
                 disabled={isLoading}
                 onClick={clickAlreadyHaveKeyHandler}
-                className="text-green-500 hover:border-green-500 mt-4 rounded-full border-transparent py-6"
+                className="mt-4 rounded-full border-transparent py-6 text-green-500 hover:border-green-500"
               >
                 Do you have a key to upload?
               </Button>

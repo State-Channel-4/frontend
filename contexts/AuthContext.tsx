@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   }
 
   const signedIn = useMemo(() => {
-    return web3Auth?.status === "connected" && token && userId
+    return web3Auth?.status === "connected" && !!token && !!userId
   }, [token, userId, web3Auth])
 
   useEffect(() => {

@@ -31,15 +31,15 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
           {signedIn && (
             <div className="mb-4 xs:mb-6">
               <Link href={siteConfig.mainNav.addSite.href}>
-                <div className="flex items-center justify-between border-b border-shark-800 p-3 xs:p-4 transition-all hover:border-c4-green">
-                  <div className="text-sm xs:text-base w-full bg-c4-gradient-separator bg-clip-text text-transparent">
+                <div className="flex items-center justify-between border-b border-shark-800 p-3 transition-all hover:border-c4-green xs:p-4">
+                  <div className="w-full bg-c4-gradient-separator bg-clip-text text-sm text-transparent xs:text-base">
                     {siteConfig.mainNav.addSite.title}
                   </div>
                   <Image alt="Browser" src={browserIcon} />
                 </div>
               </Link>
               <Link href={siteConfig.mainNav.dashboard.href}>
-                <div className="p-3 xs:p-4 text-sm xs:text-base border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-c4-green hover:text-shark-200">
+                <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 xs:p-4 xs:text-base">
                   {siteConfig.mainNav.dashboard.title}
                 </div>
               </Link>
@@ -48,13 +48,13 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
           <div className="mb-4 xs:mb-6">
             {signedIn ? (
               <Link href={siteConfig.mainNav.changeTags.href}>
-                <div className="p-3 xs:p-4 text-sm xs:text-base border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-c4-green hover:text-shark-200">
+                <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 xs:p-4 xs:text-base">
                   {siteConfig.mainNav.changeTags.title}
                 </div>
               </Link>
             ) : (
               <div
-                className="p-3 xs:p-4 text-sm xs:text-base border-b border-shark-800 cursor-pointer p-4 text-shark-300 transition-all hover:border-c4-green hover:text-shark-200"
+                className="cursor-pointer border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 xs:p-4 xs:text-base"
                 onClick={() => {
                   signIn()
                   onClose()
@@ -64,18 +64,18 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
               </div>
             )}
             <Link href={siteConfig.mainNav.stats.href}>
-              <div className="p-3 xs:p-4 text-sm xs:text-base border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-c4-green hover:text-shark-200">
+              <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 xs:p-4 xs:text-base">
                 {siteConfig.mainNav.stats.title}
               </div>
             </Link>
             <Link href={siteConfig.mainNav.about.href}>
-              <div className="p-3 xs:p-4 text-sm xs:text-base border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-c4-green hover:text-shark-200">
+              <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 xs:p-4 xs:text-base">
                 {siteConfig.mainNav.about.title}
               </div>
             </Link>
             {signedIn && (
               <Link href={siteConfig.mainNav.feedback.href}>
-                <div className="p-3 xs:p-4 text-sm xs:text-base border-b border-shark-800 p-4 text-shark-300 transition-all hover:border-c4-green hover:text-shark-200">
+                <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 xs:p-4 xs:text-base">
                   {siteConfig.mainNav.feedback.title}
                 </div>
               </Link>
@@ -83,7 +83,7 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
           </div>
           {signedIn && (
             <div
-              className="p-3 xs:p-4 text-sm xs:text-base cursor-pointer p-4 text-shark-300 transition-all hover:text-shark-200"
+              className="cursor-pointer p-3 text-sm text-shark-300 transition-all hover:text-shark-200 xs:p-4 xs:text-base"
               onClick={() => {
                 signOut()
                 onClose()
@@ -93,7 +93,7 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
             </div>
           )}
           <div
-            className="p-3 xs:p-4 text-sm xs:text-base flex cursor-pointer items-center justify-between p-4 text-shark-300 transition-colors hover:text-shark-200"
+            className="flex cursor-pointer items-center justify-between p-3 text-sm text-shark-300 transition-colors hover:text-shark-200 xs:p-4 xs:text-base"
             onClick={() => onClose()}
           >
             <div>Close menu</div>
