@@ -9,6 +9,7 @@ import { C4Content } from "@/types"
 import Channel4Icon from "../assets/channel-4-icon-v2.svg"
 import MainMenu from "./main-menu"
 import { Button } from "./ui/button"
+import SiteDetails from "./site-details"
 
 interface ToolbarProps {
   changeSite?: () => void
@@ -18,6 +19,7 @@ interface ToolbarProps {
 
 const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
   const [showMenu, setShowMenu] = useState(false)
+  const [showSiteDetails, setShowSiteDetails] = useState(false);
   const path = usePathname()
   const router = useRouter()
 
@@ -52,7 +54,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
               : "Weclome to Channel 4"}
           </div>
           {isDiscover && !isLoading && (
-            <div className="truncate text-xs text-shark-300">See details</div>
+            <button className="truncate text-xs text-shark-300" onClick={() => setShowSiteDetails(!showSiteDetails)}>See details</button>
           )}
         </div>
       </div>
@@ -73,6 +75,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
         </Button>
       </div>
       <MainMenu onClose={() => setShowMenu(false)} open={showMenu} />
+      {isDiscover && currentSite && <SiteDetails currentSite={currentSite} open={showSiteDetails} onClose={() => setShowSiteDetails(false)}/>}
     </div>
   )
 }
