@@ -95,6 +95,7 @@ module.exports = {
           "linear-gradient(77.41deg, #FB2BFF -5.41%, #E5F344 21.24%, #37FF4B 47.31%, #4D89FF 74.54%, #8F00FF 105.82%)",
         "c4-gradient-separator":
           "linear-gradient(256.85deg, #FB2BFF 9.09%, #E5F344 38.43%, #37FF4B 67.14%, #4D89FF 97.12%, #8F00FF 131.56%)",
+        "c4-gradient-submitter": 'linear-gradient(to bottom, #FFF 19.28%, #37FF4B 91.76%)',
         "c4-gradient-green":
           "linear-gradient(91.38deg, #E5F344 -4.98%, #37FF4B 98.82%)",
         "c4-gradient-green-rev":
