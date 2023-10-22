@@ -75,6 +75,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        dm: ["var(--font-dm)", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {
@@ -111,9 +112,6 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         "c4-gradient":
           "linear-gradient(77.41deg, #FB2BFF -5.41%, #E5F344 21.24%, #37FF4B 47.31%, #4D89FF 74.54%, #8F00FF 105.82%)",
-      },
-      screens: {
-        xs: "500px",
       },
     },
   },

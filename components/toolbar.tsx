@@ -32,14 +32,14 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
   }, [path])
 
   return (
-    <div className="relative flex items-center justify-between gap-4 px-4 py-2 sm:px-8 sm:py-6">
+    <div className="relative flex items-center justify-between gap-4 px-4 py-2 md:px-8 md:py-6">
       <div className="flex min-w-0 items-center gap-4">
         <div
-          className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow sm:p-4"
+          className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow md:p-4"
           onClick={() => setShowMenu(!showMenu)}
         >
           <Image
-            className="h-6 w-6 sm:h-10 sm:w-10"
+            className="h-6 w-6 md:h-10 md:w-10"
             priority
             src={Channel4Icon}
             alt="Channel 4 icon black"
@@ -66,7 +66,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
           </div>
         )}
         <Button
-          className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev sm:px-16"
+          className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev md:px-16"
           onClick={() =>
             isDiscover && changeSite ? changeSite() : router.push("discover")
           }
