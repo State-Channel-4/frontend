@@ -3,7 +3,7 @@ import { Metadata } from "next"
 import { AuthProvider } from "@/contexts/AuthContext"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
+import { fontDM, fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -48,7 +48,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body
           className={cn(
             "h-screen bg-shark-950 font-sans antialiased",
-            fontSans.variable
+            fontSans.variable, fontDM.variable
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
