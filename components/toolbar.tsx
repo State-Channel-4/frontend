@@ -4,22 +4,30 @@ import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import EmptyHeart from "@/assets/empty-heart.svg"
+import { useAuth } from "@/contexts/AuthContext"
 import { C4Content } from "@/types"
 
 import Channel4Icon from "../assets/channel-4-icon-v2.svg"
 import MainMenu from "./main-menu"
-import { Button } from "./ui/button"
 import SiteDetails from "./site-details"
+import { Button } from "./ui/button"
 
 interface ToolbarProps {
   changeSite?: () => void
   currentSite?: C4Content | null
   isLoading?: boolean
+  likeOrUnlike: (contentId: string) => void
 }
 
-const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
+const Toolbar = ({
+  changeSite,
+  currentSite,
+  isLoading,
+  likeOrUnlike,
+}: ToolbarProps) => {
+  const { signedIn } = useAuth()
   const [showMenu, setShowMenu] = useState(false)
-  const [showSiteDetails, setShowSiteDetails] = useState(false);
+  const [showSiteDetails, setShowSiteDetails] = useState(false)
   const path = usePathname()
   const router = useRouter()
 
@@ -54,16 +62,25 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
               : "Weclome to Channel 4"}
           </div>
           {isDiscover && !isLoading && (
-            <button className="truncate text-xs text-shark-300" onClick={() => setShowSiteDetails(!showSiteDetails)}>See details</button>
+            <button
+              className="truncate text-xs text-shark-300"
+              onClick={() => setShowSiteDetails(!showSiteDetails)}
+            >
+              See details
+            </button>
           )}
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-8">
         {isDiscover && !isLoading && (
-          <div className="relative flex cursor-pointer items-center gap-2 text-sm">
+          <button
+            className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"
+            disabled={!signedIn}
+            onClick={() => currentSite && likeOrUnlike(currentSite._id)}
+          >
             <Image alt="Like" className="h-4 w-4" src={EmptyHeart} />
             <div>{currentSite?.likes}</div>
-          </div>
+          </button>
         )}
         <Button
           className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev md:px-16"
@@ -75,7 +92,13 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
         </Button>
       </div>
       <MainMenu onClose={() => setShowMenu(false)} open={showMenu} />
-      {isDiscover && currentSite && <SiteDetails currentSite={currentSite} open={showSiteDetails} onClose={() => setShowSiteDetails(false)}/>}
+      {isDiscover && currentSite && (
+        <SiteDetails
+          currentSite={currentSite}
+          open={showSiteDetails}
+          onClose={() => setShowSiteDetails(false)}
+        />
+      )}
     </div>
   )
 }

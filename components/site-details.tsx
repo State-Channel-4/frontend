@@ -15,7 +15,6 @@ export default function SiteDetails({
   open,
   onClose,
 }: SiteDetailsProps) {
-  console.log("Current site: ", currentSite)
   return (
     <div
       className="absolute break-words bottom-[calc(100%+20px)] left-5 w-[calc(100%-40px)] max-w-[1112px] transition-all duration-300 p-6 bg-shark-950 border border-shark-500 rounded-2xl sm:bottom-[calc(100%+12px)] sm:p-10 sm:left-12 sm:flex sm:justify-between sm:gap-4"

@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useReducer } from "react"
+import { useAuth } from "@/contexts/AuthContext"
 import { useEncryptedStore } from "@/store/encrypted"
 import { usePasswordStore } from "@/store/password"
 import { C4Content, Tag, TagMap } from "@/types"
@@ -79,8 +80,8 @@ const mixReducer = (state: MixState, action: Action): MixState => {
 }
 
 const useMix = () => {
-  const { encrypted } = useEncryptedStore()
-  const { password, token, userId } = usePasswordStore()
+  const { signer, signedIn } = useAuth()
+  const { token, userId } = usePasswordStore()
   const [state, dispatch] = useReducer(mixReducer, initialState)
 
   const getTagsFromStore = () => {
@@ -151,6 +152,7 @@ const useMix = () => {
 
   const likeOrUnlike = useCallback(
     async (contentId: string) => {
+      if (!signedIn) return
       const { currentSite, userLikes } = state
       if (!currentSite) return
 
@@ -167,20 +169,13 @@ const useMix = () => {
           likes: state.currentSite.likes + (isLiked ? -1 : 1),
         },
       })
-
       try {
-        await updateLikesInApi(
-          contentId,
-          encrypted!,
-          password!,
-          token!,
-          userId!
-        )
+        await updateLikesInApi(contentId, !isLiked, signer!, token!, userId!)
       } catch (error) {
         console.error(error)
       }
     },
-    [state, encrypted, password, token, userId]
+    [signer, state, token, userId]
   )
 
   const changeSite = () => {

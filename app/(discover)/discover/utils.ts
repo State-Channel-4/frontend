@@ -1,5 +1,5 @@
 import { TagMap } from "@/types";
-import { Wallet } from "ethers";
+import { JsonRpcSigner, Wallet } from "ethers";
 
 import { getRawTransactionToSign } from "@/lib/utils";
 
@@ -28,16 +28,16 @@ export const fetchMix = async (
 
 export const updateLikesInApi = async (
   contentId: string,
-  encrypted: string,
-  password: string,
+  liked: boolean,
+  signer: JsonRpcSigner,
   token: string,
-  userId: string
+  userId: string,
 ) => {
   const functionName = "likeURL";
-  const params = [2]; // TODO: use a url id compatible with Solidity (object_id cannot be casted to bigint. I think it is too large)
+  const params = [2, Number(liked)]; // TODO: use a url id compatible with Solidity (object_id cannot be casted to bigint. I think it is too large)
   const metaTx = await getRawTransactionToSign(functionName, params);
-  const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!);
-  const signedLikeUrlTx = await wallet?.signTransaction(metaTx);
+  // const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!);
+  const signedLikeUrlTx = await signer.signTransaction(metaTx);
   fetch(`${process.env.NEXT_PUBLIC_API_URL}/like/${contentId}`, {
     method: "PUT",
     headers: {
@@ -46,7 +46,7 @@ export const updateLikesInApi = async (
     },
     body: JSON.stringify({
       signedMessage: signedLikeUrlTx,
-      address: wallet.address,
+      address: signer.address,
       functionName: functionName,
       params: params,
       // TODO: temp params for mongodb

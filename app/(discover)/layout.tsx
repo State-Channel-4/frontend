@@ -11,7 +11,7 @@ export default function DiscoverLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { changeSite, currentSite, error, isLoading } = useMix()
+  const { changeSite, currentSite, error, isLoading, likeOrUnlike } = useMix()
 
   return (
     <>
@@ -22,6 +22,7 @@ export default function DiscoverLayout({
         changeSite={changeSite}
         currentSite={currentSite}
         isLoading={isLoading}
+        likeOrUnlike={likeOrUnlike}
       />
     </>
   )
