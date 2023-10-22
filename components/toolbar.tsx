@@ -35,6 +35,16 @@ const Toolbar = ({
     return path === "/discover"
   }, [path])
 
+  const togglePopup = (option: string) => {
+    if (option === "navigation") {
+      setShowMenu(!showMenu)
+      setShowSiteDetails(false)
+    } else {
+      setShowSiteDetails(!showSiteDetails)
+      setShowMenu(false)
+    }
+  }
+
   useEffect(() => {
     setShowMenu(false)
   }, [path])
@@ -44,7 +54,7 @@ const Toolbar = ({
       <div className="flex min-w-0 items-center gap-4">
         <div
           className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow md:p-4"
-          onClick={() => setShowMenu(!showMenu)}
+          onClick={() => togglePopup("navigation")}
         >
           <Image
             className="h-6 w-6 md:h-10 md:w-10"
@@ -64,7 +74,7 @@ const Toolbar = ({
           {isDiscover && !isLoading && (
             <button
               className="truncate text-xs text-shark-300"
-              onClick={() => setShowSiteDetails(!showSiteDetails)}
+              onClick={() => togglePopup("site-details")}
             >
               See details
             </button>
