@@ -17,7 +17,7 @@ export default function SiteDetails({
 }: SiteDetailsProps) {
   return (
     <div
-      className="absolute break-words bottom-[calc(100%+20px)] left-5 w-[calc(100%-40px)] max-w-[1112px] transition-all duration-300 p-6 bg-shark-950 border border-shark-500 rounded-2xl sm:bottom-[calc(100%+12px)] sm:p-10 sm:left-12 sm:flex sm:justify-between sm:gap-4"
+      className="absolute break-words bottom-[calc(100%+20px)] left-5 w-[calc(100%-40px)] md:w-[calc(100%-92px)] max-w-[1112px] transition-all duration-300 p-6 bg-shark-950 border border-shark-500 rounded-2xl md:bottom-[calc(100%+12px)] md:p-10 md:left-12 md:flex md:justify-between md:gap-4"
       style={{
         opacity: open ? 1 : 0,
         pointerEvents: open ? "auto" : "none",
@@ -49,13 +49,13 @@ export default function SiteDetails({
           <div>on {moment(currentSite.createdAt).format("DD MMM YYYY")}</div>
         </div>
       </div>
-      <div className="sm:flex sm:gap-6 items-start">
-        <div className="mt-14 text-sm flex flex-wrap gap-2 sm:mt-0 text-shark-300">
+      <div className="md:flex md:gap-6 items-start">
+        <div className="mt-14 text-sm flex flex-wrap gap-2 md:mt-0 text-shark-300">
           {currentSite.tags.map(({ name }) => (
             <div>#{name}</div>
           ))}
         </div>
-        <div className="mt-[88px] flex shrink-0 justify-center sm:mt-0 sm:items-center sm:h-full">
+        <div className="mt-[88px] flex shrink-0 justify-center md:mt-0 md:items-center md:h-full">
           {/* TODO: Replace with single SVG image that can be colored */}
           <button onClick={() => onClose()}>
             <Image alt="Close" src={CloseBorder} />
