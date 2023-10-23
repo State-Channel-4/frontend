@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import EmptyHeart from "@/assets/empty-heart.svg"
+import FilledHeart from "@/assets/filled-heart.svg"
 import { useAuth } from "@/contexts/AuthContext"
 import { C4Content } from "@/types"
 
@@ -16,7 +17,8 @@ interface ToolbarProps {
   changeSite?: () => void
   currentSite?: C4Content | null
   isLoading?: boolean
-  likeOrUnlike: (contentId: string) => void
+  likeOrUnlike?: (contentId: string) => void
+  userLikes?: string[]
 }
 
 const Toolbar = ({
@@ -24,6 +26,7 @@ const Toolbar = ({
   currentSite,
   isLoading,
   likeOrUnlike,
+  userLikes,
 }: ToolbarProps) => {
   const { signedIn } = useAuth()
   const [showMenu, setShowMenu] = useState(false)
@@ -34,6 +37,11 @@ const Toolbar = ({
   const isDiscover = useMemo(() => {
     return path === "/discover"
   }, [path])
+
+  const hasLiked = useMemo(() => {
+    if (!currentSite || !userLikes) return false
+    return userLikes.includes(currentSite._id)
+  }, [currentSite, userLikes])
 
   const togglePopup = (option: string) => {
     if (option === "navigation") {
@@ -86,9 +94,16 @@ const Toolbar = ({
           <button
             className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"
             disabled={!signedIn}
-            onClick={() => currentSite && likeOrUnlike(currentSite._id)}
+            onClick={() =>
+              currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
+            }
           >
-            <Image alt="Like" className="h-4 w-4" src={EmptyHeart} />
+            {/* TODO: Replace with single SVG image that can be colored */}
+            <Image
+              alt="Like"
+              className="h-4 w-4"
+              src={hasLiked ? FilledHeart : EmptyHeart}
+            />
             <div>{currentSite?.likes}</div>
           </button>
         )}

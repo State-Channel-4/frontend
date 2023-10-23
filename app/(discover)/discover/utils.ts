@@ -33,8 +33,9 @@ export const updateLikesInApi = async (
   token: string,
   userId: string,
 ) => {
-  const functionName = "likeURL";
-  const params = [2, Number(liked)]; // TODO: use a url id compatible with Solidity (object_id cannot be casted to bigint. I think it is too large)
+  const functionName = "toggleLike";
+  // Stringifying the URL for now since input in smart contract has changed to string and is
+  const params = ['2', liked, 1, signer.address]; // TODO: use a url id compatible with Solidity (object_id cannot be casted to bigint. I think it is too large)
   const metaTx = await getRawTransactionToSign(functionName, params);
   // const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!);
   const signedLikeUrlTx = await signer.signTransaction(metaTx);

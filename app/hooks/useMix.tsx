@@ -155,7 +155,6 @@ const useMix = () => {
       if (!signedIn) return
       const { currentSite, userLikes } = state
       if (!currentSite) return
-
       const isLiked = userLikes.includes(contentId)
       const newUserLikes = isLiked
         ? userLikes.filter((item) => item !== contentId)
@@ -175,7 +174,7 @@ const useMix = () => {
         console.error(error)
       }
     },
-    [signer, state, token, userId]
+    [signer, signedIn, state, token, userId]
   )
 
   const changeSite = () => {
