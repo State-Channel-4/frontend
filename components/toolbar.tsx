@@ -111,7 +111,7 @@ const Toolbar = ({
               </button>
             </PopoverTrigger>
             <PopoverContent
-              className="p-4 bg-shark-950 border border-shark-800 text-center text-shark-50 rounded-lg w-fit text-sm"
+              className="w-fit rounded-lg border border-shark-800 bg-shark-950 p-4 text-center text-sm text-shark-50"
               side="top"
               sideOffset={15}
             >

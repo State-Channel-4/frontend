@@ -110,19 +110,19 @@ const useMix = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const fetchUserLikes = async () => {
+  const fetchUserLikes = useCallback(async () => {
     const likes = await fetchLikes(userId!)
     dispatch({
       type: "SET_LIKES",
       likes,
       currentSite: null,
     })
-  }
+  }, [userId])
 
   useEffect(() => {
     if (!userId) return
     fetchUserLikes()
-  }, [userId])
+  }, [fetchUserLikes, userId])
 
   const fetchMixContent = async () => {
     try {
