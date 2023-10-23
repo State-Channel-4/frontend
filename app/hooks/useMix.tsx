@@ -128,6 +128,7 @@ const useMix = () => {
   }
 
   useEffect(() => {
+    if (!userId) return
     fetchUserLikes()
   }, [userId])
 
