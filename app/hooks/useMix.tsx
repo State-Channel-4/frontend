@@ -183,10 +183,8 @@ const useMix = () => {
         ...state.currentSite,
         likes: state.currentSite.likes + (isLiked ? -1 : 1),
       }
-      console.log("Mix: ", mix)
       const updatedMix = [...(mix as C4Content[])]
       updatedMix[mixIndex] = updatedSite as C4Content
-      console.log("Updated mix: ", updatedMix)
       dispatch({
         type: "SET_LIKES",
         likes: newUserLikes,
@@ -203,12 +201,15 @@ const useMix = () => {
   )
 
   const changeSite = () => {
-    const { mix, mixIndex, selectedTags } = state
+    const { mix, mixIndex, mixLimit } = state
     if (!mix) return
     const newMixIndex = mixIndex + 1
 
-    // Get more content if we are almost at the end of the mix
-    if (newMixIndex >= mix.length + state.mixIndexLimit) {
+    // Get more content if we are almost at the end of the mix and if mix length equals limit (more urls exist in server)
+    if (
+      mix.length === mixLimit &&
+      newMixIndex >= mix.length + state.mixIndexLimit
+    ) {
       fetchMixContent()
     }
 
@@ -217,6 +218,14 @@ const useMix = () => {
         type: "CHANGE_SITE",
         currentSite: mix[newMixIndex],
         mixIndex: newMixIndex,
+      })
+    }
+    // Reset index to zero if index is greater than or equal to length
+    else {
+      dispatch({
+        type: "CHANGE_SITE",
+        currentSite: mix[0],
+        mixIndex: 0,
       })
     }
   }
