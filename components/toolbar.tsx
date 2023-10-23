@@ -12,6 +12,7 @@ import Channel4Icon from "../assets/channel-4-icon-v2.svg"
 import MainMenu from "./main-menu"
 import SiteDetails from "./site-details"
 import { Button } from "./ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 interface ToolbarProps {
   changeSite?: () => void
@@ -39,9 +40,9 @@ const Toolbar = ({
   }, [path])
 
   const hasLiked = useMemo(() => {
-    if (!currentSite || !userLikes) return false
+    if (!signedIn || !currentSite || !userLikes) return false
     return userLikes.includes(currentSite._id)
-  }, [currentSite, userLikes])
+  }, [currentSite, signedIn, userLikes])
 
   const togglePopup = (option: string) => {
     if (option === "navigation") {
@@ -91,21 +92,32 @@ const Toolbar = ({
       </div>
       <div className="flex shrink-0 items-center gap-8">
         {isDiscover && !isLoading && (
-          <button
-            className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"
-            disabled={!signedIn}
-            onClick={() =>
-              currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
-            }
-          >
-            {/* TODO: Replace with single SVG image that can be colored */}
-            <Image
-              alt="Like"
-              className="h-4 w-4"
-              src={hasLiked ? FilledHeart : EmptyHeart}
-            />
-            <div>{currentSite?.likes}</div>
-          </button>
+          <Popover>
+            <PopoverTrigger disabled={signedIn}>
+              <button
+                className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"
+                disabled={!signedIn}
+                onClick={() =>
+                  currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
+                }
+              >
+                {/* TODO: Replace with single SVG image that can be colored */}
+                <Image
+                  alt="Like"
+                  className="h-4 w-4"
+                  src={hasLiked ? FilledHeart : EmptyHeart}
+                />
+                <div>{currentSite?.likes}</div>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-4 bg-shark-950 border border-shark-800 text-center text-shark-50 rounded-lg w-fit text-sm"
+              side="top"
+              sideOffset={15}
+            >
+              Please sign in to like this.
+            </PopoverContent>
+          </Popover>
         )}
         <Button
           className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev md:px-16"

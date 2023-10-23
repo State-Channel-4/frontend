@@ -81,6 +81,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
     await web3Auth?.logout()
     updateToken(null)
     updateUserId(null)
+    setSigner(null)
   }
 
   const signedIn = useMemo(() => {
