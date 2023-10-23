@@ -2,11 +2,14 @@
 
 import { useCallback, useEffect, useReducer } from "react"
 import { useAuth } from "@/contexts/AuthContext"
-import { useEncryptedStore } from "@/store/encrypted"
 import { usePasswordStore } from "@/store/password"
 import { C4Content, Tag, TagMap } from "@/types"
 
-import { fetchMix, updateLikesInApi } from "../(discover)/discover/utils"
+import {
+  fetchLikes,
+  fetchMix,
+  updateLikesInApi,
+} from "../(discover)/discover/utils"
 
 type MixState = {
   currentSite: C4Content | null
@@ -27,7 +30,12 @@ type Action =
   | { type: "SET_LOADING"; isLoading: boolean }
   | { type: "SET_MIX"; mix: C4Content[]; hasNextPage: boolean }
   | { type: "SET_TAGS"; tags: TagMap }
-  | { type: "SET_LIKES"; likes: string[]; currentSite: C4Content | null }
+  | {
+      type: "SET_LIKES"
+      likes: string[]
+      currentSite: C4Content | null
+      likesFetched?: boolean
+    }
   | { type: "CHANGE_SITE"; currentSite: C4Content | null; mixIndex: number }
   | { type: "SET_CURRENT_PAGE"; currentPage: number }
 
@@ -61,6 +69,13 @@ const mixReducer = (state: MixState, action: Action): MixState => {
     case "SET_TAGS":
       return { ...state, selectedTags: action.tags }
     case "SET_LIKES":
+      // Don't update current site if dispatch is called from fetchUserLikes
+      if (action.likesFetched) {
+        return {
+          ...state,
+          userLikes: action.likes,
+        }
+      }
       return {
         ...state,
         userLikes: action.likes,
@@ -83,7 +98,6 @@ const useMix = () => {
   const { signer, signedIn } = useAuth()
   const { token, userId } = usePasswordStore()
   const [state, dispatch] = useReducer(mixReducer, initialState)
-
   const getTagsFromStore = () => {
     if (typeof window === "undefined") return
     const tagsFromStore = sessionStorage.getItem("c4.tags")
@@ -103,6 +117,20 @@ const useMix = () => {
     getTagsFromStore()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const fetchUserLikes = async () => {
+    const likes = await fetchLikes(userId!)
+    dispatch({
+      type: "SET_LIKES",
+      likes,
+      currentSite: null,
+      likesFetched: true,
+    })
+  }
+
+  useEffect(() => {
+    fetchUserLikes()
+  }, [userId])
 
   const fetchMixContent = async () => {
     try {

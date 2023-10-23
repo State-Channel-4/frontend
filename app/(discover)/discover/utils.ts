@@ -26,6 +26,24 @@ export const fetchMix = async (
   }
 };
 
+export const fetchLikes = async (userId: string) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/likes`
+    );
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const { likes } = await response.json();
+    return likes.map(({ id }: { id: string }) => id);
+  } catch (error) {
+    let message = "Unknown error";
+    if (error instanceof Error) message = error.message;
+    console.error("Error fetching mix:", error);
+    return { message };
+  }
+}
+
 export const updateLikesInApi = async (
   contentId: string,
   liked: boolean,

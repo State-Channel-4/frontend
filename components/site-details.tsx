@@ -52,7 +52,7 @@ export default function SiteDetails({
       <div className="items-start md:flex md:gap-6">
         <div className="mt-14 flex flex-wrap gap-2 text-sm text-shark-300 md:mt-0">
           {currentSite.tags.map(({ name }) => (
-            <div>#{name}</div>
+            <div key={name}>#{name}</div>
           ))}
         </div>
         <div className="mt-[88px] flex shrink-0 justify-center md:mt-0 md:h-full md:items-center">
