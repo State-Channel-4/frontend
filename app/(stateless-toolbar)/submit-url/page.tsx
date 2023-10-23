@@ -81,53 +81,70 @@ const SubmitUrl = () => {
   }
 
   return (
-    <RequireAuth>
-      <div className="mx-7 flex flex-col justify-center lg:container">
-        <div className="my-5 flex h-40 justify-center rounded-br-3xl rounded-tl-3xl bg-c4-gradient-main">
-          <Image priority src={Channel4IconBlack} alt="Channel 4 icon black" />
+    <div className="flex items-center h-full justify-center">
+      <div className="bg-c4-gradient-separator p-px rounded-[32px] w-full max-w-[1130px]">
+        <div className="p-10 pb-16 bg-shark-950 rounded-[32px] relative">
+          <div className="flex gap-10 justify-between">
+            <div className="text-5xl flex items-center gap-6">
+              <div>Add a website</div>
+            </div>
+            <div>
+              <div>Preview</div>
+            </div>
+          </div>
+          <div className="p-px bg-c4-gradient-separator rounded-[32px] absolute top-[calc(100%-14px)] left-1/2 transform -translate-x-1/2 w-full max-w-[608px]">
+            <div className="rounded-[32px] py-6 px-16 bg-shark-950"></div>
+          </div>
         </div>
-        <h2 className="my-5">
-          Share your favourite websites & <span className="">spark joy</span> in
-          our community with <span className="">random gems!</span> 🌐✨
-        </h2>
-        <div className="space-y-2 pb-4">
-          <p>Enter title here</p>
-          <input
-            type={"text"}
-            value={title || ""}
-            onChange={onTitleChangeHandler}
-            className="h-12 w-full rounded-lg bg-gray px-2 py-1"
-          />
-        </div>
-        <div className="space-y-2 pb-4">
-          <p>Enter URL here</p>
-          <input
-            type={"text"}
-            value={url || ""}
-            onChange={onUrlChangeHandler}
-            className="h-12 w-full rounded-lg bg-gray px-2 py-1"
-          />
-        </div>
-        <div className="space-y-2 pb-4">
-          <p>Add tags (optional)</p>
-          <TagRow
-            selectable
-            shownTags={showTags}
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-          />
-        </div>
-        <Button
-          variant="outline"
-          loading={isLoading}
-          disabled={isLoading}
-          onClick={onClickShareItHandler}
-          className="rounded-full border-green-500 py-6 text-green-500"
-        >
-          Share it with the world
-        </Button>
       </div>
-    </RequireAuth>
+    </div>
+    // <RequireAuth>
+    //   <div className="mx-7 flex flex-col justify-center lg:container">
+    //     <div className="my-5 flex h-40 justify-center rounded-br-3xl rounded-tl-3xl bg-c4-gradient-main">
+    //       <Image priority src={Channel4IconBlack} alt="Channel 4 icon black" />
+    //     </div>
+    //     <h2 className="my-5">
+    //       Share your favourite websites & <span className="">spark joy</span> in
+    //       our community with <span className="">random gems!</span> 🌐✨
+    //     </h2>
+    //     <div className="space-y-2 pb-4">
+    //       <p>Enter title here</p>
+    //       <input
+    //         type={"text"}
+    //         value={title || ""}
+    //         onChange={onTitleChangeHandler}
+    //         className="h-12 w-full rounded-lg bg-gray px-2 py-1"
+    //       />
+    //     </div>
+    //     <div className="space-y-2 pb-4">
+    //       <p>Enter URL here</p>
+    //       <input
+    //         type={"text"}
+    //         value={url || ""}
+    //         onChange={onUrlChangeHandler}
+    //         className="h-12 w-full rounded-lg bg-gray px-2 py-1"
+    //       />
+    //     </div>
+    //     <div className="space-y-2 pb-4">
+    //       <p>Add tags (optional)</p>
+    //       <TagRow
+    //         selectable
+    //         shownTags={showTags}
+    //         selectedTags={selectedTags}
+    //         setSelectedTags={setSelectedTags}
+    //       />
+    //     </div>
+    //     <Button
+    //       variant="outline"
+    //       loading={isLoading}
+    //       disabled={isLoading}
+    //       onClick={onClickShareItHandler}
+    //       className="rounded-full border-green-500 py-6 text-green-500"
+    //     >
+    //       Share it with the world
+    //     </Button>
+    //   </div>
+    // </RequireAuth>
   )
 }
 
