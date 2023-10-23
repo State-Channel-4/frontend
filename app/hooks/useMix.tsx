@@ -32,9 +32,9 @@ type Action =
   | { type: "SET_TAGS"; tags: TagMap }
   | {
       type: "SET_LIKES"
-      likes: string[]
       currentSite: C4Content | null
-      likesFetched?: boolean
+      likes: string[]
+      mix?: C4Content[]
     }
   | { type: "CHANGE_SITE"; currentSite: C4Content | null; mixIndex: number }
   | { type: "SET_CURRENT_PAGE"; currentPage: number }
@@ -69,8 +69,7 @@ const mixReducer = (state: MixState, action: Action): MixState => {
     case "SET_TAGS":
       return { ...state, selectedTags: action.tags }
     case "SET_LIKES":
-      // Don't update current site if dispatch is called from fetchUserLikes
-      if (action.likesFetched) {
+      if (!action.mix) {
         return {
           ...state,
           userLikes: action.likes,
@@ -80,6 +79,7 @@ const mixReducer = (state: MixState, action: Action): MixState => {
         ...state,
         userLikes: action.likes,
         currentSite: action.currentSite,
+        mix: action.mix,
       }
     case "CHANGE_SITE":
       return {
@@ -124,7 +124,6 @@ const useMix = () => {
       type: "SET_LIKES",
       likes,
       currentSite: null,
-      likesFetched: true,
     })
   }
 
@@ -181,20 +180,26 @@ const useMix = () => {
   const likeOrUnlike = useCallback(
     async (contentId: string) => {
       if (!signedIn) return
-      const { currentSite, userLikes } = state
+      const { currentSite, mix, mixIndex, userLikes } = state
       if (!currentSite) return
       const isLiked = userLikes.includes(contentId)
       const newUserLikes = isLiked
         ? userLikes.filter((item) => item !== contentId)
         : [...userLikes, contentId]
 
+      const updatedSite = state.currentSite && {
+        ...state.currentSite,
+        likes: state.currentSite.likes + (isLiked ? -1 : 1),
+      }
+      console.log("Mix: ", mix)
+      const updatedMix = [...(mix as C4Content[])]
+      updatedMix[mixIndex] = updatedSite as C4Content
+      console.log("Updated mix: ", updatedMix)
       dispatch({
         type: "SET_LIKES",
         likes: newUserLikes,
-        currentSite: state.currentSite && {
-          ...state.currentSite,
-          likes: state.currentSite.likes + (isLiked ? -1 : 1),
-        },
+        currentSite: updatedSite,
+        mix: updatedMix,
       })
       try {
         await updateLikesInApi(contentId, !isLiked, signer!, token!, userId!)
