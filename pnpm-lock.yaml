@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@radix-ui/react-popover':
     specifier: ^1.0.6
@@ -9,10 +13,10 @@ dependencies:
     version: 1.0.1(next@13.4.7)(react@18.2.0)
   '@web3auth/modal':
     specifier: ^7.0.3
-    version: 7.0.3(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)(@walletconnect/sign-client@2.10.1)(@walletconnect/types@2.10.1)(@walletconnect/utils@2.10.1)(react-dom@18.2.0)(react@18.2.0)
+    version: 7.0.3(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)(@walletconnect/sign-client@2.10.1)(@walletconnect/types@2.10.1)(@walletconnect/utils@2.10.1)(encoding@0.1.13)(react-dom@18.2.0)(react@18.2.0)
   airtable:
     specifier: ^0.12.1
-    version: 0.12.1
+    version: 0.12.1(encoding@0.1.13)
   class-variance-authority:
     specifier: ^0.4.0
     version: 0.4.0(typescript@4.9.3)
@@ -87,6 +91,9 @@ devDependencies:
   autoprefixer:
     specifier: ^10.4.13
     version: 10.4.13(postcss@8.4.21)
+  encoding:
+    specifier: ^0.1.13
+    version: 0.1.13
   eslint:
     specifier: ^8.31.0
     version: 8.31.0
@@ -1292,7 +1299,7 @@ packages:
       buffer: 6.0.3
     dev: false
 
-  /@solana/web3.js@1.78.7:
+  /@solana/web3.js@1.78.7(encoding@0.1.13):
     resolution: {integrity: sha512-BiAuCaHnbxgHsjNt/4dfMYjvPDRw+tollg6uWdVZpPogQW2GJj51LQ2NeVhfIGlJIU75O03YZeIc0r0H6LH1vA==}
     dependencies:
       '@babel/runtime': 7.23.1
@@ -1307,7 +1314,7 @@ packages:
       buffer: 6.0.3
       fast-stable-stringify: 1.0.0
       jayson: 4.1.0
-      node-fetch: 2.6.12
+      node-fetch: 2.6.12(encoding@0.1.13)
       rpc-websockets: 7.6.0
       superstruct: 0.14.2
     transitivePeerDependencies:
@@ -1628,14 +1635,14 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@toruslabs/solana-embed@2.0.0(@babel/runtime@7.23.1):
+  /@toruslabs/solana-embed@2.0.0(@babel/runtime@7.23.1)(encoding@0.1.13):
     resolution: {integrity: sha512-2Rqo8Y0/YZWDfu6IxoVMNSfJ+Mecvtg2+N8/jMUzFp9Fho1LADULl87QZW2Mgu1tMEhHPKAdisvhope3KkTZjA==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
       '@babel/runtime': 7.x
     dependencies:
       '@babel/runtime': 7.23.1
-      '@solana/web3.js': 1.78.7
+      '@solana/web3.js': 1.78.7(encoding@0.1.13)
       '@toruslabs/base-controllers': 4.2.0(@babel/runtime@7.23.1)
       '@toruslabs/http-helpers': 5.0.0(@babel/runtime@7.23.1)
       '@toruslabs/openlogin-jrpc': 5.1.0(@babel/runtime@7.23.1)
@@ -2143,7 +2150,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@web3auth/modal@7.0.3(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)(@walletconnect/sign-client@2.10.1)(@walletconnect/types@2.10.1)(@walletconnect/utils@2.10.1)(react-dom@18.2.0)(react@18.2.0):
+  /@web3auth/modal@7.0.3(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)(@walletconnect/sign-client@2.10.1)(@walletconnect/types@2.10.1)(@walletconnect/utils@2.10.1)(encoding@0.1.13)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-6jYGOgG5OiFcXv6KR0hPokq6lPkFt7VBH34M9Stij7WyDg8I1S/Qjlx5vKM9rhUP4/d51wNmb77t1rQI+TGsDg==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
@@ -2151,7 +2158,7 @@ packages:
       '@solana/web3.js': ^1.x
     dependencies:
       '@babel/runtime': 7.23.1
-      '@solana/web3.js': 1.78.7
+      '@solana/web3.js': 1.78.7(encoding@0.1.13)
       '@web3auth/base': 7.0.1(@babel/runtime@7.23.1)
       '@web3auth/base-provider': 7.0.1(@babel/runtime@7.23.1)
       '@web3auth/ethereum-provider': 7.0.2(@babel/runtime@7.23.1)
@@ -2161,7 +2168,7 @@ packages:
       '@web3auth/phantom-adapter': 7.0.2(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)
       '@web3auth/solana-provider': 7.0.2(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)
       '@web3auth/torus-evm-adapter': 7.0.3(@babel/runtime@7.23.1)
-      '@web3auth/torus-solana-adapter': 7.0.2(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)
+      '@web3auth/torus-solana-adapter': 7.0.2(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)(encoding@0.1.13)
       '@web3auth/ui': 7.0.2(@babel/runtime@7.23.1)(react-dom@18.2.0)(react@18.2.0)
       '@web3auth/wallet-connect-v2-adapter': 7.0.2(@babel/runtime@7.23.1)(@walletconnect/sign-client@2.10.1)(@walletconnect/types@2.10.1)(@walletconnect/utils@2.10.1)
     transitivePeerDependencies:
@@ -2211,7 +2218,7 @@ packages:
       '@solana/web3.js': ^1.x
     dependencies:
       '@babel/runtime': 7.23.1
-      '@solana/web3.js': 1.78.7
+      '@solana/web3.js': 1.78.7(encoding@0.1.13)
       '@toruslabs/openlogin': 5.1.1(@babel/runtime@7.23.1)
       '@toruslabs/openlogin-utils': 5.1.0(@babel/runtime@7.23.1)
       '@web3auth/base': 7.0.1(@babel/runtime@7.23.1)
@@ -2233,7 +2240,7 @@ packages:
       '@solana/web3.js': ^1.x
     dependencies:
       '@babel/runtime': 7.23.1
-      '@solana/web3.js': 1.78.7
+      '@solana/web3.js': 1.78.7(encoding@0.1.13)
       '@web3auth/base': 7.0.1(@babel/runtime@7.23.1)
       '@web3auth/base-provider': 7.0.1(@babel/runtime@7.23.1)
       '@web3auth/base-solana-adapter': 7.0.1(@babel/runtime@7.23.1)
@@ -2256,7 +2263,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.1
       '@metamask/rpc-errors': 6.0.0
-      '@solana/web3.js': 1.78.7
+      '@solana/web3.js': 1.78.7(encoding@0.1.13)
       '@toruslabs/base-controllers': 4.2.0(@babel/runtime@7.23.1)
       '@toruslabs/openlogin-ed25519': 5.0.0(@babel/runtime@7.23.1)
       '@toruslabs/openlogin-jrpc': 5.1.0(@babel/runtime@7.23.1)
@@ -2291,7 +2298,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@web3auth/torus-solana-adapter@7.0.2(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7):
+  /@web3auth/torus-solana-adapter@7.0.2(@babel/runtime@7.23.1)(@solana/web3.js@1.78.7)(encoding@0.1.13):
     resolution: {integrity: sha512-7Po8zmE3kCZe7erghyJq7h1ZV9jHqwaNq1elkLqkQZdgzLVzwcCdfcri3MLZfVI6U/nQnjAGZzjIegtFc73ygw==}
     engines: {node: '>=18.x', npm: '>=9.x'}
     peerDependencies:
@@ -2299,8 +2306,8 @@ packages:
       '@solana/web3.js': ^1.x
     dependencies:
       '@babel/runtime': 7.23.1
-      '@solana/web3.js': 1.78.7
-      '@toruslabs/solana-embed': 2.0.0(@babel/runtime@7.23.1)
+      '@solana/web3.js': 1.78.7(encoding@0.1.13)
+      '@toruslabs/solana-embed': 2.0.0(@babel/runtime@7.23.1)(encoding@0.1.13)
       '@web3auth/base': 7.0.1(@babel/runtime@7.23.1)
       '@web3auth/base-provider': 7.0.1(@babel/runtime@7.23.1)
       '@web3auth/base-solana-adapter': 7.0.1(@babel/runtime@7.23.1)
@@ -2418,7 +2425,7 @@ packages:
       humanize-ms: 1.2.1
     dev: false
 
-  /airtable@0.12.1:
+  /airtable@0.12.1(encoding@0.1.13):
     resolution: {integrity: sha512-wS49QIO46YjSUbRIslX6pJaAGsdzOFPtYfaARYsBifsev10TDsyXc5IBYX6b3JQs4SZ8A5+g/vbQ5IfPvbnc+w==}
     engines: {node: '>=8.0.0'}
     dependencies:
@@ -2426,7 +2433,7 @@ packages:
       abort-controller: 3.0.0
       abortcontroller-polyfill: 1.7.5
       lodash: 4.17.21
-      node-fetch: 2.6.12
+      node-fetch: 2.6.12(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -3069,6 +3076,11 @@ packages:
   /emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
     dev: true
+
+  /encoding@0.1.13:
+    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
+    dependencies:
+      iconv-lite: 0.6.3
 
   /end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
@@ -3890,6 +3902,12 @@ packages:
       '@babel/runtime': 7.22.5
     dev: false
 
+  /iconv-lite@0.6.3:
+    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      safer-buffer: 2.1.2
+
   /ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
     dev: false
@@ -4460,7 +4478,7 @@ packages:
     resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==}
     dev: false
 
-  /node-fetch@2.6.12:
+  /node-fetch@2.6.12(encoding@0.1.13):
     resolution: {integrity: sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
@@ -4469,6 +4487,7 @@ packages:
       encoding:
         optional: true
     dependencies:
+      encoding: 0.1.13
       whatwg-url: 5.0.0
     dev: false
 
@@ -5106,6 +5125,9 @@ packages:
     resolution: {integrity: sha512-e2bDA2WJT0wxseVd4lsDP4+3ONX6HpMXQa1ZhFQ7SU+GjvORCmShbCMltrtIDfkYhVHrOcPtj+KhmDBdPdZD1g==}
     engines: {node: '>=10'}
     dev: false
+
+  /safer-buffer@2.1.2:
+    resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
   /scheduler@0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
@@ -5854,7 +5876,3 @@ packages:
     name: '@adraffy/ens-normalize'
     version: 1.9.0
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
