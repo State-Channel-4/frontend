@@ -1,13 +1,11 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import { AuthProvider } from "@/contexts/AuthContext"
 
 import { siteConfig } from "@/config/site"
 import { fontDM, fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import Feedback from "@/components/feedback"
-import { SiteHeader } from "@/components/site-header"
 import { ThemeProvider } from "@/components/theme-provider"
-import Toolbar from "@/components/toolbar"
 
 import AnalyticWrapper from "./analytics"
 
@@ -54,9 +52,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <div className="flex h-screen flex-col">
-              <AnalyticWrapper>{children}</AnalyticWrapper>
-            </div>
+            <AuthProvider>
+              <div className="flex h-screen flex-col">
+                <AnalyticWrapper>{children}</AnalyticWrapper>
+              </div>
+            </AuthProvider>
           </ThemeProvider>
         </body>
       </html>

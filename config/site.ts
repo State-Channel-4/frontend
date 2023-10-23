@@ -4,38 +4,36 @@ export const siteConfig = {
   name: "Channel 4",
   description:
     "Experience random, interesting content from all over the internet.",
-  mainNav: [
-    {
-      title: "Home",
-      href: "/",
+  mainNav: {
+    about: {
+      title: 'About',
+      href: '/about'
     },
-    {
-      title: "Add site",
-      href: "/submit-url",
+    addSite: {
+      title: 'Add website',
+      href: '/submit-url',
     },
-    {
-      title: "Add tag",
+    changeTags: {
+      title: "Change tags",
       href: "/submit-tag",
     },
-    {
-      title: "Me",
-      href: "/me",
+    dashboard: {
+      title: 'Dashboard',
+      href: '/dashboard'
     },
-  ],
-  secondaryNav: [
-    {
-      title: "Sign in",
-      href: "/sign-in",
+    feedback: {
+      title: 'Send feedback',
+      href: '/feedback'
     },
-    {
-      title: "Sign up",
-      href: "/sign-up",
+    landing: {
+      title: 'Landing',
+      href: '/landing'
     },
-    {
-      title: "FAQs",
-      href: "https://www.notion.so/pse-team/FAQs-267043c288ad419d9b104e065a87aa1e",
+    stats: {
+      title: 'Stats',
+      href: '/stats'
     },
-  ],
+  },
   links: {
     discord: "https://discord.gg/wuPYfbYdXy",
     twitter: "https://twitter.com/StateChannel_4",
