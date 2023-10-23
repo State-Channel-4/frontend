@@ -9,6 +9,7 @@ export interface C4Content {
   _id: string
   title: string
   url: string
+  proxyUrl?: string
   submittedBy: string
   likes: number
   tags: Tag[]
