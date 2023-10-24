@@ -1,12 +1,13 @@
 "use client"
 
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import EmptyHeart from "@/assets/empty-heart.svg"
 import { C4Content } from "@/types"
 
 import Channel4Icon from "../assets/channel-4-icon-v2.svg"
+import MainMenu from "./main-menu"
 import { Button } from "./ui/button"
 
 interface ToolbarProps {
@@ -16,6 +17,7 @@ interface ToolbarProps {
 }
 
 const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
+  const [showMenu, setShowMenu] = useState(false)
   const path = usePathname()
   const router = useRouter()
 
@@ -23,12 +25,19 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
     return path === "/discover"
   }, [path])
 
+  useEffect(() => {
+    setShowMenu(false)
+  }, [path])
+
   return (
-    <div className="relative flex items-center justify-between gap-4 px-4 py-2 sm:px-8 sm:py-6">
+    <div className="relative flex items-center justify-between gap-4 px-4 py-2 md:px-8 md:py-6">
       <div className="flex min-w-0 items-center gap-4">
-        <div className="shrink-0 cursor-pointer rounded-full p-2.5 shadow-menuShadow sm:p-4">
+        <div
+          className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow md:p-4"
+          onClick={() => setShowMenu(!showMenu)}
+        >
           <Image
-            className="h-6 w-6 sm:h-10 sm:w-10"
+            className="h-6 w-6 md:h-10 md:w-10"
             priority
             src={Channel4Icon}
             alt="Channel 4 icon black"
@@ -55,7 +64,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
           </div>
         )}
         <Button
-          className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev sm:px-16"
+          className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev md:px-16"
           onClick={() =>
             isDiscover && changeSite ? changeSite() : router.push("discover")
           }
@@ -63,6 +72,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
           {isDiscover ? "Next" : "Start watching"}
         </Button>
       </div>
+      <MainMenu onClose={() => setShowMenu(false)} open={showMenu} />
     </div>
   )
 }
