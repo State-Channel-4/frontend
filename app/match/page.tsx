@@ -4,15 +4,57 @@ import { ReactNode, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useEncryptedStore } from "@/store/encrypted"
 import { usePasswordStore } from "@/store/password"
-
+import { MatchDocument } from "@/types"
 import RequireAuth from "@/components/helper/RequireAuth"
+
+const MatchDetails = ({ matchData }: {matchData: MatchDocument}) => {
+  const user1Urls = matchData.user1.urls.map((url, index) => (
+    <li key={index}>
+      <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}
+    </li>
+  ));
+
+  const user2Urls = matchData.user2.urls.map((url, index) => (
+    <li key={index}>
+      <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}
+    </li>
+  ));
+
+  return (
+    <div>
+      <h2>Match Details</h2>
+      <ul>
+        <li>
+          <strong>Status:</strong> {matchData.status}
+        </li>
+        <li>
+          <strong>Threshold:</strong> {matchData.threshold}
+        </li>
+        <li>
+          <strong>Created At:</strong>{" "}
+          {new Date(matchData.createdAt.$date).toLocaleString()}
+        </li>
+        <li>
+          <strong>Updated At:</strong>{" "}
+          {new Date(matchData.updatedAt.$date).toLocaleString()}
+        </li>
+        <li>
+          <strong>User 1 URLs:</strong>
+          <ul>{user1Urls}</ul>
+        </li>
+        <li>
+          <strong>User 2 URLs:</strong>
+          <ul>{user2Urls}</ul>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
 
 const Match = () => {
   const router = useRouter()
   const [match, setMatch] = useState(null)
-  const [user1, setUser1] = useState(null)
-  const [user2, setUser2] = useState(null)
-  const [verificationURLs, setVerificationURLs] = useState(0)
   const { address } = useEncryptedStore()
   const { userId, token } = usePasswordStore()
 
@@ -30,8 +72,7 @@ const Match = () => {
           }
         ).then((res) => res.json())
         console.log("match : ", match);
-        setUser1(match.user1)
-        setUser2(match.user2)
+        setMatch(match)
       } catch (error) {
         console.log(error)
       }
@@ -48,11 +89,10 @@ const Match = () => {
         <div className="flex h-full flex-col gap-8 rounded-lg bg-slate-900 p-6">
           <Row>
             <p className="font-semibold">your matches</p>
-            <p>{match}</p>
+            {match && <MatchDetails matchData={match} />}
           </Row>
           <Row>
             <p className="font-semibold">your task</p>
-            <p>{user2 && user2.urls}</p>
           </Row>
         </div>
       </section>

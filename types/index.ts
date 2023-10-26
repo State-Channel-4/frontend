@@ -23,3 +23,21 @@ export interface NavItem {
   disabled?: boolean
   external?: boolean
 }
+
+export interface MatchDocument {
+  _id: string, 
+  user1: {
+    id: string,
+    urls: Array<string>,
+    completed: boolean,
+},
+user2: {
+  id: string,
+  urls: Array<string>,
+  completed: boolean,
+},
+status: string;
+threshold: number; // threshold is max limit of urls allowed to be validated, depnds on key in MatchGroup
+createdAt: Date;
+updatedAt: Date;
+}
