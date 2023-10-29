@@ -9,13 +9,13 @@ import RequireAuth from "@/components/helper/RequireAuth"
 import { Button } from "@/components/ui/button"
 
 
-const handleVerificationSubmit = async () => {
-  const verifiedURLs = JSON.parse(localStorage.getItem("verifiedURLs")) || [];
-  const invalidURLs = JSON.parse(localStorage.getItem("invalidURLs")) || [];
+const handleVerificationSubmit = async (matchId, userId, token) => {
+  const verifiedURLs = JSON.parse(localStorage.getItem("valid_urls")) || [];
+  const invalidURLs = JSON.parse(localStorage.getItem("invalid_urls")) || [];
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/updateMatch`,
+      `${process.env.NEXT_PUBLIC_API_URL}/updatematch`,
       {
         method: "POST",
         headers: {
@@ -23,9 +23,9 @@ const handleVerificationSubmit = async () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          matchId,
           userId,
           verifiedURLs,
-          invalidURLs,
         }),
       }
     );
@@ -40,7 +40,7 @@ const handleVerificationSubmit = async () => {
   }
 };
 
-const handleCheckboxChange = (event, urlId, storageKey) => {
+const handleCheckboxChange = (event, url, storageKey) => {
   const isChecked = event.target.checked;
 
   // Get the current state from local storage or initialize an empty array
@@ -52,10 +52,10 @@ const handleCheckboxChange = (event, urlId, storageKey) => {
 
   if (isChecked) {
     // Add the URL ID to the array if checked
-    storedData.push(urlId);
+    storedData.push(url);
   } else {
     // Remove the URL ID from the array if unchecked
-    const index = storedData.indexOf(urlId);
+    const index = storedData.indexOf(url);
     if (index !== -1) {
       storedData.splice(index, 1);
     }
@@ -71,7 +71,7 @@ const isInLocalStorage = (urlId, storageKey) => {
 };
 
 
-const MatchDetails = ({ matchData, onVerificationSubmit }: {matchData: MatchDocument, onVerificationSubmit: () => void }) => {
+const MatchDetails = ({ matchData, userId, token, onVerificationSubmit }: {matchData: MatchDocument, userId : string | null, token: string | null, onVerificationSubmit: (matchId: string, userId : string | null , token: string | null) => void }) => {
   const user1Urls = matchData.user1.urls.map((url, index) => (
     <li key={index}>
       {/*<input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url._id)} />*/}
@@ -81,9 +81,9 @@ const MatchDetails = ({ matchData, onVerificationSubmit }: {matchData: MatchDocu
   const user2Urls = matchData.user2.urls.map((url, index) => (
     <li key={index}>
       <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}<br />
-      <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url._id, "valid_urls")} />
+      <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "valid_urls")} />
       <label>Valid url</label><br />
-      <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url._id, "invalid_urls")} />
+      <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "invalid_urls")} />
       <label>Invalid url</label><br />
     </li>
   ));
@@ -116,7 +116,7 @@ const MatchDetails = ({ matchData, onVerificationSubmit }: {matchData: MatchDocu
         </li>
       </ul>
       <Button variant="outline" className="rounded-full border-green-500 py-6 text-green-500"
-      onClick={onVerificationSubmit}>Submit Verification</Button>
+      onClick={() => onVerificationSubmit(matchData._id, userId, token)}>Submit Verification</Button>
     </div>
   );
 };
@@ -170,7 +170,7 @@ const Match = () => {
           <Row>
             <p className="font-semibold">your match</p>
             {match ? (
-              <MatchDetails matchData={match} onVerificationSubmit={handleVerificationSubmit} />
+              <MatchDetails matchData={match}  userId = {userId} token = {token} onVerificationSubmit={handleVerificationSubmit} />
               ) : (
               <button>createMatch</button>
             )}
