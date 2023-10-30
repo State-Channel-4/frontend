@@ -9,6 +9,57 @@ import RequireAuth from "@/components/helper/RequireAuth"
 import { Button } from "@/components/ui/button"
 
 
+const onMarkCompletionButton = async(userId: string | null) => {
+  // make post request to markcompletion
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/markcompletion`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+      }),
+    });
+
+    if (response.ok) {
+      // show alert and reload the page
+      window.alert("Success!");
+      window.location.reload();
+    } else {
+      // Handle error
+      window.alert("Error!");
+    }
+  } catch (error) {
+    console.error("Error marking completion:", error);
+  }
+  };
+
+const onCreateMatchButton = async(userId: string | null) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/creatematch`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+      }),
+    });
+
+    if (response.ok) {
+      // reload the page
+      window.location.reload();
+    } else {
+      // show alert no match found
+      window.alert("No match found");
+    }
+  } catch (error) {
+    console.error("Error creating match:", error);
+  }
+  };
+
+
 const handleVerificationSubmit = async (matchId, userId, token) => {
   const verifiedURLs = JSON.parse(localStorage.getItem("valid_urls")) || [];
   const invalidURLs = JSON.parse(localStorage.getItem("invalid_urls")) || [];
@@ -72,21 +123,29 @@ const isInLocalStorage = (urlId, storageKey) => {
 
 
 const MatchDetails = ({ matchData, userId, token, onVerificationSubmit }: {matchData: MatchDocument, userId : string | null, token: string | null, onVerificationSubmit: (matchId: string, userId : string | null , token: string | null) => void }) => {
-  const user1Urls = matchData.user1.urls.map((url, index) => (
-    <li key={index}>
-      {/*<input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url._id)} />*/}
-      <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}
-    </li>
-  ));
-  const user2Urls = matchData.user2.urls.map((url, index) => (
-    <li key={index}>
-      <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}<br />
-      <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "valid_urls")} />
-      <label>Valid url</label><br />
-      <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "invalid_urls")} />
-      <label>Invalid url</label><br />
-    </li>
-  ));
+  let urlsToValidate = null;
+  if(userId != matchData.user1.id) {
+    urlsToValidate = matchData.user1.urls.map((url, index) => (
+      <li key={index}>
+        <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}<br />
+        <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "valid_urls")} />
+        <label>Valid url</label><br />
+        <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "invalid_urls")} />
+        <label>Invalid url</label><br />
+      </li>
+    ))
+  }
+  else {
+    urlsToValidate = matchData.user2.urls.map((url, index) => (
+      <li key={index}>
+        <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}<br />
+        <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "valid_urls")} />
+        <label>Valid url</label><br />
+        <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "invalid_urls")} />
+        <label>Invalid url</label><br />
+      </li>
+    ))
+  }
 
   return (
     <div>
@@ -107,12 +166,8 @@ const MatchDetails = ({ matchData, userId, token, onVerificationSubmit }: {match
           {new Date(matchData.updatedAt).toLocaleString()}
         </li>
         <li>
-          <strong>your URLs:</strong>
-          <ul>{user1Urls}</ul>
-        </li>
-        <li>
           <strong>URLs you have to validate :</strong>
-          <ul>{user2Urls}</ul>
+          <ul>{urlsToValidate}</ul>
         </li>
       </ul>
       <Button variant="outline" className="rounded-full border-green-500 py-6 text-green-500"
@@ -145,6 +200,7 @@ const Match = () => {
         ).then((res) => res.json())
         if (match) {
           if (match.user1.id === userId) {
+            console.log("inside match.user1.id : ", userId);
             setUser1(match.user1);
             setUser2(match.user2);
           } else {
@@ -172,15 +228,16 @@ const Match = () => {
             {match ? (
               <MatchDetails matchData={match}  userId = {userId} token = {token} onVerificationSubmit={handleVerificationSubmit} />
               ) : (
-              <button>createMatch</button>
+              <Button variant="outline" className="rounded-full border-green-500 py-6 text-green-500"
+              onClick={() => onCreateMatchButton(userId)}>createMatch</Button>
             )}
           </Row>
           <Row>
-            <p className="font-semibold">your task</p>
-            <p>user2</p>
-            {user2 &&
-              
-              <p>{user2.id}</p>
+            <p className="font-semibold">are you done validating?</p>
+            <p>Mark as complete</p>
+            {match &&
+              <Button variant="outline" className="rounded-full border-green-500 py-6 text-green-500"
+              onClick={() => onMarkCompletionButton(userId)}>Completed</Button>
             }
           </Row>
         </div>
