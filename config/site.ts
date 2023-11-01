@@ -13,6 +13,10 @@ export const siteConfig = {
       title: 'Add website',
       href: '/submit-url',
     },
+    browseTopics: {
+      title: 'Browse topics',
+      href: ' /browse'
+    },
     changeTags: {
       title: "Change tags",
       href: "/submit-tag",
