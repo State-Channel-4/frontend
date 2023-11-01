@@ -26,18 +26,10 @@ export const fetchMix = async (tags: TagMap, limit: number) => {
 
 export const updateLikesInApi = async (
   contentId: string,
-  encrypted: string,
+  liked: boolean,
   token: string,
   userId: string
 ) => {
-  // ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
-  const functionName = "likeURL"
-  const params = [2] // TODO: use a url id compatible with Solidity (object_id cannot be casted to bigint. I think it is too large)
-  /*
-  const metaTx = await getRawTransactionToSign(functionName, params)
-  const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!)
-  const signedLikeUrlTx = await wallet?.signTransaction(metaTx)
-  */
   fetch(`${process.env.NEXT_PUBLIC_API_URL}/like/${contentId}`, {
     method: "PUT",
     headers: {
@@ -45,11 +37,7 @@ export const updateLikesInApi = async (
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      signedMessage: "signedLikeUrlTx",
-      address: "wallet.address",
-      functionName: functionName,
-      params: params,
-      // TODO: temp params for mongodb
+      liked: liked,
       userId: userId,
     }),
   }).then((response) => {

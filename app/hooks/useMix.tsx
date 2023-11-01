@@ -1,7 +1,6 @@
 "use client"
 
 import { useCallback, useEffect, useReducer } from "react"
-import { useEncryptedStore } from "@/store/encrypted"
 import { useJwtStore } from "@/store/jwt"
 import { C4Content, Tag, TagMap } from "@/types"
 
@@ -71,7 +70,6 @@ const mixReducer = (state: MixState, action: Action): MixState => {
 }
 
 const useMix = () => {
-  const { encrypted } = useEncryptedStore()
   const { token, userId } = useJwtStore()
   const [state, dispatch] = useReducer(mixReducer, initialState)
 
@@ -141,7 +139,7 @@ const useMix = () => {
   }, [state.selectedTags])
 
   const likeOrUnlike = useCallback(
-    async (contentId: string) => {
+    async (contentId: string, liked: boolean) => {
       const { currentSite, userLikes } = state
       if (!currentSite) return
 
@@ -160,12 +158,12 @@ const useMix = () => {
       })
 
       try {
-        await updateLikesInApi(contentId, encrypted!, token!, userId!)
+        await updateLikesInApi(contentId, liked, token!, userId!)
       } catch (error) {
         console.error(error)
       }
     },
-    [state, encrypted, token, userId]
+    [state, token, userId]
   )
 
   const changeSite = () => {
