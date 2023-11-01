@@ -1,7 +1,5 @@
 import { TagMap } from "@/types"
-import { Wallet } from "ethers"
 
-import { getRawTransactionToSign } from "@/lib/utils"
 import { createProxyUrls } from "@/app/utils"
 
 export const fetchMix = async (tags: TagMap, limit: number) => {
