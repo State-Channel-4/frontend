@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useReducer } from "react"
 import { useEncryptedStore } from "@/store/encrypted"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 import { C4Content, Tag, TagMap } from "@/types"
 
 import { fetchMix, updateLikesInApi } from "../(discover)/discover/utils"
@@ -22,10 +22,10 @@ type MixState = {
 type Action =
   | { type: "SET_ERROR"; message: string }
   | { type: "SET_LOADING"; isLoading: boolean }
-  | { type: "SET_MIX"; mix: C4Content[]; }
+  | { type: "SET_MIX"; mix: C4Content[] }
   | { type: "SET_TAGS"; tags: TagMap }
   | { type: "SET_LIKES"; likes: string[]; currentSite: C4Content | null }
-  | { type: "CHANGE_SITE", currentSite: C4Content | null, mixIndex: number }
+  | { type: "CHANGE_SITE"; currentSite: C4Content | null; mixIndex: number }
 
 const initialState: MixState = {
   currentSite: null,
@@ -50,7 +50,7 @@ const mixReducer = (state: MixState, action: Action): MixState => {
         ...state,
         mix: action.mix,
         currentSite: action.mix[0],
-      };
+      }
     case "SET_TAGS":
       return { ...state, selectedTags: action.tags }
     case "SET_LIKES":
@@ -64,7 +64,7 @@ const mixReducer = (state: MixState, action: Action): MixState => {
         ...state,
         currentSite: action.currentSite,
         mixIndex: action.mixIndex,
-      };
+      }
     default:
       return state
   }
@@ -72,7 +72,7 @@ const mixReducer = (state: MixState, action: Action): MixState => {
 
 const useMix = () => {
   const { encrypted } = useEncryptedStore()
-  const { password, token, userId } = usePasswordStore()
+  const { token, userId } = useJwtStore()
   const [state, dispatch] = useReducer(mixReducer, initialState)
 
   const getTagsFromStore = () => {
@@ -97,10 +97,15 @@ const useMix = () => {
 
   const fetchMixContent = async () => {
     try {
-      const { selectedTags: currentTags, mixLimit, } = state;
+      const { selectedTags: currentTags, mixLimit } = state
       // if the selected tags are the same as the current tags and we have a mix, don't get a new mix
-      if (JSON.stringify(currentTags) === JSON.stringify(state.selectedTags) && state.mix && state.mixIndex < state.mix.length + state.mixIndexLimit) return;
-      const mixResponse = await fetchMix(currentTags, mixLimit);
+      if (
+        JSON.stringify(currentTags) === JSON.stringify(state.selectedTags) &&
+        state.mix &&
+        state.mixIndex < state.mix.length + state.mixIndexLimit
+      )
+        return
+      const mixResponse = await fetchMix(currentTags, mixLimit)
       if (mixResponse.message) {
         dispatch({ type: "SET_ERROR", message: mixResponse.message })
       } else {
@@ -125,7 +130,7 @@ const useMix = () => {
     dispatch({
       type: "SET_MIX",
       mix: newMix,
-    });
+    })
     // set the first site
     dispatch({ type: "CHANGE_SITE", currentSite: newMix[0], mixIndex: 0 })
   }
@@ -155,28 +160,22 @@ const useMix = () => {
       })
 
       try {
-        await updateLikesInApi(
-          contentId,
-          encrypted!,
-          password!,
-          token!,
-          userId!
-        )
+        await updateLikesInApi(contentId, encrypted!, token!, userId!)
       } catch (error) {
         console.error(error)
       }
     },
-    [state, encrypted, password, token, userId]
+    [state, encrypted, token, userId]
   )
 
   const changeSite = () => {
-    const { mix, mixIndex, selectedTags } = state;
-    if (!mix) return;
+    const { mix, mixIndex, selectedTags } = state
+    if (!mix) return
     const newMixIndex = mixIndex + 1
 
     // Get more content if we are almost at the end of the mix
     if (newMixIndex >= mix.length + state.mixIndexLimit) {
-      fetchMixContent();
+      fetchMixContent()
     }
 
     if (newMixIndex < mix.length) {

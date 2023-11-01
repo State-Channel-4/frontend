@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
 import { useEncryptedStore } from "@/store/encrypted"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 import { Wallet } from "ethers"
 
 import { getRawTransactionToSign } from "@/lib/utils"
@@ -13,7 +13,7 @@ import RequireAuth from "@/components/helper/RequireAuth"
 
 const SubmitTag = () => {
   const { encrypted } = useEncryptedStore()
-  const { password, token, userId } = usePasswordStore()
+  const { token, userId } = useJwtStore()
   const [name, setName] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -25,9 +25,6 @@ const SubmitTag = () => {
     setIsLoading(true)
     const functionName = "createTagIfNotExists"
     const params = [name]
-    const metaTx = await getRawTransactionToSign(functionName, params)
-    const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!)
-    const signedSubmitTagtx = await wallet?.signTransaction(metaTx)
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/tag", {
       method: "POST",
       headers: {
@@ -35,8 +32,6 @@ const SubmitTag = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        signedMessage: signedSubmitTagtx,
-        address: wallet.address,
         functionName: functionName,
         params: params,
         // TODO: temp params for mongodb

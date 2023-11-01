@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 
 import { siteConfig } from "@/config/site"
 
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const RequireAuth = ({ children }: Props) => {
-  const { userId, token } = usePasswordStore()
+  const { userId, token } = useJwtStore()
   if (!token || !userId) {
     return (
       <div className="mx-7 my-10 flex flex-col items-center justify-center text-center lg:container">

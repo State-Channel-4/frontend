@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
 import { useEncryptedStore } from "@/store/encrypted"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 import { Tag, TagMap } from "@/types"
 import { Wallet } from "ethers"
 
@@ -15,7 +15,7 @@ import RequireAuth from "@/components/helper/RequireAuth"
 
 const SubmitUrl = () => {
   const { encrypted } = useEncryptedStore()
-  const { password, token, userId } = usePasswordStore()
+  const { token, userId } = useJwtStore()
   const [title, setTitle] = useState<string | null>(null)
   const [url, setUrl] = useState<string | null>(null)
   const [showTags, setShowTags] = useState<TagMap>(new Map())
@@ -56,9 +56,12 @@ const SubmitUrl = () => {
     setIsLoading(true)
     const functionName = "submitURL"
     const params = [title, url, Array.from(selectedTags.keys())]
+    /*
+    ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
     const metaTx = await getRawTransactionToSign(functionName, params)
     const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!)
     const signedSubmitURLtx = await wallet?.signTransaction(metaTx)
+    */
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
       method: "POST",
       headers: {
@@ -66,8 +69,8 @@ const SubmitUrl = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        signedMessage: signedSubmitURLtx,
-        address: wallet.address,
+        signedMessage: "signedSubmitURLtx",
+        address: "wallet.address",
         functionName: functionName,
         params: params,
         // TODO: temp params for mongodb

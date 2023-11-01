@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import Channel4Icon from "@/assets/channel-4-icon-v2.svg"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 import { Web3Auth } from "@web3auth/modal"
 import { BrowserProvider } from "ethers"
 
@@ -24,7 +24,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
   const [web3Auth, setWeb3Auth] = useState<Web3Auth | null>(null)
-  const { token, userId, updateToken, updateUserId } = usePasswordStore()
+  const { token, userId, updateToken, updateUserId } = useJwtStore()
 
   const signIn = async () => {
     try {
