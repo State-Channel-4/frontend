@@ -3,18 +3,16 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
-import { useEncryptedStore } from "@/store/encrypted"
 import { useJwtStore } from "@/store/jwt"
+import { useReceiptsStore } from "@/store/receipts"
 import { Tag, TagMap } from "@/types"
-import { Wallet } from "ethers"
 
-import { getRawTransactionToSign } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import TagRow from "@/components/ui/tag-row"
 import RequireAuth from "@/components/helper/RequireAuth"
 
 const SubmitUrl = () => {
-  const { encrypted } = useEncryptedStore()
+  const { updateList } = useReceiptsStore()
   const { token, userId } = useJwtStore()
   const [title, setTitle] = useState<string | null>(null)
   const [url, setUrl] = useState<string | null>(null)
@@ -66,6 +64,11 @@ const SubmitUrl = () => {
         tags: Array.from(selectedTags.keys()),
       }),
     }).then((res) => res.json())
+    updateList({
+      object: response.newUrl,
+      receipt: response.receipt,
+      type: "Url",
+    })
     setTitle(null)
     setUrl(null)
     setSelectedTags(new Map())

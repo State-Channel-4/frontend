@@ -26,19 +26,25 @@ export const updateLikesInApi = async (
   contentId: string,
   liked: boolean,
   token: string,
-  userId: string
+  updateList: (data: any) => void
 ) => {
-  fetch(`${process.env.NEXT_PUBLIC_API_URL}/like/${contentId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      liked: liked,
-    }),
-  }).then((response) => {
-    return response.json()
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/like/${contentId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        liked: liked,
+      }),
+    }
+  ).then((res) => res.json())
+  updateList({
+    object: response.like,
+    type: "like",
+    receipt: response.receipt,
   })
 }
 

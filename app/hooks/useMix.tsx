@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useReducer } from "react"
 import { useJwtStore } from "@/store/jwt"
+import { useReceiptsStore } from "@/store/receipts"
 import { C4Content, Tag, TagMap } from "@/types"
 
 import { fetchMix, updateLikesInApi } from "../(discover)/discover/utils"
@@ -70,7 +71,8 @@ const mixReducer = (state: MixState, action: Action): MixState => {
 }
 
 const useMix = () => {
-  const { token, userId } = useJwtStore()
+  const { token } = useJwtStore()
+  const { updateList } = useReceiptsStore()
   const [state, dispatch] = useReducer(mixReducer, initialState)
 
   const getTagsFromStore = () => {
@@ -158,12 +160,12 @@ const useMix = () => {
       })
 
       try {
-        await updateLikesInApi(contentId, liked, token!, userId!)
+        await updateLikesInApi(contentId, liked, token!, updateList)
       } catch (error) {
         console.error(error)
       }
     },
-    [state, token, userId]
+    [state, token, updateList]
   )
 
   const changeSite = () => {

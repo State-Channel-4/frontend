@@ -4,12 +4,14 @@ import { useState } from "react"
 import Image from "next/image"
 import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
 import { useJwtStore } from "@/store/jwt"
+import { useReceiptsStore } from "@/store/receipts"
 
 import { Button } from "@/components/ui/button"
 import RequireAuth from "@/components/helper/RequireAuth"
 
 const SubmitTag = () => {
-  const { token, userId } = useJwtStore()
+  const { token } = useJwtStore()
+  const { updateList } = useReceiptsStore()
   const [name, setName] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -29,6 +31,11 @@ const SubmitTag = () => {
         name: name,
       }),
     }).then((res) => res.json())
+    updateList({
+      object: response.tag,
+      receipt: response.receipt,
+      type: "Tag",
+    })
     setName(null)
     setIsLoading(false)
   }
