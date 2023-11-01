@@ -3,16 +3,12 @@
 import { useState } from "react"
 import Image from "next/image"
 import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
-import { useEncryptedStore } from "@/store/encrypted"
 import { useJwtStore } from "@/store/jwt"
-import { Wallet } from "ethers"
 
-import { getRawTransactionToSign } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import RequireAuth from "@/components/helper/RequireAuth"
 
 const SubmitTag = () => {
-  const { encrypted } = useEncryptedStore()
   const { token, userId } = useJwtStore()
   const [name, setName] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -23,8 +19,6 @@ const SubmitTag = () => {
 
   const onClickCreateHandler = async () => {
     setIsLoading(true)
-    const functionName = "createTagIfNotExists"
-    const params = [name]
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/tag", {
       method: "POST",
       headers: {
@@ -32,10 +26,8 @@ const SubmitTag = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        functionName: functionName,
-        params: params,
-        // TODO: temp params for mongodb
         userId: userId,
+        name: name,
       }),
     }).then((res) => res.json())
     setName(null)
