@@ -54,14 +54,6 @@ const SubmitUrl = () => {
 
   const onClickShareItHandler = async () => {
     setIsLoading(true)
-    const functionName = "submitURL"
-    const params = [title, url, Array.from(selectedTags.keys())]
-    /*
-    ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
-    const metaTx = await getRawTransactionToSign(functionName, params)
-    const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!)
-    const signedSubmitURLtx = await wallet?.signTransaction(metaTx)
-    */
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
       method: "POST",
       headers: {
@@ -69,12 +61,10 @@ const SubmitUrl = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        signedMessage: "signedSubmitURLtx",
-        address: "wallet.address",
-        functionName: functionName,
-        params: params,
-        // TODO: temp params for mongodb
         userId: userId,
+        title: title,
+        url: url,
+        tags: Array.from(selectedTags.keys()),
       }),
     }).then((res) => res.json())
     setTitle(null)
