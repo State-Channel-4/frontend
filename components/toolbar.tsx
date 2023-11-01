@@ -49,7 +49,7 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
               ? isLoading
                 ? "Loading sites..."
                 : currentSite?.title ?? "Site name not avaialable."
-              : "Weclome to Channel 4"}
+              : "Welcome to Channel 4"}
           </div>
           {isDiscover && !isLoading && (
             <div className="truncate text-xs text-shark-300">See details</div>
