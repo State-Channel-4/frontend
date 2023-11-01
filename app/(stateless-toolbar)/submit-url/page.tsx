@@ -61,7 +61,6 @@ const SubmitUrl = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        userId: userId,
         title: title,
         url: url,
         tags: Array.from(selectedTags.keys()),

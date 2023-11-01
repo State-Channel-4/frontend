@@ -36,7 +36,6 @@ export const updateLikesInApi = async (
     },
     body: JSON.stringify({
       liked: liked,
-      userId: userId,
     }),
   }).then((response) => {
     return response.json()

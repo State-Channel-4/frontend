@@ -26,7 +26,6 @@ const SubmitTag = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        userId: userId,
         name: name,
       }),
     }).then((res) => res.json())
