@@ -1,29 +1,58 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import EmptyHeart from "@/assets/empty-heart.svg"
+import FilledHeart from "@/assets/filled-heart.svg"
+import { useAuth } from "@/contexts/AuthContext"
+import { C4Content } from "@/types"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
-import EmptyHeart from "@/assets/empty-heart.svg"
-import { C4Content } from "@/types"
+import { useEffect, useMemo, useState } from "react"
 
 import Channel4Icon from "../assets/channel-4-icon-v2.svg"
 import MainMenu from "./main-menu"
+import SiteDetails from "./site-details"
 import { Button } from "./ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 interface ToolbarProps {
   changeSite?: () => void
   currentSite?: C4Content | null
   isLoading?: boolean
+  likeOrUnlike?: (contentId: string) => void
+  userLikes?: string[]
 }
 
-const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
+const Toolbar = ({
+  changeSite,
+  currentSite,
+  isLoading,
+  likeOrUnlike,
+  userLikes,
+}: ToolbarProps) => {
+  const { signedIn } = useAuth()
   const [showMenu, setShowMenu] = useState(false)
+  const [showSiteDetails, setShowSiteDetails] = useState(false)
   const path = usePathname()
   const router = useRouter()
 
   const isDiscover = useMemo(() => {
     return path === "/discover"
   }, [path])
+
+  const hasLiked = useMemo(() => {
+    if (!signedIn || !currentSite || !userLikes) return false
+    return userLikes.includes(currentSite._id)
+  }, [currentSite, signedIn, userLikes])
+
+  const togglePopup = (option: string) => {
+    if (option === "navigation") {
+      setShowMenu(!showMenu)
+      setShowSiteDetails(false)
+    } else {
+      setShowSiteDetails(!showSiteDetails)
+      setShowMenu(false)
+    }
+  }
 
   useEffect(() => {
     setShowMenu(false)
@@ -33,8 +62,9 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
     <div className="relative flex items-center justify-between gap-4 px-4 py-2 md:px-8 md:py-6">
       <div className="flex min-w-0 items-center gap-4">
         <div
-          className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow md:p-4"
-          onClick={() => setShowMenu(!showMenu)}
+          className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow md:p-4 hover:shadow-c4-green/70 hover:-translate-y-1 duration-500 ease-in-out active:scale-90"
+          onClick={() => togglePopup("navigation")}
+          title="Menu"
         >
           <Image
             className="h-6 w-6 md:h-10 md:w-10"
@@ -52,19 +82,44 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
               : "Weclome to Channel 4"}
           </div>
           {isDiscover && !isLoading && (
-            <div className="truncate text-xs text-shark-300">See details</div>
+            <button
+              className="truncate text-xs text-shark-300"
+              onClick={() => togglePopup("site-details")}
+            >
+              {showSiteDetails ? 'Hide details' : 'See details'}
+            </button>
           )}
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-8">
         {isDiscover && !isLoading && (
-          <div className="relative flex cursor-pointer items-center gap-2 text-sm">
-            <Image alt="Like" className="h-4 w-4" src={EmptyHeart} />
-            <div>{currentSite?.likes}</div>
-          </div>
+          <Popover>
+            <PopoverTrigger
+              className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"
+              disabled={signedIn}
+              onClick={() =>
+                currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
+              }
+            >
+              {/* TODO: Replace with single SVG image that can be colored */}
+              <Image
+                alt="Like"
+                className="h-4 w-4"
+                src={hasLiked ? FilledHeart : EmptyHeart}
+              />
+              <div>{currentSite?.likes}</div>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-fit rounded-lg border border-shark-800 bg-shark-950 p-4 text-center text-sm text-shark-50"
+              side="top"
+              sideOffset={15}
+            >
+              Please sign in to like this.
+            </PopoverContent>
+          </Popover>
         )}
         <Button
-          className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev md:px-16"
+          className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev hover:translate-x-1 md:px-16 duration-200 ease-out"
           onClick={() =>
             isDiscover && changeSite ? changeSite() : router.push("discover")
           }
@@ -73,6 +128,13 @@ const Toolbar = ({ changeSite, currentSite, isLoading }: ToolbarProps) => {
         </Button>
       </div>
       <MainMenu onClose={() => setShowMenu(false)} open={showMenu} />
+      {isDiscover && currentSite && (
+        <SiteDetails
+          currentSite={currentSite}
+          open={showSiteDetails}
+          onClose={() => setShowSiteDetails(false)}
+        />
+      )}
     </div>
   )
 }

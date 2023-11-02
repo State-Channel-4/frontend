@@ -1,5 +1,5 @@
 import { TagMap } from "@/types";
-import { Wallet } from "ethers";
+import { JsonRpcSigner, Wallet } from "ethers";
 
 import { createProxyUrls } from "@/app/utils";
 import { getRawTransactionToSign } from "@/lib/utils";
@@ -27,18 +27,37 @@ export const fetchMix = async (
   }
 };
 
+export const fetchLikes = async (userId: string) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/likes`
+    );
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+    const { likes } = await response.json();
+    return likes.map(({ id }: { id: string }) => id);
+  } catch (error) {
+    let message = "Unknown error";
+    if (error instanceof Error) message = error.message;
+    console.error("Error fetching mix:", error);
+    return { message };
+  }
+}
+
 export const updateLikesInApi = async (
   contentId: string,
-  encrypted: string,
-  password: string,
+  liked: boolean,
+  signer: JsonRpcSigner,
   token: string,
-  userId: string
+  userId: string,
 ) => {
-  const functionName = "likeURL";
-  const params = [2]; // TODO: use a url id compatible with Solidity (object_id cannot be casted to bigint. I think it is too large)
+  const functionName = "toggleLike";
+  // Stringifying the URL for now since input in smart contract has changed to string and is
+  const params = ['2', liked, 1, signer.address]; // TODO: use a url id compatible with Solidity (object_id cannot be casted to bigint. I think it is too large)
   const metaTx = await getRawTransactionToSign(functionName, params);
-  const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!);
-  const signedLikeUrlTx = await wallet?.signTransaction(metaTx);
+  // const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!);
+  const signedLikeUrlTx = await signer.signTransaction(metaTx);
   fetch(`${process.env.NEXT_PUBLIC_API_URL}/like/${contentId}`, {
     method: "PUT",
     headers: {
@@ -47,7 +66,7 @@ export const updateLikesInApi = async (
     },
     body: JSON.stringify({
       signedMessage: signedLikeUrlTx,
-      address: wallet.address,
+      address: signer.address,
       functionName: functionName,
       params: params,
       // TODO: temp params for mongodb
