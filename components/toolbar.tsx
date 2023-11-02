@@ -1,12 +1,12 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
-import Image from "next/image"
-import { usePathname, useRouter } from "next/navigation"
 import EmptyHeart from "@/assets/empty-heart.svg"
 import FilledHeart from "@/assets/filled-heart.svg"
 import { useAuth } from "@/contexts/AuthContext"
 import { C4Content } from "@/types"
+import Image from "next/image"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
 
 import Channel4Icon from "../assets/channel-4-icon-v2.svg"
 import MainMenu from "./main-menu"
@@ -93,22 +93,20 @@ const Toolbar = ({
       <div className="flex shrink-0 items-center gap-8">
         {isDiscover && !isLoading && (
           <Popover>
-            <PopoverTrigger disabled={signedIn}>
-              <button
-                className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"
-                disabled={!signedIn}
-                onClick={() =>
-                  currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
-                }
-              >
-                {/* TODO: Replace with single SVG image that can be colored */}
-                <Image
-                  alt="Like"
-                  className="h-4 w-4"
-                  src={hasLiked ? FilledHeart : EmptyHeart}
-                />
-                <div>{currentSite?.likes}</div>
-              </button>
+            <PopoverTrigger
+              className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"
+              disabled={signedIn}
+              onClick={() =>
+                currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
+              }
+            >
+              {/* TODO: Replace with single SVG image that can be colored */}
+              <Image
+                alt="Like"
+                className="h-4 w-4"
+                src={hasLiked ? FilledHeart : EmptyHeart}
+              />
+              <div>{currentSite?.likes}</div>
             </PopoverTrigger>
             <PopoverContent
               className="w-fit rounded-lg border border-shark-800 bg-shark-950 p-4 text-center text-sm text-shark-50"

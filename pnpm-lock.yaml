@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@radix-ui/react-popover':
     specifier: ^1.0.6
@@ -5876,3 +5872,7 @@ packages:
     name: '@adraffy/ens-normalize'
     version: 1.9.0
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
