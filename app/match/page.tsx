@@ -188,6 +188,16 @@ const MatchResult = ({ matchData, onAgree, onClose }) => {
           <strong>User 1 ID:</strong> {matchData.user1.id}
         </li>
         <li>
+          <ul>
+            {matchData.user1.urls.map((url, index) => (
+            <li key={index}>
+              <strong>Title:</strong> {url.title} | <strong>URL:</strong>{" "}
+              {url.url} | <strong>Verified:</strong> {url.verified ? "Yes" : "No"}
+              </li>
+              ))}
+          </ul>
+        </li>
+        <li>
           <strong>User 1 Concur:</strong> {matchData.user1.concur}
         </li>
         <li>
@@ -195,6 +205,16 @@ const MatchResult = ({ matchData, onAgree, onClose }) => {
         </li>
         <li>
           <strong>User 2 ID:</strong> {matchData.user2.id}
+        </li>
+        <li>
+          <ul>
+            {matchData.user2.urls.map((url, index) => (
+            <li key={index}>
+              <strong>Title:</strong> {url.title} | <strong>URL:</strong>{" "}
+              {url.url} | <strong>Verified:</strong> {url.verified ? "Yes" : "No"}
+              </li>
+              ))}
+          </ul>
         </li>
         <li>
           <strong>User 2 Concur:</strong> {matchData.user2.concur}
@@ -323,7 +343,7 @@ const Match = () => {
             }
           </Row>
           <Row>
-          <MatchResult matchData={match} onAgree={handleAgree} onClose={handleClose} />
+            {match && <MatchResult matchData={match} onAgree={handleAgree} onClose={handleClose} />}
           </Row>
         </div>
       </section>
