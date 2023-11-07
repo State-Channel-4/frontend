@@ -18,6 +18,10 @@ export const siteConfig = {
       href: "/submit-tag",
     },
     {
+      title: "Match",
+      href: "/match",
+    },
+    {
       title: "Me",
       href: "/me",
     },

@@ -48,7 +48,6 @@ const onCreateMatchButton = async(userId: string | null) => {
     });
 
     if (response.ok) {
-      // reload the page
       window.location.reload();
     } else {
       // show alert no match found
@@ -121,30 +120,33 @@ const isInLocalStorage = (urlId, storageKey) => {
   return storedData.includes(urlId);
 };
 
+const populateUrls = (urls, includeInputValue) => {
+  return urls.map((url, index) => (
+    <li key={index}>
+      <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}<br />
+      {includeInputValue && (
+        <div>
+          <input value={url._id} type="checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "valid_urls")} />
+          <label>Valid url</label><br />
+          <input value={url._id} type="checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "invalid_urls")} />
+          <label>Invalid url</label><br />
+        </div>
+      )}
+    </li>
+  ));
+};
+
 
 const MatchDetails = ({ matchData, userId, token, onVerificationSubmit }: {matchData: MatchDocument, userId : string | null, token: string | null, onVerificationSubmit: (matchId: string, userId : string | null , token: string | null) => void }) => {
   let urlsToValidate = null;
+  let loggedInUserUrls = null;
   if(userId != matchData.user1.id) {
-    urlsToValidate = matchData.user1.urls.map((url, index) => (
-      <li key={index}>
-        <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}<br />
-        <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "valid_urls")} />
-        <label>Valid url</label><br />
-        <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "invalid_urls")} />
-        <label>Invalid url</label><br />
-      </li>
-    ))
+    urlsToValidate = populateUrls(matchData.user1.urls, true);
+    loggedInUserUrls = populateUrls(matchData.user2.urls, false);
   }
   else {
-    urlsToValidate = matchData.user2.urls.map((url, index) => (
-      <li key={index}>
-        <strong>Title:</strong> {url.title} | <strong>URL:</strong> {url.url}<br />
-        <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "valid_urls")} />
-        <label>Valid url</label><br />
-        <input value = {url._id} type = "checkbox" onChange={(e) => handleCheckboxChange(e, url.url, "invalid_urls")} />
-        <label>Invalid url</label><br />
-      </li>
-    ))
+    urlsToValidate = populateUrls(matchData.user2.urls, true);
+    loggedInUserUrls = populateUrls(matchData.user1.urls, false);
   }
 
   return (
@@ -155,9 +157,6 @@ const MatchDetails = ({ matchData, userId, token, onVerificationSubmit }: {match
           <strong>Status:</strong> {matchData.status}
         </li>
         <li>
-          <strong>Threshold:</strong> {matchData.threshold}
-        </li>
-        <li>
           <strong>Created At:</strong>{" "}
           {new Date(matchData.createdAt).toLocaleString()}
         </li>
@@ -166,7 +165,11 @@ const MatchDetails = ({ matchData, userId, token, onVerificationSubmit }: {match
           {new Date(matchData.updatedAt).toLocaleString()}
         </li>
         <li>
-          <strong>URLs you have to validate :</strong>
+          <strong><span className="text-red-500">Your urls : </span></strong>
+          <ul>{loggedInUserUrls}</ul>
+        </li>
+        <li>
+          <strong><span className="text-green-500">URLs you have to validate :</span></strong>
           <ul>{urlsToValidate}</ul>
         </li>
       </ul>
@@ -175,6 +178,84 @@ const MatchDetails = ({ matchData, userId, token, onVerificationSubmit }: {match
     </div>
   );
 };
+
+const MatchResult = ({ matchData, onAgree, onClose }) => {
+  return (
+    <div>
+      <h2>Match Results</h2>
+      <ul>
+        <li>
+          <strong>User 1 ID:</strong> {matchData.user1.id}
+        </li>
+        <li>
+          <strong>User 1 Concur:</strong> {matchData.user1.concur}
+        </li>
+        <li>
+          <strong>User 1 Completed:</strong> {matchData.user1.completed ? 'Yes' : 'No'}
+        </li>
+        <li>
+          <strong>User 2 ID:</strong> {matchData.user2.id}
+        </li>
+        <li>
+          <strong>User 2 Concur:</strong> {matchData.user2.concur}
+        </li>
+        <li>
+          <strong>User 2 Completed:</strong> {matchData.user2.completed ? 'Yes' : 'No'}
+        </li>
+        {/* Render other properties as needed */}
+      </ul>
+      <div>
+      <Button variant="outline" className="rounded-full border-green-500 py-6 text-green-500"onClick={onAgree}>Yes</Button>
+      <Button variant="outline" className="rounded-full border-red-500 py-6 text-red-500" onClick={onClose}>No</Button>
+      </div>
+    </div>
+  );
+};
+
+const handleAgree = async () => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/concur`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ agree: true }),
+    });
+
+    if (response.ok) {
+      // Handle success, e.g., show a success message
+      console.log('Agree successful');
+    } else {
+      // Handle the error response, e.g., show an error message
+      console.error('Agree failed');
+    }
+  } catch (error) {
+    console.error('Error agreeing:', error);
+  }
+};
+
+const handleClose = async () => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/concur`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ agree: false }),
+    });
+
+    if (response.ok) {
+      // Handle success, e.g., show a success message
+      console.log('Close successful');
+    } else {
+      // Handle the error response, e.g., show an error message
+      console.error('Close failed');
+    }
+  } catch (error) {
+    console.error('Error closing:', error);
+  }
+};
+
 
 
 const Match = () => {
@@ -199,6 +280,7 @@ const Match = () => {
           }
         ).then((res) => res.json())
         if (match) {
+          console.log("match : ", match);
           if (match.user1.id === userId) {
             console.log("inside match.user1.id : ", userId);
             setUser1(match.user1);
@@ -239,6 +321,9 @@ const Match = () => {
               <Button variant="outline" className="rounded-full border-green-500 py-6 text-green-500"
               onClick={() => onMarkCompletionButton(userId)}>Completed</Button>
             }
+          </Row>
+          <Row>
+          <MatchResult matchData={match} onAgree={handleAgree} onClose={handleClose} />
           </Row>
         </div>
       </section>
