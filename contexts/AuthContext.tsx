@@ -1,15 +1,8 @@
 "use client"
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react"
+import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import Channel4Icon from "@/assets/channel-4-icon-v2.svg"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 import { Web3Auth } from "@web3auth/modal"
 import {
   BrowserProvider,
@@ -39,7 +32,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
 }) => {
   const [signer, setSigner] = useState<JsonRpcSigner | null>(null)
   const [web3Auth, setWeb3Auth] = useState<Web3Auth | null>(null)
-  const { token, userId, updateToken, updateUserId } = usePasswordStore()
+  const { token, userId, updateToken, updateUserId } = useJwtStore()
 
   const getSigner = async (web3AuthProvider: Eip1193Provider) => {
     const provider = new BrowserProvider(web3AuthProvider)

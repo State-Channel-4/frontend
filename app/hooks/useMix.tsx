@@ -1,8 +1,8 @@
 "use client"
 
 import { useCallback, useEffect, useReducer } from "react"
-import { useAuth } from "@/contexts/AuthContext"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
+import { useReceiptsStore } from "@/store/receipts"
 import { C4Content, Tag, TagMap } from "@/types"
 
 import {
@@ -26,6 +26,7 @@ type MixState = {
 type Action =
   | { type: "SET_ERROR"; message: string }
   | { type: "SET_LOADING"; isLoading: boolean }
+  | { type: "SET_MIX"; mix: C4Content[] }
   | { type: "SET_MIX"; mix: C4Content[] }
   | { type: "SET_TAGS"; tags: TagMap }
   | {
@@ -87,8 +88,8 @@ const mixReducer = (state: MixState, action: Action): MixState => {
 }
 
 const useMix = () => {
-  const { signer, signedIn } = useAuth()
-  const { token, userId } = usePasswordStore()
+  const { token, userId } = useJwtStore()
+  const { updateList } = useReceiptsStore()
   const [state, dispatch] = useReducer(mixReducer, initialState)
   const getTagsFromStore = () => {
     if (typeof window === "undefined") return
@@ -170,8 +171,7 @@ const useMix = () => {
   }, [state.selectedTags])
 
   const likeOrUnlike = useCallback(
-    async (contentId: string) => {
-      if (!signedIn) return
+    async (contentId: string, liked: boolean) => {
       const { currentSite, mix, mixIndex, userLikes } = state
       if (!currentSite) return
       const isLiked = userLikes.includes(contentId)
@@ -192,12 +192,12 @@ const useMix = () => {
         mix: updatedMix,
       })
       try {
-        await updateLikesInApi(contentId, !isLiked, signer!, token!, userId!)
+        await updateLikesInApi(contentId, liked, token!, updateList)
       } catch (error) {
         console.error(error)
       }
     },
-    [signer, signedIn, state, token, userId]
+    [state, token, updateList]
   )
 
   const changeSite = () => {

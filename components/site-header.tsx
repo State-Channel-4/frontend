@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 
 import { siteConfig } from "@/config/site"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -11,11 +11,9 @@ import { MainNav } from "@/components/main-nav"
 import { SecondaryNav } from "./secondary-nav"
 
 export function SiteHeader() {
-  const { password, token, userId, updatePassword, updateToken, updateUserId } =
-    usePasswordStore()
+  const { token, userId, updateToken, updateUserId } = useJwtStore()
 
   const onLogOutClickHandler = () => {
-    updatePassword(null)
     updateToken(null)
     updateUserId(null)
   }
@@ -72,7 +70,7 @@ export function SiteHeader() {
               </div>
             </Link>
             {/* <ThemeToggle /> */}
-            {!(password && userId && token) ? (
+            {!(userId && token) ? (
               // <SecondaryNav items={siteConfig.secondaryNav} />
               <></>
             ) : (

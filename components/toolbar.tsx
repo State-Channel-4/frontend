@@ -79,7 +79,7 @@ const Toolbar = ({
               ? isLoading
                 ? "Loading sites..."
                 : currentSite?.title ?? "Site name not avaialable."
-              : "Weclome to Channel 4"}
+              : "Welcome to Channel 4"}
           </div>
           {isDiscover && !isLoading && (
             <button

@@ -6,8 +6,7 @@ import { useRouter } from "next/navigation"
 import BustOfWomanWithFlowers from "@/assets/bust-of-woman-with-flowers.svg"
 import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
 import { useEncryptedStore } from "@/store/encrypted"
-import { usePasswordStore } from "@/store/password"
-import { Wallet } from "ethers"
+import { useJwtStore } from "@/store/jwt"
 
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/button"
@@ -15,8 +14,7 @@ import { Button } from "@/components/ui/button"
 const SignIn = () => {
   const router = useRouter()
   const { encrypted, updateEncrypted } = useEncryptedStore()
-  const { password, updateUserId, updateToken, updatePassword } =
-    usePasswordStore()
+  const { updateUserId, updateToken } = useJwtStore()
   const [error, setError] = useState<string | null>(null)
   const [hasAKey, setHasAKey] = useState(false)
   const [key, setKey] = useState<string | null>(null)
@@ -24,12 +22,16 @@ const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const onPasswordChangeHandler = (e: { target: { value: string } }) => {
+    /*
+    ** ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
     updatePassword(e.target.value)
+    */
   }
 
   const clickLetMeInHandler = async () => {
     setIsLoading(true)
     try {
+      /*
       const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!)
       const signedMessage = await wallet.signMessage(
         process.env.NEXT_PUBLIC_API_LOGIN_SECRET!
@@ -47,6 +49,7 @@ const SignIn = () => {
 
       updateUserId(user._id)
       updateToken(token)
+      */
       router.push(siteConfig.links.me)
     } catch (error: any) {
       if (error.message.includes("incorrect password")) {
@@ -69,7 +72,10 @@ const SignIn = () => {
   const clickDeleteHandler = () => {
     setIsLoading(true)
     updateEncrypted(null)
+    /*
+    ** ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
     updatePassword(null)
+    */
     updateUserId(null)
     updateToken(null)
     setHasAKey(false)
@@ -95,7 +101,10 @@ const SignIn = () => {
   const clickLoadKeyHandler = () => {
     setIsLoading(true)
     updateEncrypted(key)
+    /*
+    ** ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
     updatePassword(null)
+    */
     setEncryptedExists(true)
     setIsLoading(false)
   }
@@ -139,7 +148,7 @@ const SignIn = () => {
             <p>Password:</p>
             <input
               type={"password"}
-              value={password || ""}
+              value={""}
               onChange={onPasswordChangeHandler}
               className="w-full rounded-sm bg-gray px-2 py-1"
             />
