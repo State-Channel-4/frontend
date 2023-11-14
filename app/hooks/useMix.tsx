@@ -5,7 +5,11 @@ import { useJwtStore } from "@/store/jwt"
 import { useReceiptsStore } from "@/store/receipts"
 import { C4Content, Tag, TagMap } from "@/types"
 
-import { fetchMix, updateLikesInApi } from "../(discover)/discover/utils"
+import {
+  fetchLikes,
+  fetchMix,
+  updateLikesInApi,
+} from "../(discover)/discover/utils"
 
 type MixState = {
   currentSite: C4Content | null
@@ -23,8 +27,14 @@ type Action =
   | { type: "SET_ERROR"; message: string }
   | { type: "SET_LOADING"; isLoading: boolean }
   | { type: "SET_MIX"; mix: C4Content[] }
+  | { type: "SET_MIX"; mix: C4Content[] }
   | { type: "SET_TAGS"; tags: TagMap }
-  | { type: "SET_LIKES"; likes: string[]; currentSite: C4Content | null }
+  | {
+      type: "SET_LIKES"
+      currentSite: C4Content | null
+      likes: string[]
+      mix?: C4Content[]
+    }
   | { type: "CHANGE_SITE"; currentSite: C4Content | null; mixIndex: number }
 
 const initialState: MixState = {
@@ -54,10 +64,17 @@ const mixReducer = (state: MixState, action: Action): MixState => {
     case "SET_TAGS":
       return { ...state, selectedTags: action.tags }
     case "SET_LIKES":
+      if (!action.mix) {
+        return {
+          ...state,
+          userLikes: action.likes,
+        }
+      }
       return {
         ...state,
         userLikes: action.likes,
         currentSite: action.currentSite,
+        mix: action.mix,
       }
     case "CHANGE_SITE":
       return {
@@ -71,10 +88,9 @@ const mixReducer = (state: MixState, action: Action): MixState => {
 }
 
 const useMix = () => {
-  const { token } = useJwtStore()
+  const { token, userId } = useJwtStore()
   const { updateList } = useReceiptsStore()
   const [state, dispatch] = useReducer(mixReducer, initialState)
-
   const getTagsFromStore = () => {
     if (typeof window === "undefined") return
     const tagsFromStore = sessionStorage.getItem("c4.tags")
@@ -94,6 +110,20 @@ const useMix = () => {
     getTagsFromStore()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const fetchUserLikes = useCallback(async () => {
+    const likes = await fetchLikes(userId!)
+    dispatch({
+      type: "SET_LIKES",
+      likes,
+      currentSite: null,
+    })
+  }, [userId])
+
+  useEffect(() => {
+    if (!userId) return
+    fetchUserLikes()
+  }, [fetchUserLikes, userId])
 
   const fetchMixContent = async () => {
     try {
@@ -142,23 +172,25 @@ const useMix = () => {
 
   const likeOrUnlike = useCallback(
     async (contentId: string, liked: boolean) => {
-      const { currentSite, userLikes } = state
+      const { currentSite, mix, mixIndex, userLikes } = state
       if (!currentSite) return
-
       const isLiked = userLikes.includes(contentId)
       const newUserLikes = isLiked
         ? userLikes.filter((item) => item !== contentId)
         : [...userLikes, contentId]
 
+      const updatedSite = state.currentSite && {
+        ...state.currentSite,
+        likes: state.currentSite.likes + (isLiked ? -1 : 1),
+      }
+      const updatedMix = [...(mix as C4Content[])]
+      updatedMix[mixIndex] = updatedSite as C4Content
       dispatch({
         type: "SET_LIKES",
         likes: newUserLikes,
-        currentSite: state.currentSite && {
-          ...state.currentSite,
-          likes: state.currentSite.likes + (isLiked ? -1 : 1),
-        },
+        currentSite: updatedSite,
+        mix: updatedMix,
       })
-
       try {
         await updateLikesInApi(contentId, liked, token!, updateList)
       } catch (error) {
@@ -169,12 +201,15 @@ const useMix = () => {
   )
 
   const changeSite = () => {
-    const { mix, mixIndex, selectedTags } = state
+    const { mix, mixIndex, mixLimit } = state
     if (!mix) return
     const newMixIndex = mixIndex + 1
 
-    // Get more content if we are almost at the end of the mix
-    if (newMixIndex >= mix.length + state.mixIndexLimit) {
+    // Get more content if we are almost at the end of the mix and if mix length equals limit (more urls exist in server)
+    if (
+      mix.length === mixLimit &&
+      newMixIndex >= mix.length + state.mixIndexLimit
+    ) {
       fetchMixContent()
     }
 
@@ -183,6 +218,14 @@ const useMix = () => {
         type: "CHANGE_SITE",
         currentSite: mix[newMixIndex],
         mixIndex: newMixIndex,
+      })
+    }
+    // Reset index to zero if index is greater than or equal to length
+    else {
+      dispatch({
+        type: "CHANGE_SITE",
+        currentSite: mix[0],
+        mixIndex: 0,
       })
     }
   }

@@ -4,10 +4,16 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import Channel4Icon from "@/assets/channel-4-icon-v2.svg"
 import { useJwtStore } from "@/store/jwt"
 import { Web3Auth } from "@web3auth/modal"
-import { BrowserProvider } from "ethers"
+import {
+  BrowserProvider,
+  Eip1193Provider,
+  JsonRpcSigner,
+  Provider,
+} from "ethers"
 
 type AuthContextType = {
   initializingW3A: boolean
+  signer: JsonRpcSigner | null
   signIn: () => void
   signedIn: boolean
   signOut: () => void
@@ -15,6 +21,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({
   initializingW3A: false,
+  signer: null,
   signIn: () => undefined,
   signedIn: false,
   signOut: () => undefined,
@@ -23,17 +30,22 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
+  const [signer, setSigner] = useState<JsonRpcSigner | null>(null)
   const [web3Auth, setWeb3Auth] = useState<Web3Auth | null>(null)
   const { token, userId, updateToken, updateUserId } = useJwtStore()
+
+  const getSigner = async (web3AuthProvider: Eip1193Provider) => {
+    const provider = new BrowserProvider(web3AuthProvider)
+    return await provider.getSigner()
+  }
 
   const signIn = async () => {
     try {
       const web3AuthProvider = await web3Auth?.connect()
       if (web3AuthProvider) {
         // Create ethers provider from web3 auth provider
-        const provider = new BrowserProvider(web3AuthProvider)
-        const signer = await provider.getSigner()
-        const signedMessage = await signer.signMessage(
+        const rpcSigner = await getSigner(web3AuthProvider)
+        const signedMessage = await rpcSigner.signMessage(
           process.env.NEXT_PUBLIC_API_LOGIN_SECRET!
         )
         // TODO: Place inside a server utils folder?
@@ -50,6 +62,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
         if (message) throw new Error(message)
         updateToken(token)
         updateUserId(user._id)
+        setSigner(rpcSigner)
       }
     } catch (err) {
       // TODO: Add toast notifications to display errors?
@@ -61,11 +74,12 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
     await web3Auth?.logout()
     updateToken(null)
     updateUserId(null)
+    setSigner(null)
   }
 
   const signedIn = useMemo(() => {
-    return web3Auth?.status === "connected" && !!token && !!userId
-  }, [token, userId, web3Auth])
+    return !!signer && !!token && !!userId
+  }, [signer, token, userId])
 
   useEffect(() => {
     const init = async () => {
@@ -74,10 +88,10 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
         web3AuthNetwork: "sapphire_devnet", // Web3Auth Network
         chainConfig: {
           chainNamespace: "eip155",
-          chainId: "0x5",
-          rpcTarget: "https://rpc.ankr.com/eth_goerli",
-          displayName: "Ethereum Goerli",
-          blockExplorer: "https://goerli.etherscan.io",
+          chainId: "0xaa36a7",
+          rpcTarget: "https://rpc.ankr.com/eth_sepolia",
+          displayName: "Ethereum Sepolia",
+          blockExplorer: "https://sepolia.etherscan.io",
           ticker: "ETH",
           tickerName: "Ethereum",
         },
@@ -89,6 +103,11 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
       })
       await client.initModal()
       setWeb3Auth(client)
+      // Check if web3 is connected and if so extract signer
+      if (client.status === "connected" && client.provider) {
+        const rpcSigner = await getSigner(client.provider)
+        setSigner(rpcSigner)
+      }
     }
     init()
   }, [])
@@ -97,6 +116,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
     <AuthContext.Provider
       value={{
         initializingW3A: !web3Auth,
+        signer,
         signIn,
         signedIn,
         signOut,
