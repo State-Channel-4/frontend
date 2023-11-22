@@ -24,16 +24,17 @@ export default function Select(): JSX.Element {
 
   return (
     <div
-      className="cursor-pointer p-3 border-[1.5px] mt-2 rounded-lg border-shark-800 flex justify-between w-full relative items-center"
+      className="cursor-pointer h-12 px-3 border-[1.5px] mt-4 rounded-lg border-shark-800 flex justify-between w-full relative items-center"
       onClick={() => filteredOptions.length && setExpanded(!expanded)}
     >
       {selected.length ? (
-        <div className="flex gap-2 overflow-x-auto max-w-2">
+        <div className="flex gap-2 overflow-x-auto shrink-0 max-w-md">
           {selected.map((option) => (
             <div className="bg-shark-700 flex items-center gap-1 px-2 py-1 rounded text-shark-200 text-sm">
               <div>{option}</div>
               <div
                 className="bg-shark-900 p-1 rounded"
+                // @ts-ignore
                 onClick={(e) => removeSelection(option, e)}
               >
                 <X size={8} />

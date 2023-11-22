@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import BadURLDisplay from "@/assets/bad-url-display.png"
 import BrowserIcon from "@/assets/browser-icon.svg"
 import InfoIcon from "@/assets/info-icon.svg"
 import { useEncryptedStore } from "@/store/encrypted"
@@ -14,11 +13,13 @@ import { getRawTransactionToSign } from "@/lib/utils"
 import Select from "@/components/ui/select"
 import RequireAuth from "@/components/helper/RequireAuth"
 
+import { SubmitSiteFrame } from "./components/SubmitSiteFrame"
 import Slider from "./components/slider"
 
 const SubmitUrl = () => {
   const { encrypted } = useEncryptedStore()
   const { password, token, userId } = usePasswordStore()
+  const [error, setError] = useState(new Error())
   const [isLoading, setIsLoading] = useState(false)
   const [previewPasses, setPreviewPasses] = useState(false)
   const [selectedTags, setSelectedTags] = useState<TagMap>(new Map())
@@ -86,44 +87,36 @@ const SubmitUrl = () => {
   }
 
   return (
-    <div
-      className={`flex items-center h-full justify-center bg-cover bg-center bg-shark-900`}
-    >
+    <div className="flex items-center h-full justify-center bg-cover bg-center bg-shark-900">
       <div className="bg-c4-gradient-separator p-px rounded-[32px] w-full max-w-[1130px]">
-        <div className="p-10 pb-16 bg-shark-950 rounded-[32px] relative">
-          <div className="flex gap-10 justify-between items-start">
+        <div className="p-10 pb-16 bg-shark-950 rounded-[32px] relative h-[506px]">
+          <div className="flex gap-10 justify-between items-start h-full">
             <div className="flex-1">
               <div className="text-5xl flex items-center gap-6 ">
                 <div>Add a website</div>
                 <Image alt="Browser" className="w-10 h-10" src={BrowserIcon} />
               </div>
-              <div className="mt-10 text-shark-50">Website URL</div>
+              <div className="mt-10 text-shark-50 text-xl">Website URL</div>
               <input
-                className="w-full mt-2 p-3 bg-shark-950 rounded-lg border-[1.5px] border-shark-800 text-lg placeholder:text-shark-400"
+                className="w-full mt-4 p-3 bg-shark-950 rounded-lg border-[1.5px] border-shark-800 text-lg placeholder:text-shark-400"
                 placeholder="Paste URL here"
                 onChange={(e) => setUrl(e.target.value)}
                 value={url ?? ""}
               />
               <div className="mt-6 flex gap-2 items-center">
-                <div className="text-shark-50">Short description</div>
+                <div className="text-shark-50 text-xl">Short description</div>
                 <div className="text-sm text-shark-300">(Optional)</div>
               </div>
               <input
-                className="w-full mt-2 p-3 bg-shark-950 rounded-lg border-[1.5px] border-shark-800 text-lg placeholder:text-shark-400"
+                className="w-full mt-4 p-3 bg-shark-950 rounded-lg border-[1.5px] border-shark-800 text-lg placeholder:text-shark-400"
                 placeholder="This site is about..."
               />
-              <div className="text-shark-50 mt-6">Choose tags</div>
+              <div className="text-shark-50 mt-6 text-xl">Choose tags</div>
               <Select />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col h-full">
               <div className="text-xl text-shark-50">Preview</div>
-              <div className="rounded-2xl border border-shark-600 mt-4 h-full">
-                <Image
-                  alt="Bad URL"
-                  className="rounded-2xl h-full"
-                  src={BadURLDisplay}
-                />
-              </div>
+              <SubmitSiteFrame error={error} />
               <div className="flex items-center justify-between mt-4">
                 <div className="flex gap-2 items-center">
                   <input
@@ -140,12 +133,12 @@ const SubmitUrl = () => {
               </div>
             </div>
           </div>
-          <div className="p-px bg-c4-gradient-separator rounded-[32px] absolute top-[calc(100%-14px)] left-1/2 transform -translate-x-1/2 w-full max-w-[608px]">
-            <div className="rounded-[32px] py-6 px-16 bg-shark-950">
-              {/* <div className="border border-shark-600 py-4 px-16 rounded-full"></div> */}
-              <Slider />
+          {/* <div className="p-px bg-c4-gradient-separator rounded-[32px] absolute top-[calc(100%-14px)] left-1/2 transform -translate-x-1/2 w-full max-w-[608px]">
+            <div className="rounded-[32px] py-6 px-16 bg-shark-950"> */}
+          {/* <div className="border border-shark-600 py-4 px-16 rounded-full"></div> */}
+          {/* <Slider onSubmit={() => null} />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
