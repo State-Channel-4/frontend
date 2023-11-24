@@ -1,11 +1,19 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import BadURLDisplay from "@/assets/bad-url-display.png"
 
+import { useDebounce } from "@/app/hooks/useDebounce"
+
 interface SubmitSiteFrame {
-  error: Error | null
+  url: string
 }
 
-export function SubmitSiteFrame({ error }: SubmitSiteFrame): JSX.Element {
+export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
+  const [error, setError] = useState<Error | null>(null)
+  const iframeUrl = useDebounce(url, 500)
+
   return (
     <div className="rounded-2xl border border-shark-600 grow mt-2 rounded-2xl h-full">
       {error ? (
@@ -14,6 +22,12 @@ export function SubmitSiteFrame({ error }: SubmitSiteFrame): JSX.Element {
             Can't connect. Please try a different URL
           </div>
         </div>
+      ) : iframeUrl ? (
+        <iframe
+          className="h-full w-full rounded-2xl"
+          onError={(err) => console.log("Err: ", err)}
+          src={iframeUrl}
+        />
       ) : (
         <Image alt="No URL" className="rounded-2xl" src={BadURLDisplay} />
       )}

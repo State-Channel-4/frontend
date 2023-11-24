@@ -19,13 +19,12 @@ import Slider from "./components/slider"
 const SubmitUrl = () => {
   const { encrypted } = useEncryptedStore()
   const { password, token, userId } = usePasswordStore()
-  const [error, setError] = useState(new Error())
   const [isLoading, setIsLoading] = useState(false)
   const [previewPasses, setPreviewPasses] = useState(false)
   const [selectedTags, setSelectedTags] = useState<TagMap>(new Map())
   const [showTags, setShowTags] = useState<TagMap>(new Map())
   // const [title, setTitle] = useState<string | null>(null)
-  const [url, setUrl] = useState<string | null>(null)
+  const [url, setUrl] = useState<string>("")
 
   // const onTitleChangeHandler = (e: { target: { value: string } }) => {
   //   setTitle(e.target.value)
@@ -81,7 +80,7 @@ const SubmitUrl = () => {
       }),
     }).then((res) => res.json())
     // setTitle(null)
-    setUrl(null)
+    setUrl("")
     setSelectedTags(new Map())
     setIsLoading(false)
   }
@@ -116,7 +115,7 @@ const SubmitUrl = () => {
             </div>
             <div className="flex-1 flex flex-col h-full">
               <div className="text-xl text-shark-50">Preview</div>
-              <SubmitSiteFrame error={error} />
+              <SubmitSiteFrame url={url} />
               <div className="flex items-center justify-between mt-4">
                 <div className="flex gap-2 items-center">
                   <input

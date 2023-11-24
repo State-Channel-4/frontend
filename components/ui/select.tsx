@@ -33,11 +33,11 @@ export default function Select(): JSX.Element {
             <div className="bg-shark-700 flex items-center gap-1 px-2 py-1 rounded text-shark-200 text-sm">
               <div>{option}</div>
               <div
-                className="bg-shark-900 p-1 rounded"
+                className="bg-shark-900 p-0.5 rounded"
                 // @ts-ignore
                 onClick={(e) => removeSelection(option, e)}
               >
-                <X size={8} />
+                <X size={10} />
               </div>
             </div>
           ))}
