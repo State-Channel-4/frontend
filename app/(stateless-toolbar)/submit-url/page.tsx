@@ -5,7 +5,7 @@ import Image from "next/image"
 import BrowserIcon from "@/assets/browser-icon.svg"
 import { useJwtStore } from "@/store/jwt"
 import { useReceiptsStore } from "@/store/receipts"
-import { Tag, TagMap } from "@/types"
+import { Tag } from "@/types"
 import { Info } from "lucide-react"
 
 import {
