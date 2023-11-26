@@ -13,6 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import Select from "@/components/ui/select"
 import RequireAuth from "@/components/helper/RequireAuth"
 
 import { SubmitSiteFrame } from "./components/SubmitSiteFrame"
@@ -25,32 +26,29 @@ const SubmitUrl = () => {
   const [errorSending, setErrorSending] = useState<Error | null>(null)
   const [isSending, setIsSending] = useState(false)
   const [previewPasses, setPreviewPasses] = useState(false)
-  const [selectedTags, setSelectedTags] = useState<TagMap>(new Map())
-  const [showTags, setShowTags] = useState<TagMap>(new Map())
+  const [selectedTags, setSelectedTags] = useState<Array<Tag>>([])
+  const [showTags, setShowTags] = useState<Array<Tag>>([])
   const [sent, setSent] = useState(false)
   const [url, setUrl] = useState<string>("")
+
+  const addSelected = (option: string) => {
+    const tag = showTags.find((tag) => tag.name === option)
+    setSelectedTags((prev) => [...prev, tag!])
+  }
 
   const getTags = async () => {
     try {
       const response = await fetch(
         process.env.NEXT_PUBLIC_API_URL + "/tag"
       ).then((res) => res.json())
-      let tags: TagMap = new Map()
       if ("tags" in response) {
-        response.tags.forEach((tag: Tag) => {
-          tags.set(tag._id, tag)
-        })
+        setShowTags(response.tags)
       }
-      setShowTags(tags)
     } catch (error) {
       console.log(error)
-      setShowTags(new Map())
+      setShowTags([])
     }
   }
-
-  useEffect(() => {
-    getTags()
-  }, [])
 
   const onClickShareItHandler = async () => {
     setIsSending(true)
@@ -61,10 +59,9 @@ const SubmitUrl = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        tags: selectedTags.map((tag) => tag._id),
         title: description,
         url: url,
-        // tags: Array.from(selectedTags.keys()),
-        tags: Array.from(showTags.keys()),
       }),
     })
       .then((res) => {
@@ -76,7 +73,7 @@ const SubmitUrl = () => {
           setDescription("")
           setPreviewPasses(false)
           setUrl("")
-          setSelectedTags(new Map())
+          setSelectedTags([])
           setSent(false)
         }, 3000)
         return res.json()
@@ -96,6 +93,22 @@ const SubmitUrl = () => {
       type: "Url",
     })
   }
+
+  const optionNames = useMemo(() => {
+    return showTags.map((tag) => tag.name)
+  }, [showTags])
+
+  const removeSelected = (index: number) => {
+    setSelectedTags((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const selectedNames = useMemo(() => {
+    return selectedTags.map((tag) => tag.name)
+  }, [selectedTags])
+
+  useEffect(() => {
+    getTags()
+  }, [])
 
   return (
     <div className="flex items-center h-full justify-center bg-cover bg-center bg-shark-900">
@@ -125,11 +138,12 @@ const SubmitUrl = () => {
                 value={description}
               />
               <div className="text-shark-50 mt-6 text-xl">Choose tags</div>
-              {/* <Select
-                options={Array.from(showTags.values()).map((tag) => tag.name)}
-                selected={selectedTags}
-                setSelected={setSelectedTags}
-              /> */}
+              <Select
+                onSelect={addSelected}
+                onRemove={removeSelected}
+                options={optionNames}
+                selected={selectedNames}
+              />
             </div>
             <div className="flex-1 flex flex-col h-full">
               <div className="text-xl text-shark-50">Preview</div>
