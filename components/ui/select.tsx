@@ -1,25 +1,29 @@
-import { MouseEvent, useMemo, useState } from "react"
+import { Dispatch, MouseEvent, SetStateAction, useMemo, useState } from "react"
 import { ChevronDown, X } from "lucide-react"
 
-export default function Select(): JSX.Element {
+interface SelectProps {
+  options: Array<string>
+  selected: Array<string>
+  setSelected: (option: string) => void
+}
+
+export default function Select({
+  selected,
+  setSelected,
+  options,
+}: SelectProps): JSX.Element {
   const [expanded, setExpanded] = useState(false)
-  // const [selected, setSelected] = useState<Array<string>>([
-  //   "jfkwjfklwejotewiqjtoiewoqrjoejwoqirjqwioejroiewqrjqwioerpjoqw;wqerjeoiwqjroieqwjrpoijqwijroweqoj",
-  // ])
-  const [selected, setSelected] = useState<Array<string>>([])
-  const OPTIONS = ["UFO", "Blockchain", "Burger", "Fries", "Chicken", "Beef"]
-  // TODO: Make radix UI component? Does not work with selected items however
 
   const filteredOptions = useMemo(() => {
-    return OPTIONS.filter((option) => !selected.includes(option))
-  }, [selected])
+    return options.filter((option) => !selected.includes(option))
+  }, [options, selected])
 
   const removeSelection = (
     selection: string,
     event: MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.stopPropagation()
-    setSelected((prev) => prev.filter((option) => option !== selection))
+    // setSelected((prev) => prev.filter((option) => option !== selection))
   }
 
   return (
@@ -51,7 +55,7 @@ export default function Select(): JSX.Element {
           {filteredOptions.map((option) => (
             <div
               className="px-4 hover:bg-shark-700"
-              onClick={() => setSelected((prev) => [...prev, option])}
+              // onClick={() => setSelected((prev) => [...prev, option])}
             >
               {option}
             </div>

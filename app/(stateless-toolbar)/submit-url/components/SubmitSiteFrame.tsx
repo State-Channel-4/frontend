@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import BadURLDisplay from "@/assets/bad-url-display.png"
 
@@ -23,13 +23,13 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
           </div>
         </div>
       ) : iframeUrl ? (
-        <iframe
-          className="h-full w-full rounded-2xl"
-          onError={(err) => console.log("Err: ", err)}
-          src={iframeUrl}
-        />
+        <iframe className="h-full w-full rounded-2xl" src={iframeUrl} />
       ) : (
-        <Image alt="No URL" className="rounded-2xl" src={BadURLDisplay} />
+        <Image
+          alt="No URL"
+          className="rounded-2xl h-full"
+          src={BadURLDisplay}
+        />
       )}
     </div>
   )

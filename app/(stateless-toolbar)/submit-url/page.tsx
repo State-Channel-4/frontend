@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import BrowserIcon from "@/assets/browser-icon.svg"
 import InfoIcon from "@/assets/info-icon.svg"
-import { useEncryptedStore } from "@/store/encrypted"
+import { useAuth } from "@/contexts/AuthContext"
 import { usePasswordStore } from "@/store/password"
 import { Tag, TagMap } from "@/types"
 import { Wallet } from "ethers"
@@ -17,22 +17,15 @@ import { SubmitSiteFrame } from "./components/SubmitSiteFrame"
 import Slider from "./components/slider"
 
 const SubmitUrl = () => {
-  const { encrypted } = useEncryptedStore()
-  const { password, token, userId } = usePasswordStore()
-  const [isLoading, setIsLoading] = useState(false)
+  const { token, userId } = usePasswordStore()
+  const [description, setDescription] = useState<string>("")
+  const [errorSending, setErrorSending] = useState<Error | null>(null)
+  const [isSending, setIsSending] = useState(false)
   const [previewPasses, setPreviewPasses] = useState(false)
   const [selectedTags, setSelectedTags] = useState<TagMap>(new Map())
   const [showTags, setShowTags] = useState<TagMap>(new Map())
-  // const [title, setTitle] = useState<string | null>(null)
+  const [sent, setSent] = useState(false)
   const [url, setUrl] = useState<string>("")
-
-  // const onTitleChangeHandler = (e: { target: { value: string } }) => {
-  //   setTitle(e.target.value)
-  // }
-
-  const onUrlChangeHandler = (e: { target: { value: string } }) => {
-    setUrl(e.target.value)
-  }
 
   const getTags = async () => {
     try {
@@ -57,14 +50,15 @@ const SubmitUrl = () => {
   }, [])
 
   const onClickShareItHandler = async () => {
-    setIsLoading(true)
+    setIsSending(true)
     const functionName = "submitURL"
-    // const params = [title, url, Array.from(selectedTags.keys())]
-    const params = [url, Array.from(selectedTags.keys())]
+    const params = [description, url, Array.from(selectedTags.keys())]
+
     const metaTx = await getRawTransactionToSign(functionName, params)
-    const wallet = Wallet.fromEncryptedJsonSync(encrypted!, password!)
-    const signedSubmitURLtx = await wallet?.signTransaction(metaTx)
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
+    // const signedSubmitURLtx = await wallet
+    //   ?.signTransaction(metaTx)
+    const signedSubmitURLtx = ""
+    await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,17 +66,35 @@ const SubmitUrl = () => {
       },
       body: JSON.stringify({
         signedMessage: signedSubmitURLtx,
-        address: wallet.address,
+        address: "",
         functionName: functionName,
         params: params,
         // TODO: temp params for mongodb
         userId: userId,
       }),
-    }).then((res) => res.json())
-    // setTitle(null)
-    setUrl("")
-    setSelectedTags(new Map())
-    setIsLoading(false)
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error
+        }
+        setSent(true)
+        setTimeout(() => {
+          setDescription("")
+          setUrl("")
+          setSelectedTags(new Map())
+          setSent(false)
+        }, 3000)
+      })
+      .catch((err) => {
+        console.log("Flag error")
+        setErrorSending(err)
+        setTimeout(() => {
+          setErrorSending(null)
+        }, 3000)
+      })
+      .finally(() => {
+        setIsSending(false)
+      })
   }
 
   return (
@@ -111,7 +123,11 @@ const SubmitUrl = () => {
                 placeholder="This site is about..."
               />
               <div className="text-shark-50 mt-6 text-xl">Choose tags</div>
-              <Select />
+              {/* <Select
+                options={Array.from(showTags.values()).map((tag) => tag.name)}
+                selected={selectedTags}
+                setSelected={setSelectedTags}
+              /> */}
             </div>
             <div className="flex-1 flex flex-col h-full">
               <div className="text-xl text-shark-50">Preview</div>
@@ -132,62 +148,20 @@ const SubmitUrl = () => {
               </div>
             </div>
           </div>
-          {/* <div className="p-px bg-c4-gradient-separator rounded-[32px] absolute top-[calc(100%-14px)] left-1/2 transform -translate-x-1/2 w-full max-w-[608px]">
-            <div className="rounded-[32px] py-6 px-16 bg-shark-950"> */}
-          {/* <div className="border border-shark-600 py-4 px-16 rounded-full"></div> */}
-          {/* <Slider onSubmit={() => null} />
+          <div className="p-px bg-c4-gradient-separator rounded-[32px] absolute top-[calc(100%-14px)] left-1/2 transform -translate-x-1/2 w-full max-w-[608px]">
+            <div className="rounded-[32px] py-6 px-16 bg-shark-950">
+              <Slider
+                disabled={!previewPasses || !url}
+                error={errorSending}
+                onSubmit={onClickShareItHandler}
+                sending={isSending}
+                sent={sent}
+              />
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
-    // <RequireAuth>
-    //   <div className="mx-7 flex flex-col justify-center lg:container">
-    //     <div className="my-5 flex h-40 justify-center rounded-br-3xl rounded-tl-3xl bg-c4-gradient-main">
-    //       <Image priority src={Channel4IconBlack} alt="Channel 4 icon black" />
-    //     </div>
-    //     <h2 className="my-5">
-    //       Share your favourite websites & <span className="">spark joy</span> in
-    //       our community with <span className="">random gems!</span> 🌐✨
-    //     </h2>
-    //     <div className="space-y-2 pb-4">
-    //       <p>Enter title here</p>
-    //       <input
-    //         type={"text"}
-    //         value={title || ""}
-    //         onChange={onTitleChangeHandler}
-    //         className="h-12 w-full rounded-lg bg-gray px-2 py-1"
-    //       />
-    //     </div>
-    //     <div className="space-y-2 pb-4">
-    //       <p>Enter URL here</p>
-    //       <input
-    //         type={"text"}
-    //         value={url || ""}
-    //         onChange={onUrlChangeHandler}
-    //         className="h-12 w-full rounded-lg bg-gray px-2 py-1"
-    //       />
-    //     </div>
-    //     <div className="space-y-2 pb-4">
-    //       <p>Add tags (optional)</p>
-    //       <TagRow
-    //         selectable
-    //         shownTags={showTags}
-    //         selectedTags={selectedTags}
-    //         setSelectedTags={setSelectedTags}
-    //       />
-    //     </div>
-    //     <Button
-    //       variant="outline"
-    //       loading={isLoading}
-    //       disabled={isLoading}
-    //       onClick={onClickShareItHandler}
-    //       className="rounded-full border-green-500 py-6 text-green-500"
-    //     >
-    //       Share it with the world
-    //     </Button>
-    //   </div>
-    // </RequireAuth>
   )
 }
 
