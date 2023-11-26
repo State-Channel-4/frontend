@@ -3,16 +3,16 @@
 import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import BrowserIcon from "@/assets/browser-icon.svg"
-import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
-import InfoIcon from "@/assets/info-icon.svg"
-import { useAuth } from "@/contexts/AuthContext"
 import { useJwtStore } from "@/store/jwt"
 import { useReceiptsStore } from "@/store/receipts"
 import { Tag, TagMap } from "@/types"
+import { Info } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import Select from "@/components/ui/select"
-import TagRow from "@/components/ui/tag-row"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import RequireAuth from "@/components/helper/RequireAuth"
 
 import { SubmitSiteFrame } from "./components/SubmitSiteFrame"
@@ -20,7 +20,7 @@ import Slider from "./components/slider"
 
 const SubmitUrl = () => {
   const { updateList } = useReceiptsStore()
-  const { token, userId } = useJwtStore()
+  const { token } = useJwtStore()
   const [description, setDescription] = useState<string>("")
   const [errorSending, setErrorSending] = useState<Error | null>(null)
   const [isSending, setIsSending] = useState(false)
@@ -63,7 +63,8 @@ const SubmitUrl = () => {
       body: JSON.stringify({
         title: description,
         url: url,
-        tags: Array.from(selectedTags.keys()),
+        // tags: Array.from(selectedTags.keys()),
+        tags: Array.from(showTags.keys()),
       }),
     })
       .then((res) => {
@@ -73,6 +74,7 @@ const SubmitUrl = () => {
         setSent(true)
         setTimeout(() => {
           setDescription("")
+          setPreviewPasses(false)
           setUrl("")
           setSelectedTags(new Map())
           setSent(false)
@@ -80,7 +82,6 @@ const SubmitUrl = () => {
         return res.json()
       })
       .catch((err) => {
-        console.log("Flag error")
         setErrorSending(err)
         setTimeout(() => {
           setErrorSending(null)
@@ -119,7 +120,9 @@ const SubmitUrl = () => {
               </div>
               <input
                 className="w-full mt-4 p-3 bg-shark-950 rounded-lg border-[1.5px] border-shark-800 text-lg placeholder:text-shark-400"
+                onChange={(e) => setDescription(e.target.value)}
                 placeholder="This site is about..."
+                value={description}
               />
               <div className="text-shark-50 mt-6 text-xl">Choose tags</div>
               {/* <Select
@@ -143,7 +146,25 @@ const SubmitUrl = () => {
                     Check this box if the website preview looks good
                   </div>
                 </div>
-                <Image alt="Info" className="cursor-pointer" src={InfoIcon} />
+                <Popover>
+                  <PopoverTrigger className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed">
+                    <Info
+                      className="cursor-pointer stroke-shark-300"
+                      size={16}
+                    />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="end"
+                    alignOffset={-15}
+                    className="w-64 rounded-lg border border-shark-800 bg-shark-950 p-4 text-left text-sm text-shark-50"
+                    side="top"
+                    sideOffset={15}
+                  >
+                    Some websites don't allow other applications to render their
+                    website in an iframe. Make sure you the preview renders
+                    correctly so others can enjoy this channel.
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           </div>
