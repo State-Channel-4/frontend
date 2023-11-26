@@ -1,12 +1,12 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
+import Image from "next/image"
+import { usePathname, useRouter } from "next/navigation"
 import EmptyHeart from "@/assets/empty-heart.svg"
 import FilledHeart from "@/assets/filled-heart.svg"
 import { useAuth } from "@/contexts/AuthContext"
 import { C4Content } from "@/types"
-import Image from "next/image"
-import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
 
 import Channel4Icon from "../assets/channel-4-icon-v2.svg"
 import MainMenu from "./main-menu"
@@ -86,7 +86,7 @@ const Toolbar = ({
               className="truncate text-xs text-shark-300"
               onClick={() => togglePopup("site-details")}
             >
-              {showSiteDetails ? 'Hide details' : 'See details'}
+              {showSiteDetails ? "Hide details" : "See details"}
             </button>
           )}
         </div>
