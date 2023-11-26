@@ -11,7 +11,7 @@ const SiteFrame: React.FC<SiteFrameProps> = ({ site }) => {
   if (!site) return null
 
   return (
-    <section className="h-full rounded-2xl bg-c4-gradient-main pe-2 ps-2">
+    <section className="h-full rounded-2xl">
       <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-secondary">
         <iframe
           src={site.proxyUrl}

@@ -3,21 +3,24 @@
 import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import BrowserIcon from "@/assets/browser-icon.svg"
+import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
 import InfoIcon from "@/assets/info-icon.svg"
 import { useAuth } from "@/contexts/AuthContext"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
+import { useReceiptsStore } from "@/store/receipts"
 import { Tag, TagMap } from "@/types"
-import { Wallet } from "ethers"
 
-import { getRawTransactionToSign } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import Select from "@/components/ui/select"
+import TagRow from "@/components/ui/tag-row"
 import RequireAuth from "@/components/helper/RequireAuth"
 
 import { SubmitSiteFrame } from "./components/SubmitSiteFrame"
 import Slider from "./components/slider"
 
 const SubmitUrl = () => {
-  const { token, userId } = usePasswordStore()
+  const { updateList } = useReceiptsStore()
+  const { token, userId } = useJwtStore()
   const [description, setDescription] = useState<string>("")
   const [errorSending, setErrorSending] = useState<Error | null>(null)
   const [isSending, setIsSending] = useState(false)
@@ -51,26 +54,16 @@ const SubmitUrl = () => {
 
   const onClickShareItHandler = async () => {
     setIsSending(true)
-    const functionName = "submitURL"
-    const params = [description, url, Array.from(selectedTags.keys())]
-
-    const metaTx = await getRawTransactionToSign(functionName, params)
-    // const signedSubmitURLtx = await wallet
-    //   ?.signTransaction(metaTx)
-    const signedSubmitURLtx = ""
-    await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        signedMessage: signedSubmitURLtx,
-        address: "",
-        functionName: functionName,
-        params: params,
-        // TODO: temp params for mongodb
-        userId: userId,
+        title: description,
+        url: url,
+        tags: Array.from(selectedTags.keys()),
       }),
     })
       .then((res) => {
@@ -84,6 +77,7 @@ const SubmitUrl = () => {
           setSelectedTags(new Map())
           setSent(false)
         }, 3000)
+        return res.json()
       })
       .catch((err) => {
         console.log("Flag error")
@@ -95,6 +89,11 @@ const SubmitUrl = () => {
       .finally(() => {
         setIsSending(false)
       })
+    updateList({
+      object: response.newUrl,
+      receipt: response.receipt,
+      type: "Url",
+    })
   }
 
   return (
