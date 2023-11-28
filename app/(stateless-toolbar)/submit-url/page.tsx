@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import BrowserIcon from "@/assets/browser-icon.svg"
+import Background from "@/assets/submit-url-background.svg"
 import { useJwtStore } from "@/store/jwt"
 import { useReceiptsStore } from "@/store/receipts"
 import { Tag } from "@/types"
@@ -111,7 +112,13 @@ const SubmitUrl = () => {
   }, [])
 
   return (
-    <div className="flex items-center h-full justify-center bg-cover bg-center bg-shark-900">
+    <div
+      className="flex items-center h-full justify-center bg-no-repeat bg-center bg-shark-900 bg-size"
+      style={{
+        backgroundImage: `url(${Background.src})`,
+        backgroundSize: "90%",
+      }}
+    >
       <div className="bg-c4-gradient-separator p-px rounded-[32px] w-full max-w-[1130px]">
         <div className="p-10 pb-16 bg-shark-950 rounded-[32px] relative h-[506px]">
           <div className="flex gap-10 justify-between items-start h-full">
