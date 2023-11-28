@@ -113,7 +113,7 @@ const SubmitUrl = () => {
 
   return (
     <div
-      className="flex items-center h-full justify-center bg-no-repeat bg-center bg-shark-900 bg-size"
+      className="flex items-center h-full justify-center bg-no-repeat bg-center bg-shark-900"
       style={{
         backgroundImage: `url(${Background.src})`,
         backgroundSize: "90%",
