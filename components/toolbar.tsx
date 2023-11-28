@@ -35,6 +35,12 @@ const Toolbar = ({
   const path = usePathname()
   const router = useRouter()
 
+  // Map route to toolbar label
+  const labelMap: { [path: string]: string } = {
+    "/landing": "Welcome to Channel 4",
+    "/submit-url": "Add a website",
+  }
+
   const isDiscover = useMemo(() => {
     return path === "/discover"
   }, [path])
@@ -43,6 +49,15 @@ const Toolbar = ({
     if (!signedIn || !currentSite || !userLikes) return false
     return userLikes.includes(currentSite._id)
   }, [currentSite, signedIn, userLikes])
+
+  const labelText = useMemo(() => {
+    if (isDiscover) {
+      return isLoading
+        ? "Loading sites..."
+        : currentSite?.title ?? "Site name not avaialable."
+    }
+    return labelMap[path]
+  }, [currentSite, isDiscover, isLoading, path])
 
   const togglePopup = (option: string) => {
     if (option === "navigation") {
@@ -74,13 +89,7 @@ const Toolbar = ({
           />
         </div>
         <div className="min-w-0">
-          <div className="truncate font-medium">
-            {isDiscover
-              ? isLoading
-                ? "Loading sites..."
-                : currentSite?.title ?? "Site name not avaialable."
-              : "Welcome to Channel 4"}
-          </div>
+          <div className="truncate font-medium">{labelText}</div>
           {isDiscover && !isLoading && (
             <button
               className="truncate text-xs text-shark-300"
