@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 interface LikeButtonProps {
   signedIn: boolean
-  likeOrUnlike: (contentId: string, liked: boolean) => void
+  likeOrUnlike: (contentId: string) => void
   site: C4Content | null
   userLikes: string[]
 }
@@ -28,7 +28,7 @@ const LikeButton = ({
       variant="secondary"
       size="sm"
       className="group inline-flex items-center gap-2 self-start rounded-full px-4 py-2 text-sm transition-all duration-300"
-      onClick={signedIn ? (e) => likeOrUnlike(site._id, !isLiked) : undefined}
+      onClick={signedIn ? (e) => likeOrUnlike(site._id) : undefined}
     >
       <ThumbsUpIcon
         size={16}
