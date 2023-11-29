@@ -171,7 +171,7 @@ const useMix = () => {
   }, [state.selectedTags])
 
   const likeOrUnlike = useCallback(
-    async (contentId: string, liked: boolean) => {
+    async (contentId: string) => {
       const { currentSite, mix, mixIndex, userLikes } = state
       if (!currentSite) return
       const isLiked = userLikes.includes(contentId)
@@ -192,7 +192,7 @@ const useMix = () => {
         mix: updatedMix,
       })
       try {
-        await updateLikesInApi(contentId, liked, token!, updateList)
+        await updateLikesInApi(contentId, isLiked, token!, updateList)
       } catch (error) {
         console.error(error)
       }
