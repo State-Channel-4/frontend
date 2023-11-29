@@ -192,7 +192,7 @@ const useMix = () => {
         mix: updatedMix,
       })
       try {
-        await updateLikesInApi(contentId, isLiked, token!, updateList)
+        await updateLikesInApi(contentId, !isLiked, token!, updateList) // isLiked is the opposite of the user action (I am not sure why) by Nico Serrano
       } catch (error) {
         console.error(error)
       }

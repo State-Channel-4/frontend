@@ -96,10 +96,10 @@ const Toolbar = ({
           <Popover>
             <PopoverTrigger
               className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"
-              disabled={signedIn}
-              onClick={() =>
+              onClick={() => {
+                if (!signedIn) return
                 currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
-              }
+              }}
             >
               {/* TODO: Replace with single SVG image that can be colored */}
               <Image
@@ -109,13 +109,15 @@ const Toolbar = ({
               />
               <div>{currentSite?.likes}</div>
             </PopoverTrigger>
-            <PopoverContent
-              className="w-fit rounded-lg border border-shark-800 bg-shark-950 p-4 text-center text-sm text-shark-50"
-              side="top"
-              sideOffset={15}
-            >
-              Please sign in to like this.
-            </PopoverContent>
+            {!signedIn && (
+              <PopoverContent
+                className="w-fit rounded-lg border border-shark-800 bg-shark-950 p-4 text-center text-sm text-shark-50"
+                side="top"
+                sideOffset={15}
+              >
+                Please sign in to like this.
+              </PopoverContent>
+            )}
           </Popover>
         )}
         <Button
