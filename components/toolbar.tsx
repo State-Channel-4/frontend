@@ -47,6 +47,7 @@ const Toolbar = ({
   const labelText = useMemo(() => {
     // Map route to toolbar label
     const labelMap: { [path: string]: string } = {
+      "/browse": "Browse topics",
       "/landing": "Welcome to Channel 4",
       "/submit-url": "Add a website",
     }
