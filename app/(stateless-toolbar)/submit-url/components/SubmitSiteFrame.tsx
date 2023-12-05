@@ -15,11 +15,11 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
   const iframeUrl = useDebounce(url, 500)
 
   return (
-    <div className="rounded-2xl border border-shark-600 mt-2 rounded-2xl h-full">
+    <div className="mt-2 h-full rounded-2xl border border-shark-600">
       {error ? (
-        <div className="bg-shark-200 h-full rounded-2xl flex items-center justify-center">
+        <div className="flex h-full items-center justify-center rounded-2xl bg-shark-200">
           <div className="px-4 text-shark-800">
-            Can't connect. Please try a different URL
+            Can&apos;t connect. Please try a different URL
           </div>
         </div>
       ) : iframeUrl ? (
@@ -27,7 +27,7 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
       ) : (
         <Image
           alt="No URL"
-          className="rounded-2xl h-full max-h-[239px]"
+          className="h-full max-h-[239px] rounded-2xl"
           src={BadURLDisplay}
         />
       )}

@@ -35,12 +35,6 @@ const Toolbar = ({
   const path = usePathname()
   const router = useRouter()
 
-  // Map route to toolbar label
-  const labelMap: { [path: string]: string } = {
-    "/landing": "Welcome to Channel 4",
-    "/submit-url": "Add a website",
-  }
-
   const isDiscover = useMemo(() => {
     return path === "/discover"
   }, [path])
@@ -51,6 +45,12 @@ const Toolbar = ({
   }, [currentSite, signedIn, userLikes])
 
   const labelText = useMemo(() => {
+    // Map route to toolbar label
+    const labelMap: { [path: string]: string } = {
+      "/landing": "Welcome to Channel 4",
+      "/submit-url": "Add a website",
+    }
+
     if (isDiscover) {
       return isLoading
         ? "Loading sites..."
@@ -77,7 +77,7 @@ const Toolbar = ({
     <div className="relative flex items-center justify-between gap-4 px-4 py-2 md:px-8 md:py-6">
       <div className="flex min-w-0 items-center gap-4">
         <div
-          className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow md:p-4 hover:shadow-c4-green/70 hover:-translate-y-1 duration-500 ease-in-out active:scale-90"
+          className="shrink-0 cursor-pointer select-none rounded-full p-2.5 shadow-menuShadow duration-500 ease-in-out hover:-translate-y-1 hover:shadow-c4-green/70 active:scale-90 md:p-4"
           onClick={() => togglePopup("navigation")}
           title="Menu"
         >
@@ -127,7 +127,7 @@ const Toolbar = ({
           </Popover>
         )}
         <Button
-          className="h-auto bg-c4-gradient-green px-6 py-2 hover:bg-c4-gradient-green-rev hover:translate-x-1 md:px-16 duration-200 ease-out"
+          className="h-auto bg-c4-gradient-green px-6 py-2 duration-200 ease-out hover:translate-x-1 hover:bg-c4-gradient-green-rev md:px-16"
           onClick={() =>
             isDiscover && changeSite ? changeSite() : router.push("discover")
           }

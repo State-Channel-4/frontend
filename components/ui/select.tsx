@@ -30,16 +30,16 @@ export default function Select({
 
   return (
     <div
-      className="cursor-pointer h-12 px-3 border-[1.5px] mt-4 rounded-lg border-shark-800 flex justify-between w-full relative items-center"
+      className="relative mt-4 flex h-12 w-full cursor-pointer items-center justify-between rounded-lg border-[1.5px] border-shark-800 px-3"
       onClick={() => filteredOptions.length && setExpanded(!expanded)}
     >
       {selected.length ? (
-        <div className="flex gap-2 overflow-x-auto shrink-0 max-w-md">
+        <div className="flex max-w-md shrink-0 gap-2 overflow-x-auto">
           {selected.map((option, index) => (
-            <div className="bg-shark-700 flex items-center gap-1 px-2 py-1 rounded text-shark-200 text-sm">
+            <div className="flex items-center gap-1 rounded bg-shark-700 px-2 py-1 text-sm text-shark-200">
               <div>{option}</div>
               <div
-                className="bg-shark-900 p-0.5 rounded"
+                className="rounded bg-shark-900 p-0.5"
                 // @ts-ignore
                 onClick={(e) => removeSelection(e, index)}
               >
@@ -53,10 +53,10 @@ export default function Select({
       )}
       <ChevronDown className="stroke-shark-200" size={24} />
       {expanded && (
-        <div className="absolute bg-shark-950 border-[1.5px] border-t-0 border-shark-800 max-h-[200px] ml-[-13.5px] rounded-b-lg w-[calc(100%+3px)] top-[85%] z-5">
+        <div className="z-5 absolute top-[85%] ml-[-13.5px] max-h-[200px] w-[calc(100%+3px)] rounded-b-lg border-[1.5px] border-t-0 border-shark-800 bg-shark-950">
           {filteredOptions.map((option) => (
             <div
-              className="px-4 hover:bg-shark-700 last:rounded-b-md"
+              className="px-4 last:rounded-b-md hover:bg-shark-700"
               onClick={() => onSelect(option)}
             >
               {option}

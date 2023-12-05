@@ -113,38 +113,38 @@ const SubmitUrl = () => {
 
   return (
     <div
-      className="flex items-center h-full justify-center bg-no-repeat bg-center bg-shark-900"
+      className="flex h-full items-center justify-center bg-shark-900 bg-center bg-no-repeat"
       style={{
         backgroundImage: `url(${Background.src})`,
         backgroundSize: "90%",
       }}
     >
-      <div className="bg-c4-gradient-separator p-px rounded-[32px] w-full max-w-[1130px]">
-        <div className="p-10 pb-16 bg-shark-950 rounded-[32px] relative h-[501px]">
-          <div className="flex gap-10 justify-between items-start h-full">
+      <div className="w-full max-w-[1130px] rounded-[32px] bg-c4-gradient-separator p-px">
+        <div className="relative h-[501px] rounded-[32px] bg-shark-950 p-10 pb-16">
+          <div className="flex h-full items-start justify-between gap-10">
             <div className="flex-1">
-              <div className="text-5xl flex items-center gap-6 ">
+              <div className="flex items-center gap-6 text-5xl ">
                 <div>Add a website</div>
-                <Image alt="Browser" className="w-10 h-10" src={BrowserIcon} />
+                <Image alt="Browser" className="h-10 w-10" src={BrowserIcon} />
               </div>
-              <div className="mt-10 text-shark-50 text-xl">Website URL</div>
+              <div className="mt-10 text-xl text-shark-50">Website URL</div>
               <input
-                className="w-full mt-4 p-3 bg-shark-950 rounded-lg border-[1.5px] border-shark-800 text-lg placeholder:text-shark-400"
+                className="mt-4 w-full rounded-lg border-[1.5px] border-shark-800 bg-shark-950 p-3 text-lg placeholder:text-shark-400"
                 placeholder="Paste URL here"
                 onChange={(e) => setUrl(e.target.value)}
                 value={url ?? ""}
               />
-              <div className="mt-6 flex gap-2 items-center">
-                <div className="text-shark-50 text-xl">Short description</div>
+              <div className="mt-6 flex items-center gap-2">
+                <div className="text-xl text-shark-50">Short description</div>
                 <div className="text-sm text-shark-300">(Optional)</div>
               </div>
               <input
-                className="w-full mt-4 p-3 bg-shark-950 rounded-lg border-[1.5px] border-shark-800 text-lg placeholder:text-shark-400"
+                className="mt-4 w-full rounded-lg border-[1.5px] border-shark-800 bg-shark-950 p-3 text-lg placeholder:text-shark-400"
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="This site is about..."
                 value={description}
               />
-              <div className="text-shark-50 mt-6 text-xl">Choose tags</div>
+              <div className="mt-6 text-xl text-shark-50">Choose tags</div>
               <Select
                 onSelect={addSelected}
                 onRemove={removeSelected}
@@ -152,18 +152,18 @@ const SubmitUrl = () => {
                 selected={selectedNames}
               />
             </div>
-            <div className="flex-1 flex flex-col h-full">
+            <div className="flex h-full flex-1 flex-col">
               <div className="text-xl text-shark-50">Preview</div>
               <SubmitSiteFrame url={url} />
-              <div className="flex items-center justify-between mt-4">
-                <div className="flex gap-2 items-center">
+              <div className="mt-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
                   <input
-                    className="border border-shark-500 bg-shark-700 bg-c4-green cursor-pointer h-[18px] rounded w-[18px]"
+                    className="h-[18px] w-[18px] cursor-pointer rounded border border-shark-500 bg-shark-700"
                     checked={previewPasses}
                     onChange={() => setPreviewPasses(!previewPasses)}
                     type="checkbox"
                   />
-                  <div className="text-shark-200 text-sm">
+                  <div className="text-sm text-shark-200">
                     Check this box if the website preview looks good
                   </div>
                 </div>
@@ -181,9 +181,9 @@ const SubmitUrl = () => {
                     side="top"
                     sideOffset={15}
                   >
-                    Some websites don't allow other applications to render their
-                    website in an iframe. Make sure you the preview renders
-                    correctly so others can enjoy this channel.
+                    Some websites don&apos;t allow other applications to render
+                    their website in an iframe. Make sure you the preview
+                    renders correctly so others can enjoy this channel.
                   </PopoverContent>
                 </Popover>
               </div>

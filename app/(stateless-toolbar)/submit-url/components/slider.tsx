@@ -56,9 +56,9 @@ export default function Slider({
   }, [sent])
 
   return (
-    <div className={`border ${borderColor} px-1.5 py-1 rounded-full`}>
+    <div className={`border ${borderColor} rounded-full px-1.5 py-1`}>
       <Root
-        className="cursor-pointer relative flex items-center select-none touch-none w-full rounded-full h-[48px]"
+        className="relative flex h-[48px] w-full cursor-pointer touch-none select-none items-center rounded-full"
         disabled={disabled || !!sliderText}
         onLostPointerCapture={() => {
           if (value === 100) {
@@ -79,8 +79,8 @@ export default function Slider({
       >
         <Track className="w-full">
           {sliderText && (
-            <div className="absolute px-6 w-full z-10 flex items-center justify-between">
-              <div className="text-black text-lg">{sliderText}</div>
+            <div className="absolute z-10 flex w-full items-center justify-between px-6">
+              <div className="text-lg text-black">{sliderText}</div>
               {error ? (
                 <X color="black" size={24} />
               ) : sent ? (
@@ -92,7 +92,7 @@ export default function Slider({
               )}
             </div>
           )}
-          <Range className="absolute bg-c4-gradient-separator border-shark-600 border rounded-full h-full top-1/2 transform -translate-y-1/2" />
+          <Range className="absolute top-1/2 h-full -translate-y-1/2 rounded-full border border-shark-600 bg-c4-gradient-separator" />
           <div className="text-center text-lg text-shark-300">
             Slide to send to Channel4
           </div>
