@@ -120,7 +120,7 @@ const SubmitUrl = () => {
       }}
     >
       <div className="bg-c4-gradient-separator p-px rounded-[32px] w-full max-w-[1130px]">
-        <div className="p-10 pb-16 bg-shark-950 rounded-[32px] relative h-[506px]">
+        <div className="p-10 pb-16 bg-shark-950 rounded-[32px] relative h-[501px]">
           <div className="flex gap-10 justify-between items-start h-full">
             <div className="flex-1">
               <div className="text-5xl flex items-center gap-6 ">
@@ -158,7 +158,7 @@ const SubmitUrl = () => {
               <div className="flex items-center justify-between mt-4">
                 <div className="flex gap-2 items-center">
                   <input
-                    className="border border-shark-500 bg-shark-700 cursor-pointer h-[18px] rounded w-[18px]"
+                    className="border border-shark-500 bg-shark-700 bg-c4-green cursor-pointer h-[18px] rounded w-[18px]"
                     checked={previewPasses}
                     onChange={() => setPreviewPasses(!previewPasses)}
                     type="checkbox"
@@ -187,17 +187,15 @@ const SubmitUrl = () => {
                   </PopoverContent>
                 </Popover>
               </div>
-            </div>
-          </div>
-          <div className="p-px bg-c4-gradient-separator rounded-[32px] absolute top-[calc(100%-14px)] left-1/2 transform -translate-x-1/2 w-full max-w-[608px]">
-            <div className="rounded-[32px] py-6 px-16 bg-shark-950">
-              <Slider
-                disabled={!previewPasses || !url}
-                error={errorSending}
-                onSubmit={onClickShareItHandler}
-                sending={isSending}
-                sent={sent}
-              />
+              <div className="mt-8">
+                <Slider
+                  disabled={!previewPasses || !url}
+                  error={errorSending}
+                  onSubmit={onClickShareItHandler}
+                  sending={isSending}
+                  sent={sent}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -11,11 +11,11 @@ interface SubmitSiteFrame {
 }
 
 export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
-  const [error, setError] = useState<Error | null>(null)
+  const [error] = useState<Error | null>(null)
   const iframeUrl = useDebounce(url, 500)
 
   return (
-    <div className="rounded-2xl border border-shark-600 grow mt-2 rounded-2xl h-full">
+    <div className="rounded-2xl border border-shark-600 mt-2 rounded-2xl h-full">
       {error ? (
         <div className="bg-shark-200 h-full rounded-2xl flex items-center justify-center">
           <div className="px-4 text-shark-800">
@@ -27,7 +27,7 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
       ) : (
         <Image
           alt="No URL"
-          className="rounded-2xl h-full"
+          className="rounded-2xl h-full max-h-[239px]"
           src={BadURLDisplay}
         />
       )}
