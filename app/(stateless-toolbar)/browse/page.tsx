@@ -30,7 +30,7 @@ const Browse = async () => {
   const { tags } = await fetchTags()
   return (
     <div>
-      <div className="p-10 sticky top-0 z-10 bg-shark-950">
+      <div className="p-10 sticky top-0 z-2 bg-shark-950">
         <div className="bg-c4-gradient-green text-[56px] font-extrabold leading-none bg-clip-text text-transparent w-fit">
           Topics
         </div>
