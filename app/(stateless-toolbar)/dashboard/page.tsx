@@ -1,4 +1,12 @@
-const Dashboard = () => {
+"use client"
+
+import { useEffect } from "react"
+
+const Dashboard = async () => {
+  useEffect(() => {
+    ;(async () => {})()
+  })
+
   return (
     <div className="flex justify-center items-center flex-col h-full">
       <div className="px-4">
