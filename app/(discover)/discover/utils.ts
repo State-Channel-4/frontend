@@ -68,7 +68,7 @@ export const updateLikesInApi = async (
 
 export const feedbackMessages = {
   "not-found":
-    "Oops! We couldn't find any content under these tags... Try using different ones",
+    "Oops! We couldn't find any content under this tags... Try using a different one",
   loading: "Loading content...",
 }
 

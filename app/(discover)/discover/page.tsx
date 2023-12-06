@@ -26,7 +26,7 @@ const Discover = ({
       <div className="flex w-full flex-col items-center justify-center space-y-3 p-6 h-full">
         <p className="text-lg">{feedbackMessages["not-found"]}</p>
         <Link href="/browse" passHref>
-          <Button variant={"default"} size="lg">
+          <Button variant="default" size="lg">
             Back to Browse
           </Button>
         </Link>
