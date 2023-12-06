@@ -26,6 +26,8 @@ const SubmitUrl = () => {
   const { token } = useJwtStore()
   const [creatingTag, setCreatingTag] = useState<boolean>(false)
   const [description, setDescription] = useState<string>("")
+  const [duplicateTagError, setDuplicateTagError] = useState<boolean>(false)
+  const [duplicateUrlError, setDuplicateUrlError] = useState<boolean>(false)
   const [errorSending, setErrorSending] = useState<Error | null>(null)
   const [isSending, setIsSending] = useState(false)
   const [newTag, setNewTag] = useState("")
@@ -43,24 +45,39 @@ const SubmitUrl = () => {
 
   const createTag = async () => {
     setCreatingTag(true)
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tag`, {
-        body: JSON.stringify({ name: newTag }),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tag`, {
+      body: JSON.stringify({ name: newTag }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    if (res.ok) {
       const { tag } = await res.json()
       setShowTags((prev) => [...prev, tag])
       hideNewTag()
-    } catch (err) {
-      console.log("Error: ", err)
+    } else {
+      const { error } = await res.json()
+      if (error.includes("duplicate key")) {
+        setDuplicateTagError(true)
+      } else throw Error
     }
+    setCreatingTag(false)
+  }
+
+  const handleTagInput = (val: string) => {
+    setNewTag(val)
+    setDuplicateTagError(false)
+  }
+
+  const handleUrlInput = (val: string) => {
+    setUrl(val)
+    setDuplicateUrlError(false)
   }
 
   const hideNewTag = () => {
+    setDuplicateTagError(false)
     setNewTag("")
     setShowTagInput(false)
   }
@@ -81,7 +98,7 @@ const SubmitUrl = () => {
 
   const onClickShareItHandler = async () => {
     setIsSending(true)
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -93,34 +110,34 @@ const SubmitUrl = () => {
         url: url,
       }),
     })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error
-        }
-        setSent(true)
-        setTimeout(() => {
-          setDescription("")
-          setPreviewPasses(false)
-          setUrl("")
-          setSelectedTags([])
-          setSent(false)
-        }, 3000)
-        return res.json()
+    if (res.ok) {
+      const data = await res.json()
+      updateList({
+        object: data.newUrl,
+        receipt: data.receipt,
+        type: "Url",
       })
-      .catch((err) => {
-        setErrorSending(err)
-        setTimeout(() => {
-          setErrorSending(null)
-        }, 3000)
-      })
-      .finally(() => {
-        setIsSending(false)
-      })
-    updateList({
-      object: response.newUrl,
-      receipt: response.receipt,
-      type: "Url",
-    })
+      setSent(true)
+      setDuplicateUrlError(false)
+      setTimeout(() => {
+        setDescription("")
+        setPreviewPasses(false)
+        setUrl("")
+        setSelectedTags([])
+        setSent(false)
+      }, 3000)
+    } else {
+      const { error } = await res.json()
+      if (error.includes("URL already exists")) {
+        setDuplicateUrlError(true)
+      }
+      setErrorSending(new Error())
+      setTimeout(() => {
+        setErrorSending(null)
+      }, 3000)
+    }
+    setIsSending(false)
+    setDuplicateTagError(false)
   }
 
   const optionNames = useMemo(() => {
@@ -147,21 +164,28 @@ const SubmitUrl = () => {
         backgroundSize: "90%",
       }}
     >
-      <div className="w-full max-w-[1130px] rounded-[32px] bg-c4-gradient-separator p-px">
-        <div className="relative h-full md:h-[501px] rounded-[32px] bg-shark-950 p-10 pb-16 overflow-y-auto">
+      <div className="w-full h-full md:h-[501px] max-w-[1130px] rounded-[32px] bg-c4-gradient-separator p-px">
+        <div className="h-full rounded-[32px] bg-shark-950 p-4 md:p-10 pb-16 overflow-y-auto md:overflow-visible">
           <div className="flex h-full items-start justify-between gap-10 flex-col md:flex-row">
             <div className="flex-1 w-full">
-              <div className="flex items-center gap-6 text-5xl">
-                <div>Add a website</div>
-                <Image alt="Browser" className="h-10 w-10" src={BrowserIcon} />
+              <div className="flex items-center gap-4 text-4xl">
+                <div className="whitespace-nowrap">Add a website</div>
+                <Image alt="Browser" className="h-8 w-8" src={BrowserIcon} />
               </div>
               <div className="mt-10 text-xl text-shark-50">Website URL</div>
               <input
-                className="mt-4 w-full rounded-lg border-[1.5px] border-shark-800 bg-shark-950 p-3 text-lg placeholder:text-shark-400"
+                className={`mt-4 w-full rounded-lg border-[1.5px] bg-shark-950 ${
+                  duplicateUrlError ? "border-red-500" : "border-shark-800"
+                } p-3 text-lg placeholder:text-shark-400`}
                 placeholder="Paste URL here"
-                onChange={(e) => setUrl(e.target.value)}
+                onChange={(e) => handleUrlInput(e.target.value)}
                 value={url ?? ""}
               />
+              {duplicateUrlError && (
+                <div className="text-xs mt-1 text-red-500">
+                  * Url already exists
+                </div>
+              )}
               <div className="mt-6 flex items-center gap-2">
                 <div className="text-xl text-shark-50">Short description</div>
                 <div className="text-sm text-shark-300">(Optional)</div>
@@ -172,13 +196,17 @@ const SubmitUrl = () => {
                 placeholder="This site is about..."
                 value={description}
               />
-              <div className="mt-6 flex items-center justify-between">
+              <div className="mt-6 flex items-center justify-between gap-2 flex-wrap">
                 <div className="text-xl text-shark-50">Choose tags</div>
                 {showTagInput ? (
                   <div className="flex items-center gap-2">
                     <input
-                      className="rounded-lg border-[1.5px] border-shark-800 bg-shark-950 px-2 placeholder:text-shark-400"
-                      onChange={(e) => setNewTag(e.target.value)}
+                      className={`rounded-lg border-[1.5px] ${
+                        duplicateTagError
+                          ? "border-red-500"
+                          : "border-shark-800"
+                      } bg-shark-950 px-2 placeholder:text-shark-400`}
+                      onChange={(e) => handleTagInput(e.target.value)}
                       placeholder="Tag name..."
                       value={newTag}
                     />
@@ -193,14 +221,14 @@ const SubmitUrl = () => {
                         </Button>
                       )}
                       <Button
-                        className="h-fit p-2"
+                        className="h-fit p-2 shrink-0"
                         loading={creatingTag}
                         loaderIconSize={14}
-                        loadingText="Creating tag"
+                        loadingText="Creating"
                         onClick={() => !creatingTag && createTag()}
                         variant="ghost"
                       >
-                        {creatingTag ? "Creating tag..." : "Create"}
+                        Create
                         {!creatingTag && <Plus size={16} />}
                       </Button>
                     </div>
@@ -222,6 +250,11 @@ const SubmitUrl = () => {
                 options={optionNames}
                 selected={selectedNames}
               />
+              {duplicateTagError && (
+                <div className="text-xs mt-1 text-red-500">
+                  * Tag already exists
+                </div>
+              )}
             </div>
             <div className="flex h-full flex-1 flex-col w-full">
               <div className="text-xl text-shark-50">Preview</div>
@@ -258,9 +291,9 @@ const SubmitUrl = () => {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="mt-8">
+              <div className="my-8 md:mb-0">
                 <Slider
-                  disabled={!previewPasses || !url}
+                  disabled={!previewPasses || !selectedTags.length || !url}
                   error={errorSending}
                   onSubmit={onClickShareItHandler}
                   sending={isSending}

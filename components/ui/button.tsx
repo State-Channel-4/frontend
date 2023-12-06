@@ -66,8 +66,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           ref={ref}
           {...props}
         >
-          <Loader2 className={"animate-spin"} size={loaderIconSize ?? 24} />
           {loadingText ? loadingText : "Loading..."}
+          <Loader2 className={"animate-spin"} size={loaderIconSize ?? 24} />
         </button>
       )
     }
