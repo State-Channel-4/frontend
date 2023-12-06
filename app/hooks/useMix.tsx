@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useReducer } from "react"
+import { useSearchParams } from "next/navigation"
 import { useJwtStore } from "@/store/jwt"
 import { useReceiptsStore } from "@/store/receipts"
 import { C4Content, Tag, TagMap } from "@/types"
@@ -13,7 +14,7 @@ import {
 
 type MixState = {
   currentSite: C4Content | null
-  selectedTags: TagMap
+  // selectedTags: TagMap
   isLoading: boolean
   error: { message: string }
   mixIndex: number
@@ -28,7 +29,7 @@ type Action =
   | { type: "SET_LOADING"; isLoading: boolean }
   | { type: "SET_MIX"; mix: C4Content[] }
   | { type: "SET_MIX"; mix: C4Content[] }
-  | { type: "SET_TAGS"; tags: TagMap }
+  // | { type: "SET_TAGS"; tags: TagMap }
   | {
       type: "SET_LIKES"
       currentSite: C4Content | null
@@ -39,7 +40,7 @@ type Action =
 
 const initialState: MixState = {
   currentSite: null,
-  selectedTags: new Map(),
+  // selectedTags: new Map(),
   isLoading: true,
   error: { message: "" },
   mixIndex: -1,
@@ -61,8 +62,8 @@ const mixReducer = (state: MixState, action: Action): MixState => {
         mix: action.mix,
         currentSite: action.mix[0],
       }
-    case "SET_TAGS":
-      return { ...state, selectedTags: action.tags }
+    // case "SET_TAGS":
+    //   return { ...state, selectedTags: action.tags }
     case "SET_LIKES":
       if (!action.mix) {
         return {
@@ -88,28 +89,31 @@ const mixReducer = (state: MixState, action: Action): MixState => {
 }
 
 const useMix = () => {
+  const params = useSearchParams()
+  const tag = params.get("tag")
   const { token, userId } = useJwtStore()
   const { updateList } = useReceiptsStore()
   const [state, dispatch] = useReducer(mixReducer, initialState)
-  const getTagsFromStore = () => {
-    if (typeof window === "undefined") return
-    const tagsFromStore = sessionStorage.getItem("c4.tags")
-    if (!tagsFromStore) return
-    try {
-      const parsedTags = JSON.parse(tagsFromStore)
-      parsedTags.forEach((data: [string, Tag]) => {
-        const [tagId, tag] = data
-        state.selectedTags.set(tagId, tag)
-      })
-    } catch (error) {
-      console.error("Error parsing JSON:", error)
-    }
-  }
 
-  useEffect(() => {
-    getTagsFromStore()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // const getTagsFromStore = () => {
+  //   if (typeof window === "undefined") return
+  //   const tagsFromStore = sessionStorage.getItem("c4.tags")
+  //   if (!tagsFromStore) return
+  //   try {
+  //     const parsedTags = JSON.parse(tagsFromStore)
+  //     parsedTags.forEach((data: [string, Tag]) => {
+  //       const [tagId, tag] = data
+  //       state.selectedTags.set(tagId, tag)
+  //     })
+  //   } catch (error) {
+  //     console.error("Error parsing JSON:", error)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getTagsFromStore()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   const fetchUserLikes = useCallback(async () => {
     const likes = await fetchLikes(userId!)
@@ -127,15 +131,15 @@ const useMix = () => {
 
   const fetchMixContent = async () => {
     try {
-      const { selectedTags: currentTags, mixLimit } = state
+      const { mixLimit } = state
       // if the selected tags are the same as the current tags and we have a mix, don't get a new mix
       if (
-        JSON.stringify(currentTags) === JSON.stringify(state.selectedTags) &&
+        // JSON.stringify(currentTags) === JSON.stringify(state.selectedTags) &&
         state.mix &&
         state.mixIndex < state.mix.length + state.mixIndexLimit
       )
         return
-      const mixResponse = await fetchMix(currentTags, mixLimit)
+      const mixResponse = await fetchMix(tag ? [tag] : [], mixLimit)
       if (mixResponse.message) {
         dispatch({ type: "SET_ERROR", message: mixResponse.message })
       } else {
@@ -168,7 +172,7 @@ const useMix = () => {
   useEffect(() => {
     fetchMixContent()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.selectedTags])
+  }, [tag])
 
   const likeOrUnlike = useCallback(
     async (contentId: string, liked: boolean) => {
