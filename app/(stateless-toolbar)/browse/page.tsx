@@ -23,21 +23,23 @@ const Browse = async () => {
         </div>
       </div>
       <div className="h-full overflow-auto">
-        {tags.map(({ name, urls }) => (
-          <Link
-            className="cursor-pointer flex items-center py-4 px-10 border-y border-shark-500 hover:border-c4-green justify-between relative"
-            href={`discover?tag=${name}`}
-          >
-            <div className="text-xl text-shark-50">{name}</div>
-            <div
-              className="w-px bg-c4-green absolute h-full"
-              style={{
-                left: `${random(25, 89)}%`,
-              }}
-            />
-            <div className="text-c4-green text-xl">{urls.length}</div>
-          </Link>
-        ))}
+        {tags
+          .filter(({ urls }) => true)
+          .map(({ name, urls }) => (
+            <Link
+              className="cursor-pointer flex items-center py-4 px-10 border-y border-shark-500 hover:border-c4-green justify-between relative"
+              href={`discover?tag=${name}`}
+            >
+              <div className="text-xl text-shark-50">{name}</div>
+              <div
+                className="w-px bg-c4-green absolute h-full"
+                style={{
+                  left: `${random(25, 89)}%`,
+                }}
+              />
+              <div className="text-c4-green text-xl">{urls.length}</div>
+            </Link>
+          ))}
       </div>
     </div>
   )
