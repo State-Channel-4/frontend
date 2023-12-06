@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { Range, Root, Thumb, Track } from "@radix-ui/react-slider"
+import { Range, Root, Track } from "@radix-ui/react-slider"
 import { ArrowRight, Check, Loader2, X } from "lucide-react"
 
 interface SliderProps {
@@ -92,14 +92,22 @@ export default function Slider({
               )}
             </div>
           )}
-          <Range className="absolute top-1/2 h-full -translate-y-1/2 rounded-full border border-shark-600 bg-c4-gradient-separator" />
+          <Range className="absolute top-1/2 h-full -translate-y-1/2 rounded-full border border-shark-600 bg-c4-gradient-separator flex items-center justify-end">
+            {!sliderText && (
+              <ArrowRight
+                className="shrink-0"
+                color="black"
+                style={{
+                  marginInline: value <= 20 ? "auto" : "0px",
+                  marginRight: value > 20 ? "24px" : "",
+                }}
+              />
+            )}
+          </Range>
           <div className="text-center text-lg text-shark-300">
             Slide to send to Channel4
           </div>
         </Track>
-        <Thumb aria-label="Volume" className="outline-none">
-          {!sliderText && <ArrowRight className="mr-12" color="black" />}
-        </Thumb>
       </Root>
     </div>
   )

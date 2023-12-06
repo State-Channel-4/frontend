@@ -27,7 +27,7 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
       ) : (
         <Image
           alt="No URL"
-          className="h-full max-h-[239px] rounded-2xl"
+          className="h-full max-h-[321px] md:max-h-[239px] rounded-2xl w-full"
           src={BadURLDisplay}
         />
       )}

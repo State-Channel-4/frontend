@@ -7,15 +7,16 @@ import Background from "@/assets/submit-url-background.svg"
 import { useJwtStore } from "@/store/jwt"
 import { useReceiptsStore } from "@/store/receipts"
 import { Tag } from "@/types"
-import { Info } from "lucide-react"
+import { Ban, Info, Plus } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import Select from "@/components/ui/select"
 import RequireAuth from "@/components/helper/RequireAuth"
+import Select from "@/app/(stateless-toolbar)/submit-url/components/TagSelect"
 
 import { SubmitSiteFrame } from "./components/SubmitSiteFrame"
 import Slider from "./components/slider"
@@ -23,18 +24,45 @@ import Slider from "./components/slider"
 const SubmitUrl = () => {
   const { updateList } = useReceiptsStore()
   const { token } = useJwtStore()
+  const [creatingTag, setCreatingTag] = useState<boolean>(false)
   const [description, setDescription] = useState<string>("")
   const [errorSending, setErrorSending] = useState<Error | null>(null)
   const [isSending, setIsSending] = useState(false)
+  const [newTag, setNewTag] = useState("")
   const [previewPasses, setPreviewPasses] = useState(false)
   const [selectedTags, setSelectedTags] = useState<Array<Tag>>([])
   const [showTags, setShowTags] = useState<Array<Tag>>([])
+  const [showTagInput, setShowTagInput] = useState(false)
   const [sent, setSent] = useState(false)
   const [url, setUrl] = useState<string>("")
 
   const addSelected = (option: string) => {
     const tag = showTags.find((tag) => tag.name === option)
     setSelectedTags((prev) => [...prev, tag!])
+  }
+
+  const createTag = async () => {
+    setCreatingTag(true)
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tag`, {
+        body: JSON.stringify({ name: newTag }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      const { tag } = await res.json()
+      setShowTags((prev) => [...prev, tag])
+      hideNewTag()
+    } catch (err) {
+      console.log("Error: ", err)
+    }
+  }
+
+  const hideNewTag = () => {
+    setNewTag("")
+    setShowTagInput(false)
   }
 
   const getTags = async () => {
@@ -113,17 +141,17 @@ const SubmitUrl = () => {
 
   return (
     <div
-      className="flex h-full items-center justify-center bg-shark-900 bg-center bg-no-repeat"
+      className="flex h-full items-start md:items-center justify-center bg-shark-900 bg-center bg-no-repeat p-2"
       style={{
         backgroundImage: `url(${Background.src})`,
         backgroundSize: "90%",
       }}
     >
       <div className="w-full max-w-[1130px] rounded-[32px] bg-c4-gradient-separator p-px">
-        <div className="relative h-[501px] rounded-[32px] bg-shark-950 p-10 pb-16">
-          <div className="flex h-full items-start justify-between gap-10">
-            <div className="flex-1">
-              <div className="flex items-center gap-6 text-5xl ">
+        <div className="relative h-full md:h-[501px] rounded-[32px] bg-shark-950 p-10 pb-16 overflow-y-auto">
+          <div className="flex h-full items-start justify-between gap-10 flex-col md:flex-row">
+            <div className="flex-1 w-full">
+              <div className="flex items-center gap-6 text-5xl">
                 <div>Add a website</div>
                 <Image alt="Browser" className="h-10 w-10" src={BrowserIcon} />
               </div>
@@ -144,7 +172,50 @@ const SubmitUrl = () => {
                 placeholder="This site is about..."
                 value={description}
               />
-              <div className="mt-6 text-xl text-shark-50">Choose tags</div>
+              <div className="mt-6 flex items-center justify-between">
+                <div className="text-xl text-shark-50">Choose tags</div>
+                {showTagInput ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      className="rounded-lg border-[1.5px] border-shark-800 bg-shark-950 px-2 placeholder:text-shark-400"
+                      onChange={(e) => setNewTag(e.target.value)}
+                      placeholder="Tag name..."
+                      value={newTag}
+                    />
+                    <div className="flex items-center">
+                      {!creatingTag && (
+                        <Button
+                          className="h-fit p-2"
+                          onClick={() => hideNewTag()}
+                          variant="ghost"
+                        >
+                          <Ban size={16} />
+                        </Button>
+                      )}
+                      <Button
+                        className="h-fit p-2"
+                        loading={creatingTag}
+                        loaderIconSize={14}
+                        loadingText="Creating tag"
+                        onClick={() => !creatingTag && createTag()}
+                        variant="ghost"
+                      >
+                        {creatingTag ? "Creating tag..." : "Create"}
+                        {!creatingTag && <Plus size={16} />}
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <Button
+                    className="h-fit p-2"
+                    onClick={() => setShowTagInput(true)}
+                    variant="ghost"
+                  >
+                    <div>Create tag</div>
+                    <Plus size={14} />
+                  </Button>
+                )}
+              </div>
               <Select
                 onSelect={addSelected}
                 onRemove={removeSelected}
@@ -152,13 +223,13 @@ const SubmitUrl = () => {
                 selected={selectedNames}
               />
             </div>
-            <div className="flex h-full flex-1 flex-col">
+            <div className="flex h-full flex-1 flex-col w-full">
               <div className="text-xl text-shark-50">Preview</div>
               <SubmitSiteFrame url={url} />
               <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <input
-                    className="h-[18px] w-[18px] cursor-pointer rounded border border-shark-500 bg-shark-700"
+                    className="h-[18px] w-[18px] cursor-pointer rounded border border-shark-500 bg-shark-700 shrink-0"
                     checked={previewPasses}
                     onChange={() => setPreviewPasses(!previewPasses)}
                     type="checkbox"
