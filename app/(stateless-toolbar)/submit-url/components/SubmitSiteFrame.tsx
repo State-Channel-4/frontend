@@ -15,7 +15,7 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
   const iframeUrl = useDebounce(url, 500)
 
   return (
-    <div className="mt-2 rounded-2xl border border-shark-600 h-[280px] md:h-[239px]">
+    <div className="mt-2 h-[280px] rounded-2xl border border-shark-600 md:h-[239px]">
       {error ? (
         <div className="flex h-full items-center justify-center rounded-2xl bg-shark-200">
           <div className="px-4 text-shark-800">
@@ -27,7 +27,7 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
       ) : (
         <Image
           alt="No URL"
-          className="h-full rounded-2xl w-full"
+          className="h-full w-full rounded-2xl"
           src={BadURLDisplay}
         />
       )}

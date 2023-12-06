@@ -92,15 +92,11 @@ export default function Slider({
               )}
             </div>
           )}
-          <Range className="absolute top-1/2 h-full -translate-y-1/2 rounded-full border border-shark-600 bg-c4-gradient-separator flex items-center justify-end">
+          <Range className="absolute top-1/2 flex h-full -translate-y-1/2 items-center justify-end rounded-full border border-shark-600 bg-c4-gradient-separator">
             {!sliderText && (
               <ArrowRight
-                className="shrink-0"
+                className={`shrink-0 ${value <= 20 ? "mx-auto" : "mx-0 mr-6"}`}
                 color="black"
-                style={{
-                  marginInline: value <= 20 ? "auto" : "0px",
-                  marginRight: value > 20 ? "24px" : "",
-                }}
               />
             )}
           </Range>

@@ -158,18 +158,18 @@ const SubmitUrl = () => {
 
   return (
     <div
-      className="flex h-full items-start md:items-center justify-center bg-shark-900 bg-center bg-no-repeat p-2"
+      className="flex h-full items-start justify-center bg-shark-900 bg-center bg-no-repeat p-2 md:items-center"
       style={{
         backgroundImage: `url(${Background.src})`,
         backgroundSize: "90%",
       }}
     >
-      <div className="w-full h-full md:h-[501px] max-w-[1130px] rounded-[32px] bg-c4-gradient-separator p-px">
-        <div className="h-full rounded-[32px] bg-shark-950 p-4 md:p-10 pb-16 overflow-y-auto md:overflow-visible">
-          <div className="flex h-full items-start justify-between gap-10 flex-col md:flex-row">
-            <div className="flex-1 w-full">
+      <div className="h-full w-full max-w-[1130px] rounded-[32px] bg-c4-gradient-separator p-px md:h-[501px]">
+        <div className="h-full overflow-y-auto rounded-[32px] bg-shark-950 p-4 pb-16 md:overflow-visible md:p-10">
+          <div className="flex h-full flex-col items-start justify-between gap-10 md:flex-row">
+            <div className="w-full flex-1">
               <div className="flex items-center gap-4 text-4xl">
-                <div className="whitespace-nowrap">Add a website</div>
+                <div className="md:whitespace-nowrap">Add a website</div>
                 <Image alt="Browser" className="h-8 w-8" src={BrowserIcon} />
               </div>
               <div className="mt-10 text-xl text-shark-50">Website URL</div>
@@ -182,7 +182,7 @@ const SubmitUrl = () => {
                 value={url ?? ""}
               />
               {duplicateUrlError && (
-                <div className="text-xs mt-1 text-red-500">
+                <div className="mt-1 text-xs text-red-500">
                   * Url already exists
                 </div>
               )}
@@ -196,21 +196,11 @@ const SubmitUrl = () => {
                 placeholder="This site is about..."
                 value={description}
               />
-              <div className="mt-6 flex items-center justify-between gap-2 flex-wrap">
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-2">
                 <div className="text-xl text-shark-50">Choose tags</div>
                 {showTagInput ? (
                   <div className="flex items-center gap-2">
-                    <input
-                      className={`rounded-lg border-[1.5px] ${
-                        duplicateTagError
-                          ? "border-red-500"
-                          : "border-shark-800"
-                      } bg-shark-950 px-2 placeholder:text-shark-400`}
-                      onChange={(e) => handleTagInput(e.target.value)}
-                      placeholder="Tag name..."
-                      value={newTag}
-                    />
-                    <div className="flex items-center">
+                    <div className="flex grow items-center">
                       {!creatingTag && (
                         <Button
                           className="h-fit p-2"
@@ -221,7 +211,7 @@ const SubmitUrl = () => {
                         </Button>
                       )}
                       <Button
-                        className="h-fit p-2 shrink-0"
+                        className="h-fit grow p-2"
                         loading={creatingTag}
                         loaderIconSize={14}
                         loadingText="Creating"
@@ -244,25 +234,36 @@ const SubmitUrl = () => {
                   </Button>
                 )}
               </div>
-              <Select
-                onSelect={addSelected}
-                onRemove={removeSelected}
-                options={optionNames}
-                selected={selectedNames}
-              />
+              {showTagInput ? (
+                <input
+                  className={`mt-4 w-full rounded-lg  border-[1.5px] p-3 ${
+                    duplicateTagError ? "border-red-500" : "border-shark-800"
+                  } bg-shark-950 px-2 placeholder:text-shark-400`}
+                  onChange={(e) => handleTagInput(e.target.value)}
+                  placeholder="Tag name..."
+                  value={newTag}
+                />
+              ) : (
+                <Select
+                  onSelect={addSelected}
+                  onRemove={removeSelected}
+                  options={optionNames}
+                  selected={selectedNames}
+                />
+              )}
               {duplicateTagError && (
-                <div className="text-xs mt-1 text-red-500">
+                <div className="mt-1 text-xs text-red-500">
                   * Tag already exists
                 </div>
               )}
             </div>
-            <div className="flex h-full flex-1 flex-col w-full">
+            <div className="flex h-full w-full flex-1 flex-col">
               <div className="text-xl text-shark-50">Preview</div>
               <SubmitSiteFrame url={url} />
               <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <input
-                    className="h-[18px] w-[18px] cursor-pointer rounded border border-shark-500 bg-shark-700 shrink-0"
+                    className="h-[18px] w-[18px] shrink-0 cursor-pointer rounded border border-shark-500 bg-shark-700"
                     checked={previewPasses}
                     onChange={() => setPreviewPasses(!previewPasses)}
                     type="checkbox"

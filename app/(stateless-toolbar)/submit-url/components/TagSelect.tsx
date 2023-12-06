@@ -62,7 +62,7 @@ export default function Select({
       )}
       <ChevronDown className="stroke-shark-200" size={24} />
       {expanded && (
-        <div className="z-10 absolute top-[85%] ml-[-13.5px] max-h-[100px] w-[calc(100%+3px)] rounded-b-lg border-[1.5px] border-t-0 border-shark-800 bg-shark-950 overflow-y-auto">
+        <div className="absolute top-[85%] z-10 ml-[-13.5px] max-h-[100px] w-[calc(100%+3px)] overflow-y-auto rounded-b-lg border-[1.5px] border-t-0 border-shark-800 bg-shark-950">
           {filteredOptions.map((option) => (
             <div
               className="px-4 last:rounded-b-md hover:bg-shark-700"
