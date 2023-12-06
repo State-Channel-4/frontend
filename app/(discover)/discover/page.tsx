@@ -23,7 +23,7 @@ const Discover = ({
 }: DiscoverPageProps) => {
   if (error.message !== "") {
     return (
-      <div className="flex w-full flex-col items-center justify-center space-y-3 p-6 h-full">
+      <div className="flex h-full w-full flex-col items-center justify-center space-y-3 p-6">
         <p className="text-lg">{feedbackMessages["not-found"]}</p>
         <Link href="/browse" passHref>
           <Button variant="default" size="lg">
@@ -35,7 +35,7 @@ const Discover = ({
   }
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex h-full items-center justify-center">
         <p className="mx-auto flex w-full items-center justify-center p-6">
           {feedbackMessages.loading}
         </p>

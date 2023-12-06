@@ -15,11 +15,11 @@ const Browse = async () => {
   const tags = await fetchTags()
   return (
     <div>
-      <div className="p-4 md:p-10 sticky top-0 z-10 bg-shark-950">
-        <div className="bg-c4-gradient-green text-[56px] font-extrabold leading-none bg-clip-text text-transparent w-fit">
+      <div className="sticky top-0 z-10 bg-shark-950 p-4 md:p-10">
+        <div className="w-fit bg-c4-gradient-green bg-clip-text text-[56px] font-extrabold leading-none text-transparent">
           Topics
         </div>
-        <div className="text-lg text-shark-50 mt-2">
+        <div className="mt-2 text-lg text-shark-50">
           Your channel guides for various topics. Select one of following &
           let’s start watching
         </div>
@@ -29,17 +29,17 @@ const Browse = async () => {
           .filter(({ __v }) => !!__v)
           .map(({ name, __v }) => (
             <Link
-              className="cursor-pointer flex items-center py-4 px-10 border-y border-shark-500 hover:border-c4-green justify-between relative gap-6"
+              className="relative flex cursor-pointer items-center justify-between gap-6 border-y border-shark-500 px-10 py-4 hover:border-c4-green"
               href={`discover?tag=${name}`}
             >
-              <div className="text-xl text-shark-50 truncate">{name}</div>
+              <div className="truncate text-xl text-shark-50">{name}</div>
               <div
-                className="w-px bg-c4-green absolute h-full z-[-1]"
+                className="absolute z-[-1] h-full w-px bg-c4-green"
                 style={{
                   left: `${random(25, 89)}%`,
                 }}
               />
-              <div className="text-c4-green text-xl">{__v}</div>
+              <div className="text-xl text-c4-green">{__v}</div>
             </Link>
           ))}
       </div>
