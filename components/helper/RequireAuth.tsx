@@ -1,7 +1,6 @@
 "use client"
 
 import { useAuth } from "@/contexts/AuthContext"
-import { useJwtStore } from "@/store/jwt"
 import { Loader2 } from "lucide-react"
 
 /**
@@ -15,8 +14,7 @@ interface Props {
 }
 
 const RequireAuth = ({ children }: Props) => {
-  const { initializingW3A, signIn } = useAuth()
-  const { userId, token } = useJwtStore()
+  const { initializingW3A, signIn, signedIn } = useAuth()
   if (initializingW3A) {
     return (
       <div className="flex h-full flex-col items-center justify-center px-4">
@@ -24,7 +22,7 @@ const RequireAuth = ({ children }: Props) => {
         <Loader2 className="mt-4 animate-spin stroke-c4-green" size={36} />
       </div>
     )
-  } else if (!token || !userId) {
+  } else if (signedIn) {
     return (
       <div className="flex h-full flex-col items-center justify-center px-4 text-center">
         <h2 className="my-5">
