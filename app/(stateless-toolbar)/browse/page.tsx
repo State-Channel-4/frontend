@@ -5,7 +5,7 @@ import { random } from "@/app/utils"
 
 const fetchTags = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tag`, {
-    next: { revalidate: 0 },
+    cache: "no-store",
   })
   const { tags } = await res.json()
   return tags as Tag[]
