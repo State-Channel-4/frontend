@@ -20,7 +20,11 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
           </div>
         </div>
       ) : url ? (
-        <iframe className="h-full w-full rounded-2xl" src={url} />
+        <iframe
+          className="h-full w-full rounded-2xl"
+          src={url}
+          title="Website Preview"
+        />
       ) : (
         <Image
           alt="No URL"
