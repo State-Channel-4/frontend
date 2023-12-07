@@ -250,7 +250,7 @@ const SubmitUrl = () => {
                 {urlError && (
                   <div className="mt-1 text-xs text-red-500">{urlError}</div>
                 )}
-                <div className="text-lg text-shark-50 mt-6 flex">
+                <div className="mt-6 flex text-lg text-shark-50">
                   Short description
                 </div>
                 <input
@@ -369,7 +369,7 @@ const SubmitUrl = () => {
                     </PopoverContent>
                   </Popover>
                 </div>
-                <div className="mt-1 text-xs text-red-500 h-[14px]">
+                <div className="mt-1 h-[14px] text-xs text-red-500">
                   {submissionError.missingRequired && !previewPasses
                     ? "* Preview must pass"
                     : ""}
