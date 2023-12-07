@@ -48,7 +48,7 @@ export default function Select({
         onClick={() => filteredOptions.length && setExpanded(!expanded)}
       >
         {selected.length ? (
-          <div className="flex max-w-md shrink-0 gap-2 overflow-x-auto">
+          <div className="flex max-w-[90%] shrink-0 gap-2 overflow-x-auto">
             {selected.map((option, index) => (
               <div
                 className="flex items-center gap-1 rounded bg-shark-700 px-2 py-1 text-sm text-shark-200"

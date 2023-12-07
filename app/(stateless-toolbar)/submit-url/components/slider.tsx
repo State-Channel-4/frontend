@@ -48,7 +48,6 @@ export default function Slider({
 
   // Reset progress on sent reset
   useEffect(() => {
-    console.log("Flag")
     if (!sent) {
       setValue(10)
     }

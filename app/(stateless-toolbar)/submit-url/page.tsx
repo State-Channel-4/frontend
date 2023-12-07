@@ -372,7 +372,7 @@ const SubmitUrl = () => {
                 <div className="mt-1 text-xs text-red-500 h-[14px]">
                   {submissionError.missingRequired && !previewPasses
                     ? "* Preview must pass"
-                    : " "}
+                    : ""}
                 </div>
                 <div className="my-6 md:mb-0">
                   <Slider
