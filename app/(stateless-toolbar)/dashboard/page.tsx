@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useAuth } from "@/contexts/AuthContext"
 import { useJwtStore } from "@/store/jwt"
 import moment from "moment"
 
@@ -13,6 +14,7 @@ type UserStats = {
 }
 
 const Dashboard = async () => {
+  const { socialLogin } = useAuth()
   const { token, userId } = useJwtStore()
   const [stats, setStats] = useState<UserStats | null>(null)
   useEffect(() => {
@@ -33,13 +35,20 @@ const Dashboard = async () => {
 
   return (
     <RequireAuth>
-      <div className="flex justify-center items-center flex-col h-full">
-        <div className="px-4">
-          <div className="text-shark-300 font-bold text-2xl/none">
-            Login with
+      <div className="flex justify-center items-center flex-col h-full max-w-full">
+        <div className="px-4 max-w-full break-words">
+          <div className="flex gap-4 items-center">
+            <div className="text-shark-300 font-bold text-2xl/none">
+              Login with
+            </div>
+            {socialLogin && (
+              <div className="bg-shark-600 px-2 py-1 rounded-2xl text-sm/none">
+                {socialLogin.provider}
+              </div>
+            )}
           </div>
-          <div className="mt-6 text-shark-100 text-[32px]/none">
-            user’s email if they use social
+          <div className="mt-6 text-shark-100 text-2xl/none">
+            {socialLogin ? `Email: ${socialLogin.email}` : "Web3 Login"}
           </div>
           <div className="text-shark-200 mt-4">
             Member since {moment(stats?.memberSince).format("MMMM Do, YYYY")}

@@ -11,8 +11,14 @@ import {
   Provider,
 } from "ethers"
 
+type SocialLogin = {
+  email: string
+  provider: string
+}
+
 type AuthContextType = {
   initializingW3A: boolean
+  socialLogin: SocialLogin | null
   signer: JsonRpcSigner | null
   signIn: () => void
   signedIn: boolean
@@ -21,6 +27,7 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({
   initializingW3A: false,
+  socialLogin: null,
   signer: null,
   signIn: () => undefined,
   signedIn: false,
@@ -30,6 +37,7 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
+  const [socialLogin, setSocialLogin] = useState<SocialLogin | null>(null)
   const [signer, setSigner] = useState<JsonRpcSigner | null>(null)
   const [web3Auth, setWeb3Auth] = useState<Web3Auth | null>(null)
   const { token, userId, updateToken, updateUserId } = useJwtStore()
@@ -37,6 +45,16 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   const getSigner = async (web3AuthProvider: Eip1193Provider) => {
     const provider = new BrowserProvider(web3AuthProvider)
     return await provider.getSigner()
+  }
+
+  const getProviderInfo = async (w3a: Web3Auth) => {
+    const info = await w3a.getUserInfo()
+    if ("typeOfLogin" in info) {
+      setSocialLogin({
+        email: info.email,
+        provider: info.typeOfLogin,
+      })
+    }
   }
 
   const signIn = async () => {
@@ -60,6 +78,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
         ).then((response) => response.json())
         // handle any server error messages
         if (message) throw new Error(message)
+        await getProviderInfo(web3Auth)
         updateToken(token)
         updateUserId(user._id)
         setSigner(rpcSigner)
@@ -107,6 +126,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
       if (client.status === "connected" && client.provider) {
         const rpcSigner = await getSigner(client.provider)
         setSigner(rpcSigner)
+        await getProviderInfo(client)
       }
     }
     init()
@@ -116,6 +136,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
     <AuthContext.Provider
       value={{
         initializingW3A: !web3Auth,
+        socialLogin,
         signer,
         signIn,
         signedIn,
