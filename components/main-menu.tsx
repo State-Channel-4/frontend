@@ -25,9 +25,9 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
       }}
     >
       {initializingW3A ? (
-        <div className="flex items-center justify-center flex-col">
+        <div className="flex flex-col items-center justify-center">
           Initializing Web3Auth
-          <Loader2 className="animate-spin mt-2" size={22} />
+          <Loader2 className="mt-2 animate-spin" size={22} />
         </div>
       ) : (
         <>

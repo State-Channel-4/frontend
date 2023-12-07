@@ -35,34 +35,34 @@ const Dashboard = async () => {
 
   return (
     <RequireAuth>
-      <div className="flex justify-center items-center flex-col h-full max-w-full">
-        <div className="px-4 max-w-full break-words">
-          <div className="flex gap-4 items-center">
-            <div className="text-shark-300 font-bold text-2xl/none">
+      <div className="flex h-full max-w-full flex-col items-center justify-center">
+        <div className="max-w-full break-words px-4">
+          <div className="flex items-center gap-4">
+            <div className="text-2xl/none font-bold text-shark-300">
               Login with
             </div>
             {socialLogin && (
-              <div className="bg-shark-600 px-2 py-1 rounded-2xl text-sm/none">
+              <div className="rounded-2xl bg-shark-600 px-2 py-1 text-sm/none">
                 {socialLogin.provider}
               </div>
             )}
           </div>
-          <div className="mt-6 text-shark-100 text-2xl/none">
+          <div className="mt-6 text-2xl/none text-shark-100">
             {socialLogin ? `Email: ${socialLogin.email}` : "Web3 Login"}
           </div>
-          <div className="text-shark-200 mt-4">
+          <div className="mt-4 text-shark-200">
             Member since {moment(stats?.memberSince).format("MMMM Do, YYYY")}
           </div>
-          <div className="text-shark-300 font-bold text-2xl/none mt-12">
+          <div className="mt-12 text-2xl/none font-bold text-shark-300">
             Websites submitted
           </div>
-          <div className="text-shark-50 font-extrabold mt-6 text-[56px]/none">
+          <div className="mt-6 text-[56px]/none font-extrabold text-shark-50">
             {stats?.siteCount ?? 0}
           </div>
-          <div className="text-shark-300 font-bold text-2xl/none mt-10">
+          <div className="mt-10 text-2xl/none font-bold text-shark-300">
             Likes submitted
           </div>
-          <div className="text-shark-50 font-extrabold mt-6 text-[56px]/none">
+          <div className="mt-6 text-[56px]/none font-extrabold text-shark-50">
             {stats?.likeCount ?? 0}
           </div>
         </div>
