@@ -173,9 +173,9 @@ const SubmitUrl = () => {
                   <div className="md:whitespace-nowrap">Add a website</div>
                   <Image alt="Browser" className="h-8 w-8" src={BrowserIcon} />
                 </div>
-                <div className="mt-10 text-xl text-shark-50">Website URL</div>
+                <div className="mt-10 text-lg text-shark-50">Website URL</div>
                 <input
-                  className={`mt-4 w-full rounded-lg border-[1.5px] bg-shark-950 ${
+                  className={`mt-3 w-full rounded-lg border-[1.5px] bg-shark-950 ${
                     duplicateUrlError ? "border-red-500" : "border-shark-800"
                   } p-3 text-lg placeholder:text-shark-400`}
                   placeholder="Paste URL here"
@@ -188,17 +188,17 @@ const SubmitUrl = () => {
                   </div>
                 )}
                 <div className="mt-6 flex items-center gap-2">
-                  <div className="text-xl text-shark-50">Short description</div>
+                  <div className="text-lg text-shark-50">Short description</div>
                   <div className="text-sm text-shark-300">(Optional)</div>
                 </div>
                 <input
-                  className="mt-4 w-full rounded-lg border-[1.5px] border-shark-800 bg-shark-950 p-3 text-lg placeholder:text-shark-400"
+                  className="mt-3 w-full rounded-lg border-[1.5px] border-shark-800 bg-shark-950 p-3 text-lg placeholder:text-shark-400"
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="This site is about..."
                   value={description}
                 />
                 <div className="mt-6 flex flex-wrap items-center justify-between gap-2">
-                  <div className="text-xl text-shark-50">Choose tags</div>
+                  <div className="text-lg text-shark-50">Choose tags</div>
                   {showTagInput ? (
                     <div className="flex items-center gap-2">
                       <div className="flex grow items-center">
@@ -237,7 +237,7 @@ const SubmitUrl = () => {
                 </div>
                 {showTagInput ? (
                   <input
-                    className={`mt-4 w-full rounded-lg  border-[1.5px] p-3 ${
+                    className={`mt-3 w-full rounded-lg  border-[1.5px] p-3 ${
                       duplicateTagError ? "border-red-500" : "border-shark-800"
                     } bg-shark-950 px-2 placeholder:text-shark-400`}
                     onChange={(e) => handleTagInput(e.target.value)}
@@ -294,7 +294,7 @@ const SubmitUrl = () => {
                     </PopoverContent>
                   </Popover>
                 </div>
-                <div className="my-8 md:mb-0">
+                <div className="my-6 md:mb-0">
                   <Slider
                     disabled={!previewPasses || !selectedTags.length || !url}
                     error={errorSending}

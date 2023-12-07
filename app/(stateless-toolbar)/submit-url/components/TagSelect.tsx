@@ -35,7 +35,7 @@ export default function Select({
 
   return (
     <div
-      className="relative mt-4 flex h-12 w-full cursor-pointer items-center justify-between rounded-lg border-[1.5px] border-shark-800 px-3"
+      className="relative mt-3 flex h-12 w-full cursor-pointer items-center justify-between rounded-lg border-[1.5px] border-shark-800 px-3"
       ref={selectRef}
       onClick={() => filteredOptions.length && setExpanded(!expanded)}
     >
