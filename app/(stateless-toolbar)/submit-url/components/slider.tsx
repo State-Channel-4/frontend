@@ -3,6 +3,7 @@ import { Range, Root, Track } from "@radix-ui/react-slider"
 import { ArrowRight, Check, Loader2, X } from "lucide-react"
 
 interface SliderProps {
+  disabled?: boolean
   error: Error | null
   onSubmit: () => void
   sending: boolean
@@ -10,6 +11,7 @@ interface SliderProps {
 }
 
 export default function Slider({
+  disabled,
   error,
   onSubmit,
   sending,
@@ -57,7 +59,7 @@ export default function Slider({
     <div className={`border ${borderColor} rounded-full px-1.5 py-1`}>
       <Root
         className="relative flex h-[48px] w-full cursor-pointer touch-none select-none items-center rounded-full"
-        disabled={!!sliderText}
+        disabled={disabled || !!sliderText}
         onLostPointerCapture={() => {
           if (value === 100) {
             onSubmit()
