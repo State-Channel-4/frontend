@@ -1,34 +1,64 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { useJwtStore } from "@/store/jwt"
+import moment from "moment"
+
+import RequireAuth from "@/components/helper/RequireAuth"
+
+type UserStats = {
+  likeCount: number
+  memberSince: string
+  siteCount: number
+}
 
 const Dashboard = async () => {
+  const { token, userId } = useJwtStore()
+  const [stats, setStats] = useState<UserStats | null>(null)
   useEffect(() => {
-    ;(async () => {})()
-  })
+    ;(async () => {
+      if (!token || !userId) return
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      const { user } = await res.json()
+      setStats({
+        likeCount: user.likedUrls.length,
+        memberSince: user.createdAt,
+        siteCount: user.submittedUrls.length,
+      })
+    })()
+  }, [token, userId])
 
   return (
-    <div className="flex justify-center items-center flex-col h-full">
-      <div className="px-4">
-        <div className="text-shark-300 font-bold text-2xl/none">Login with</div>
-        <div className="mt-6 text-shark-100 text-[32px]/none">
-          user’s email if they use social
-        </div>
-        <div className="text-shark-200 mt-4">Member since July 19, 2023</div>
-        <div className="text-shark-300 font-bold text-2xl/none mt-12">
-          Websites submitted
-        </div>
-        <div className="text-shark-50 font-extrabold mt-6 text-[56px]/none">
-          109
-        </div>
-        <div className="text-shark-300 font-bold text-2xl/none mt-10">
-          Likes submitted
-        </div>
-        <div className="text-shark-50 font-extrabold mt-6 text-[56px]/none">
-          4
+    <RequireAuth>
+      <div className="flex justify-center items-center flex-col h-full">
+        <div className="px-4">
+          <div className="text-shark-300 font-bold text-2xl/none">
+            Login with
+          </div>
+          <div className="mt-6 text-shark-100 text-[32px]/none">
+            user’s email if they use social
+          </div>
+          <div className="text-shark-200 mt-4">
+            Member since {moment(stats?.memberSince).format("MMMM Do, YYYY")}
+          </div>
+          <div className="text-shark-300 font-bold text-2xl/none mt-12">
+            Websites submitted
+          </div>
+          <div className="text-shark-50 font-extrabold mt-6 text-[56px]/none">
+            {stats?.siteCount ?? 0}
+          </div>
+          <div className="text-shark-300 font-bold text-2xl/none mt-10">
+            Likes submitted
+          </div>
+          <div className="text-shark-50 font-extrabold mt-6 text-[56px]/none">
+            {stats?.likeCount ?? 0}
+          </div>
         </div>
       </div>
-    </div>
+    </RequireAuth>
   )
 }
 
