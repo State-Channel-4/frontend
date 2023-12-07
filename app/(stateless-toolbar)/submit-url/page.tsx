@@ -21,26 +21,48 @@ import Select from "@/app/(stateless-toolbar)/submit-url/components/TagSelect"
 import { SubmitSiteFrame } from "./components/SubmitSiteFrame"
 import Slider from "./components/slider"
 
+const PLACEHOLDER_ERROR: WebsiteSubmissionError = {
+  duplicateUrl: false,
+  missingRequired: false,
+  showError: false,
+}
+
+const PLACEHOLDER_URL = {
+  input: "",
+  preview: "",
+}
+
+type WebsiteSubmissionError = {
+  duplicateUrl: boolean
+  missingRequired: boolean
+  showError: boolean
+}
+
+type WebsiteUrl = {
+  input: string
+  preview: string
+}
+
 const SubmitUrl = () => {
   const { updateList } = useReceiptsStore()
   const { token } = useJwtStore()
+
   const [creatingTag, setCreatingTag] = useState<boolean>(false)
   const [description, setDescription] = useState<string>("")
-  const [duplicateTagError, setDuplicateTagError] = useState<boolean>(false)
-  const [duplicateUrlError, setDuplicateUrlError] = useState<boolean>(false)
-  const [errorSending, setErrorSending] = useState<Error | null>(null)
-  const [isSending, setIsSending] = useState(false)
+  const [duplicateTagError, setDuplicateTagError] = useState<string>("")
   const [newTag, setNewTag] = useState("")
   const [previewPasses, setPreviewPasses] = useState(false)
   const [selectedTags, setSelectedTags] = useState<Array<Tag>>([])
-  const [showTags, setShowTags] = useState<Array<Tag>>([])
+  const [sendStatus, setSendStatus] = useState<"sending" | "sent" | "">("")
   const [showTagInput, setShowTagInput] = useState(false)
-  const [sent, setSent] = useState(false)
-  const [url, setUrl] = useState<string>("")
+  const [submissionError, setSubmissionError] =
+    useState<WebsiteSubmissionError>(PLACEHOLDER_ERROR)
+  const [tags, setTags] = useState<Array<Tag>>([])
+  const [url, setUrl] = useState<WebsiteUrl>(PLACEHOLDER_URL)
 
   const addSelected = (option: string) => {
-    const tag = showTags.find((tag) => tag.name === option)
-    setSelectedTags((prev) => [...prev, tag!])
+    const tag = tags.find((tag: Tag) => tag.name === option)
+    setSelectedTags((prev: Tag[]) => [...prev, tag!])
   }
 
   const createTag = async () => {
@@ -55,7 +77,7 @@ const SubmitUrl = () => {
     })
     if (res.ok) {
       const { tag } = await res.json()
-      setShowTags((prev) => [...prev, tag])
+      setTags((prev: Tag[]) => [...prev, tag])
       hideNewTag()
     } else {
       const { error } = await res.json()
@@ -66,14 +88,30 @@ const SubmitUrl = () => {
     setCreatingTag(false)
   }
 
+  const hideErrorDisplay = () => {
+    setTimeout(() => {
+      setSubmissionError((prev: WebsiteSubmissionError) => ({
+        ...prev,
+        showError: false,
+      }))
+    }, 3000)
+  }
+
   const handleTagInput = (val: string) => {
     setNewTag(val)
     setDuplicateTagError(false)
   }
 
   const handleUrlInput = (val: string) => {
-    setUrl(val)
-    setDuplicateUrlError(false)
+    setUrl((prev: WebsiteUrl) => ({ ...prev, input: val }))
+    setSubmissionError((prev: WebsiteSubmissionError) => ({
+      ...prev,
+      duplicateUrl: false,
+    }))
+  }
+
+  const hasRequired = () => {
+    return description && previewPasses && selectedTags.length && url.input
   }
 
   const hideNewTag = () => {
@@ -88,16 +126,25 @@ const SubmitUrl = () => {
         process.env.NEXT_PUBLIC_API_URL + "/tag"
       ).then((res) => res.json())
       if ("tags" in response) {
-        setShowTags(response.tags)
+        setTags(response.tags)
       }
     } catch (error) {
       console.log(error)
-      setShowTags([])
+      setTags([])
     }
   }
 
   const onClickShareItHandler = async () => {
-    setIsSending(true)
+    if (!hasRequired()) {
+      setSubmissionError((prev: WebsiteSubmissionError) => ({
+        ...prev,
+        missingRequired: true,
+        showError: true,
+      }))
+      hideErrorDisplay()
+      return
+    }
+    setSendStatus("sending")
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
       method: "POST",
       headers: {
@@ -105,9 +152,9 @@ const SubmitUrl = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        tags: selectedTags.map((tag) => tag._id),
+        tags: selectedTags.map((tag: Tag) => tag._id),
         title: description,
-        url: url,
+        url: url.input,
       }),
     })
     if (res.ok) {
@@ -117,40 +164,52 @@ const SubmitUrl = () => {
         receipt: data.receipt,
         type: "Url",
       })
-      setSent(true)
-      setDuplicateUrlError(false)
+      setSendStatus("sent")
+      setSubmissionError(PLACEHOLDER_ERROR)
       setTimeout(() => {
         setDescription("")
         setPreviewPasses(false)
-        setUrl("")
+        setUrl(PLACEHOLDER_URL)
         setSelectedTags([])
-        setSent(false)
+        setSendStatus("")
       }, 3000)
     } else {
       const { error } = await res.json()
+      let duplicateUrl = false
       if (error.includes("URL already exists")) {
-        setDuplicateUrlError(true)
+        duplicateUrl = true
       }
-      setErrorSending(new Error())
-      setTimeout(() => {
-        setErrorSending(null)
-      }, 3000)
+      setSubmissionError((prev: WebsiteSubmissionError) => ({
+        ...prev,
+        duplicateUrl,
+        showError: true,
+      }))
+      hideErrorDisplay()
+      setSendStatus("")
     }
-    setIsSending(false)
     setDuplicateTagError(false)
   }
 
   const optionNames = useMemo(() => {
-    return showTags.map((tag) => tag.name)
-  }, [showTags])
+    return tags.map((tag: Tag) => tag.name)
+  }, [tags])
 
   const removeSelected = (index: number) => {
-    setSelectedTags((prev) => prev.filter((_, i) => i !== index))
+    setSelectedTags((prev: Tag[]) => prev.filter((_, i) => i !== index))
   }
 
   const selectedNames = useMemo(() => {
-    return selectedTags.map((tag) => tag.name)
+    return selectedTags.map((tag: Tag) => tag.name)
   }, [selectedTags])
+
+  const urlError = useMemo(() => {
+    if (submissionError.duplicateUrl) {
+      return "* Url already exists"
+    } else if (submissionError.missingRequired && !url.input) {
+      return "* Url required"
+    }
+    return ""
+  }, [submissionError, url])
 
   useEffect(() => {
     getTags()
@@ -176,27 +235,39 @@ const SubmitUrl = () => {
                 <div className="mt-10 text-lg text-shark-50">Website URL</div>
                 <input
                   className={`mt-3 w-full rounded-lg border-[1.5px] bg-shark-950 ${
-                    duplicateUrlError ? "border-red-500" : "border-shark-800"
+                    urlError ? "border-red-500" : "border-shark-800"
                   } p-3 text-lg placeholder:text-shark-400`}
-                  placeholder="Paste URL here"
+                  onBlur={() =>
+                    setUrl((prev: WebsiteUrl) => ({
+                      ...prev,
+                      preview: prev.input,
+                    }))
+                  }
                   onChange={(e) => handleUrlInput(e.target.value)}
-                  value={url ?? ""}
+                  placeholder="Paste URL here"
+                  value={url.input}
                 />
-                {duplicateUrlError && (
-                  <div className="mt-1 text-xs text-red-500">
-                    * Url already exists
-                  </div>
+                {urlError && (
+                  <div className="mt-1 text-xs text-red-500">{urlError}</div>
                 )}
-                <div className="mt-6 flex items-center gap-2">
-                  <div className="text-lg text-shark-50">Short description</div>
-                  <div className="text-sm text-shark-300">(Optional)</div>
+                <div className="text-lg text-shark-50 mt-6 flex">
+                  Short description
                 </div>
                 <input
-                  className="mt-3 w-full rounded-lg border-[1.5px] border-shark-800 bg-shark-950 p-3 text-lg placeholder:text-shark-400"
+                  className={`mt-3 w-full ${
+                    submissionError.missingRequired && !description
+                      ? "border-red-500"
+                      : "border-shark-800"
+                  } rounded-lg border-[1.5px] bg-shark-950 p-3 text-lg placeholder:text-shark-400`}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="This site is about..."
                   value={description}
                 />
+                {submissionError.missingRequired && !description && (
+                  <div className="mt-1 text-xs text-red-500">
+                    * Description required
+                  </div>
+                )}
                 <div className="mt-6 flex flex-wrap items-center justify-between gap-2">
                   <div className="text-lg text-shark-50">Choose tags</div>
                   {showTagInput ? (
@@ -246,6 +317,10 @@ const SubmitUrl = () => {
                   />
                 ) : (
                   <Select
+                    error={
+                      submissionError.missingRequired && !selectedTags.length
+                    }
+                    errorMsg="* At lest one tag must be selected"
                     onSelect={addSelected}
                     onRemove={removeSelected}
                     options={optionNames}
@@ -260,7 +335,7 @@ const SubmitUrl = () => {
               </div>
               <div className="flex h-full w-full flex-1 flex-col">
                 <div className="text-xl text-shark-50">Preview</div>
-                <SubmitSiteFrame url={url} />
+                <SubmitSiteFrame url={url.preview} />
                 <div className="mt-4 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <input
@@ -294,13 +369,17 @@ const SubmitUrl = () => {
                     </PopoverContent>
                   </Popover>
                 </div>
+                <div className="mt-1 text-xs text-red-500 h-[14px]">
+                  {submissionError.missingRequired && !previewPasses
+                    ? "* Preview must pass"
+                    : " "}
+                </div>
                 <div className="my-6 md:mb-0">
                   <Slider
-                    disabled={!previewPasses || !selectedTags.length || !url}
-                    error={errorSending}
+                    error={submissionError.showError}
                     onSubmit={onClickShareItHandler}
-                    sending={isSending}
-                    sent={sent}
+                    sending={sendStatus === "sending"}
+                    sent={sendStatus === "sent"}
                   />
                 </div>
               </div>

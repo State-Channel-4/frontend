@@ -4,15 +4,12 @@ import { useState } from "react"
 import Image from "next/image"
 import BadURLDisplay from "@/assets/bad-url-display.png"
 
-import { useDebounce } from "@/app/hooks/useDebounce"
-
 interface SubmitSiteFrame {
   url: string
 }
 
 export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
   const [error] = useState<Error | null>(null)
-  const iframeUrl = useDebounce(url, 500)
 
   return (
     <div className="mt-2 h-[280px] rounded-2xl border border-shark-600 md:h-[239px]">
@@ -22,8 +19,8 @@ export function SubmitSiteFrame({ url }: SubmitSiteFrame): JSX.Element {
             Can&apos;t connect. Please try a different URL
           </div>
         </div>
-      ) : iframeUrl ? (
-        <iframe className="h-full w-full rounded-2xl" src={iframeUrl} />
+      ) : url ? (
+        <iframe className="h-full w-full rounded-2xl" src={url} />
       ) : (
         <Image
           alt="No URL"
