@@ -42,12 +42,21 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   loading?: boolean
+  loaderIconSize?: number
   loadingText?: string
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, loading = false, loadingText, ...props },
+    {
+      className,
+      variant,
+      size,
+      loading = false,
+      loaderIconSize,
+      loadingText,
+      ...props
+    },
     ref
   ) => {
     if (loading) {
@@ -57,8 +66,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           ref={ref}
           {...props}
         >
-          <Loader2 className={"animate-spin"} />
           {loadingText ? loadingText : "Loading..."}
+          <Loader2 className={"animate-spin"} size={loaderIconSize ?? 24} />
         </button>
       )
     }

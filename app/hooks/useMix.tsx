@@ -175,7 +175,7 @@ const useMix = () => {
   }, [tag])
 
   const likeOrUnlike = useCallback(
-    async (contentId: string, liked: boolean) => {
+    async (contentId: string) => {
       const { currentSite, mix, mixIndex, userLikes } = state
       if (!currentSite) return
       const isLiked = userLikes.includes(contentId)
@@ -196,7 +196,7 @@ const useMix = () => {
         mix: updatedMix,
       })
       try {
-        await updateLikesInApi(contentId, liked, token!, updateList)
+        await updateLikesInApi(contentId, !isLiked, token!, updateList) // isLiked is the opposite of the user action (I am not sure why) by Nico Serrano
       } catch (error) {
         console.error(error)
       }
