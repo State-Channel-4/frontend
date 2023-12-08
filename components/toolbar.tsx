@@ -44,6 +44,21 @@ const Toolbar = ({
     return userLikes.includes(currentSite._id)
   }, [currentSite, signedIn, userLikes])
 
+  const labelText = useMemo(() => {
+    // Map route to toolbar label
+    const labelMap: { [path: string]: string } = {
+      "/landing": "Welcome to Channel 4",
+      "/submit-url": "Add a website",
+    }
+
+    if (isDiscover) {
+      return isLoading
+        ? "Loading sites..."
+        : currentSite?.title ?? "Site name not avaialable."
+    }
+    return labelMap[path]
+  }, [currentSite, isDiscover, isLoading, path])
+
   const togglePopup = (option: string) => {
     if (option === "navigation") {
       setShowMenu(!showMenu)
@@ -74,13 +89,7 @@ const Toolbar = ({
           />
         </div>
         <div className="min-w-0">
-          <div className="truncate font-medium">
-            {isDiscover
-              ? isLoading
-                ? "Loading sites..."
-                : currentSite?.title ?? "Site name not avaialable."
-              : "Welcome to Channel 4"}
-          </div>
+          <div className="truncate font-medium">{labelText}</div>
           {isDiscover && !isLoading && (
             <button
               className="truncate text-xs text-shark-300"
@@ -101,7 +110,6 @@ const Toolbar = ({
                 currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
               }}
             >
-              {/* TODO: Replace with single SVG image that can be colored */}
               <Image
                 alt="Like"
                 className="h-4 w-4"

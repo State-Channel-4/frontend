@@ -8,7 +8,7 @@ export default function MainContentWrapper({
   return (
     // TODO: Remove hacky height fix once background image is replaced with countdown component
     <div className="h-[calc(100vh-136px)] flex-1 p-4 md:px-8 md:pb-0 md:pt-6">
-      <div className="h-full w-full overflow-auto rounded-2xl border border-shark-600">
+      <div className="h-full w-full overflow-hidden rounded-2xl border border-shark-600">
         {children}
       </div>
     </div>
