@@ -4,7 +4,7 @@ import { ArrowRight, Check, Loader2, X } from "lucide-react"
 
 interface SliderProps {
   disabled?: boolean
-  error: Error | null
+  error: boolean
   onSubmit: () => void
   sending: boolean
   sent: boolean

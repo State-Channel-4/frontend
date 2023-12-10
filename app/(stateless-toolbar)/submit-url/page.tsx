@@ -49,7 +49,7 @@ const SubmitUrl = () => {
 
   const [creatingTag, setCreatingTag] = useState<boolean>(false)
   const [description, setDescription] = useState<string>("")
-  const [duplicateTagError, setDuplicateTagError] = useState<string>("")
+  const [duplicateTagError, setDuplicateTagError] = useState<boolean>(false)
   const [newTag, setNewTag] = useState("")
   const [previewPasses, setPreviewPasses] = useState(false)
   const [selectedTags, setSelectedTags] = useState<Array<Tag>>([])
