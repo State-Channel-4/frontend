@@ -17,7 +17,7 @@ const RequireAuth = ({ children }: Props) => {
   const { initializingW3A, signIn, signedIn } = useAuth()
   if (initializingW3A) {
     return (
-      <div className="flex h-full flex-col items-center justify-center px-4">
+      <div className="flex h-full flex-col items-center justify-center px-4 text-center">
         <h2>Checking Web3Auth Connection...</h2>
         <Loader2 className="mt-4 animate-spin stroke-c4-green" size={36} />
       </div>
