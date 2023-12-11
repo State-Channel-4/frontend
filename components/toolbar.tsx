@@ -112,7 +112,6 @@ const Toolbar = ({
                 currentSite && likeOrUnlike && likeOrUnlike(currentSite._id)
               }}
             >
-              {/* TODO: Replace with single SVG image that can be colored */}
               <Image
                 alt="Like"
                 className="h-4 w-4"
