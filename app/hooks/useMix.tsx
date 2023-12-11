@@ -4,7 +4,7 @@ import { useCallback, useEffect, useReducer } from "react"
 import { useSearchParams } from "next/navigation"
 import { useJwtStore } from "@/store/jwt"
 import { useReceiptsStore } from "@/store/receipts"
-import { C4Content, Tag, TagMap } from "@/types"
+import { C4Content } from "@/types"
 
 import {
   fetchLikes,

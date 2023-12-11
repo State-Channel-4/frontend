@@ -1,5 +1,3 @@
-import { TagMap } from "@/types"
-
 import { createProxyUrls } from "@/app/utils"
 
 export const fetchMix = async (tags: string[], limit: number) => {
