@@ -26,8 +26,8 @@ const Browse = async () => {
       </div>
       <div className="h-full overflow-auto">
         {tags
-          .filter(({ __v }) => !!__v)
-          .map(({ name, __v }) => (
+          .filter(({ urls }) => !!urls.length)
+          .map(({ name, urls }) => (
             <Link
               className="relative flex cursor-pointer items-center justify-between gap-6 border-y border-shark-500 px-10 py-4 hover:border-c4-green"
               href={`discover?tag=${name}`}
@@ -39,7 +39,7 @@ const Browse = async () => {
                   left: `${random(25, 89)}%`,
                 }}
               />
-              <div className="text-xl text-c4-green">{__v}</div>
+              <div className="text-xl text-c4-green">{urls.length}</div>
             </Link>
           ))}
       </div>

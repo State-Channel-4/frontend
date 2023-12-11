@@ -1,8 +1,7 @@
 export interface Tag {
   _id: string
   name: string
-  // Video count
-  __v: number
+  urls: string[]
 }
 
 export interface TagMap extends Map<string, Tag> { }
