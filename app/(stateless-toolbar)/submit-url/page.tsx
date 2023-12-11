@@ -377,7 +377,7 @@ const SubmitUrl = () => {
                 <div className="my-6 md:mb-0">
                   <Slider
                     disabled={creatingTag}
-                    error={submissionError.showError}
+                    hasError={submissionError.showError}
                     onSubmit={onClickShareItHandler}
                     sending={sendStatus === "sending"}
                     sent={sendStatus === "sent"}
