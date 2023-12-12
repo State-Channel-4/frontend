@@ -17,7 +17,7 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
 
   return (
     <div
-      className="absolute bottom-[calc(100%+20px)] left-5 w-[calc(100%-40px)] rounded-2xl border border-shark-700 bg-shark-950 p-6 transition-all duration-300 md:bottom-[calc(100%+12px)] md:left-12 md:w-[351px]"
+      className="absolute bottom-[calc(100%+20px)] left-5 z-20 w-[calc(100%-40px)] rounded-2xl border border-shark-700 bg-shark-950 p-6 transition-all duration-300 md:bottom-[calc(100%+12px)] md:left-12 md:w-[351px]"
       style={{
         opacity: open ? 1 : 0,
         pointerEvents: open ? "auto" : "none",
@@ -46,11 +46,6 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
                   {siteConfig.mainNav.dashboard.title}
                 </div>
               </Link>
-              <Link prefetch href={siteConfig.mainNav.browseTopics.href}>
-                <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
-                  {siteConfig.mainNav.browseTopics.title}
-                </div>
-              </Link>
             </div>
           ) : (
             <div
@@ -63,23 +58,11 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
               Sign in / Sign up
             </div>
           )}
-          {/* <Link href={siteConfig.mainNav.stats.href}>
-              <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
-                {siteConfig.mainNav.stats.title}
-              </div>
-            </Link> */}
-          {/* <Link href={siteConfig.mainNav.about.href}>
-              <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
-                {siteConfig.mainNav.about.title}
-              </div>
-            </Link> */}
-          {/* {signedIn && (
-              <Link href={siteConfig.mainNav.feedback.href}>
-                <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
-                  {siteConfig.mainNav.feedback.title}
-                </div>
-              </Link>
-            )} */}
+          <Link href={siteConfig.mainNav.browseTopics.href}>
+            <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
+              {siteConfig.mainNav.browseTopics.title}
+            </div>
+          </Link>
           {signedIn && (
             <div
               className="cursor-pointer p-3 text-sm text-shark-300 transition-all hover:text-shark-200 md:p-4 md:text-base"

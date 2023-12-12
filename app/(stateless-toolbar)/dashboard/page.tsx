@@ -18,7 +18,7 @@ const Dashboard = async () => {
   const { token, userId } = useJwtStore()
   const [stats, setStats] = useState<UserStats | null>(null)
   useEffect(() => {
-    ;(async () => {
+    const fetchUserData = async () => {
       if (!token || !userId) return
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
@@ -30,7 +30,8 @@ const Dashboard = async () => {
         memberSince: user.createdAt,
         siteCount: user.submittedUrls.length,
       })
-    })()
+    }
+    fetchUserData()
   }, [token, userId])
 
   return (

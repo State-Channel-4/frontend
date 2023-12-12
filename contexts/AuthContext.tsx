@@ -47,12 +47,13 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
     return await provider.getSigner()
   }
 
-  const getProviderInfo = async (w3a: Web3Auth) => {
+  const getProviderInfo = async (w3a: Web3Auth | null) => {
+    if (!w3a) return
     const info = await w3a.getUserInfo()
     if ("typeOfLogin" in info) {
       setSocialLogin({
-        email: info.email,
-        provider: info.typeOfLogin,
+        email: info.email ?? "",
+        provider: info.typeOfLogin ?? "",
       })
     }
   }
