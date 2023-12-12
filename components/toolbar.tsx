@@ -48,6 +48,7 @@ const Toolbar = ({
     // Map route to toolbar label
     const labelMap: { [path: string]: string } = {
       "/browse": "Browse topics",
+      "/dashboard": "Dashboard",
       "/landing": "Welcome to Channel 4",
       "/submit-url": "Add a website",
     }

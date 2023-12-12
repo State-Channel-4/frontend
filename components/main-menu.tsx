@@ -3,6 +3,7 @@ import Link from "next/link"
 import browserIcon from "@/assets/browser-icon.svg"
 import xIcon from "@/assets/x-icon.svg"
 import { useAuth } from "@/contexts/AuthContext"
+import { Loader2 } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 
@@ -24,12 +25,14 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
       }}
     >
       {initializingW3A ? (
-        // TODO: Add spinner component
-        <div className="flex justify-center">Initializing Web3Auth...</div>
+        <div className="flex flex-col items-center justify-center">
+          Initializing Web3Auth
+          <Loader2 className="mt-2 animate-spin" size={22} />
+        </div>
       ) : (
         <>
-          {signedIn && (
-            <div className="mb-4 md:mb-6">
+          {signedIn ? (
+            <div>
               <Link href={siteConfig.mainNav.addSite.href}>
                 <div className="flex items-center justify-between border-b border-shark-800 p-3 transition-all hover:border-c4-green md:p-4">
                   <div className="w-full bg-c4-gradient-separator bg-clip-text text-sm text-transparent md:text-base">
@@ -44,43 +47,22 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
                 </div>
               </Link>
             </div>
+          ) : (
+            <div
+              className="cursor-pointer border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base"
+              onClick={() => {
+                signIn()
+                onClose()
+              }}
+            >
+              Sign in / Sign up
+            </div>
           )}
-          <div className="mb-4 md:mb-6">
-            {signedIn ? (
-              <Link prefetch href={siteConfig.mainNav.browseTopics.href}>
-                <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
-                  {siteConfig.mainNav.browseTopics.title}
-                </div>
-              </Link>
-            ) : (
-              <div
-                className="cursor-pointer border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base"
-                onClick={() => {
-                  signIn()
-                  onClose()
-                }}
-              >
-                Sign in / Sign up
-              </div>
-            )}
-            <Link href={siteConfig.mainNav.stats.href}>
-              <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
-                {siteConfig.mainNav.stats.title}
-              </div>
-            </Link>
-            <Link href={siteConfig.mainNav.about.href}>
-              <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
-                {siteConfig.mainNav.about.title}
-              </div>
-            </Link>
-            {signedIn && (
-              <Link href={siteConfig.mainNav.feedback.href}>
-                <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
-                  {siteConfig.mainNav.feedback.title}
-                </div>
-              </Link>
-            )}
-          </div>
+          <Link href={siteConfig.mainNav.browseTopics.href}>
+            <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
+              {siteConfig.mainNav.browseTopics.title}
+            </div>
+          </Link>
           {signedIn && (
             <div
               className="cursor-pointer p-3 text-sm text-shark-300 transition-all hover:text-shark-200 md:p-4 md:text-base"
