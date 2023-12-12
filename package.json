@@ -5,7 +5,7 @@
   "packageManager": "pnpm@8.6.2",
   "engines": {
     "node": ">=16.8",
-    "pnpm": ">=7.28.0",
+    "pnpm": ">=8.6.2",
     "npm": "please-use-pnpm"
   },
   "scripts": {

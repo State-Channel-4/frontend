@@ -16,7 +16,7 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
 
   return (
     <div
-      className="absolute bottom-[calc(100%+20px)] left-5 w-[calc(100%-40px)] rounded-2xl border border-shark-700 bg-shark-950 p-6 transition-all duration-300 md:bottom-[calc(100%+12px)] md:left-12 md:w-[351px]"
+      className="absolute bottom-[calc(100%+20px)] left-5 z-20 w-[calc(100%-40px)] rounded-2xl border border-shark-700 bg-shark-950 p-6 transition-all duration-300 md:bottom-[calc(100%+12px)] md:left-12 md:w-[351px]"
       style={{
         opacity: open ? 1 : 0,
         pointerEvents: open ? "auto" : "none",
@@ -47,7 +47,7 @@ export default function MainMenu({ open, onClose }: MainMenuProps) {
           )}
           <div className="mb-4 md:mb-6">
             {signedIn ? (
-              <Link href={siteConfig.mainNav.browseTopics.href}>
+              <Link prefetch href={siteConfig.mainNav.browseTopics.href}>
                 <div className="border-b border-shark-800 p-3 text-sm text-shark-300 transition-all hover:border-c4-green hover:text-shark-200 md:p-4 md:text-base">
                   {siteConfig.mainNav.browseTopics.title}
                 </div>

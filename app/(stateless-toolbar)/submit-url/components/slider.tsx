@@ -4,7 +4,7 @@ import { ArrowRight, Check, Loader2, X } from "lucide-react"
 
 interface SliderProps {
   disabled?: boolean
-  error: Error | null
+  hasError: boolean
   onSubmit: () => void
   sending: boolean
   sent: boolean
@@ -12,7 +12,7 @@ interface SliderProps {
 
 export default function Slider({
   disabled,
-  error,
+  hasError,
   onSubmit,
   sending,
   sent,
@@ -22,31 +22,31 @@ export default function Slider({
   const borderColor = useMemo(() => {
     if (sent) {
       return "border-c4-green"
-    } else if (error) {
+    } else if (hasError) {
       return "border-red-600"
     } else {
       return "border-shark-600"
     }
-  }, [error, sent])
+  }, [hasError, sent])
 
   const sliderText = useMemo(() => {
     if (sent) {
       return "Sent!"
-    } else if (error) {
+    } else if (hasError) {
       return "Error occured!"
     } else if (sending) {
       return "Sending..."
     } else {
       return ""
     }
-  }, [error, sending, sent])
+  }, [hasError, sending, sent])
 
   // Reset progress on error reset
   useEffect(() => {
-    if (!error) {
+    if (!hasError) {
       setValue(10)
     }
-  }, [error])
+  }, [hasError])
 
   // Reset progress on sent reset
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function Slider({
           {sliderText && (
             <div className="absolute z-10 flex w-full items-center justify-between px-6">
               <div className="text-lg text-black">{sliderText}</div>
-              {error ? (
+              {hasError ? (
                 <X color="black" size={24} />
               ) : sent ? (
                 <Check color="black" size={24} />

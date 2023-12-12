@@ -49,7 +49,7 @@ const SubmitUrl = () => {
 
   const [creatingTag, setCreatingTag] = useState<boolean>(false)
   const [description, setDescription] = useState<string>("")
-  const [duplicateTagError, setDuplicateTagError] = useState<string>("")
+  const [isDuplicateTagError, setIsDuplicateTagError] = useState<boolean>(false)
   const [newTag, setNewTag] = useState("")
   const [previewPasses, setPreviewPasses] = useState(false)
   const [selectedTags, setSelectedTags] = useState<Array<Tag>>([])
@@ -82,7 +82,7 @@ const SubmitUrl = () => {
     } else {
       const { error } = await res.json()
       if (error.includes("duplicate key")) {
-        setDuplicateTagError(true)
+        setIsDuplicateTagError(true)
       } else throw Error
     }
     setCreatingTag(false)
@@ -99,7 +99,7 @@ const SubmitUrl = () => {
 
   const handleTagInput = (val: string) => {
     setNewTag(val)
-    setDuplicateTagError(false)
+    setIsDuplicateTagError(false)
   }
 
   const handleUrlInput = (val: string) => {
@@ -115,7 +115,7 @@ const SubmitUrl = () => {
   }
 
   const hideNewTag = () => {
-    setDuplicateTagError(false)
+    setIsDuplicateTagError(false)
     setNewTag("")
     setShowTagInput(false)
   }
@@ -187,7 +187,7 @@ const SubmitUrl = () => {
       hideErrorDisplay()
       setSendStatus("")
     }
-    setDuplicateTagError(false)
+    setIsDuplicateTagError(false)
   }
 
   const optionNames = useMemo(() => {
@@ -309,7 +309,9 @@ const SubmitUrl = () => {
                 {showTagInput ? (
                   <input
                     className={`mt-3 w-full rounded-lg  border-[1.5px] p-3 ${
-                      duplicateTagError ? "border-red-500" : "border-shark-800"
+                      isDuplicateTagError
+                        ? "border-red-500"
+                        : "border-shark-800"
                     } bg-shark-950 px-2 placeholder:text-shark-400`}
                     onChange={(e) => handleTagInput(e.target.value)}
                     placeholder="Tag name..."
@@ -327,7 +329,7 @@ const SubmitUrl = () => {
                     selected={selectedNames}
                   />
                 )}
-                {duplicateTagError && (
+                {isDuplicateTagError && (
                   <div className="mt-1 text-xs text-red-500">
                     * Tag already exists
                   </div>
@@ -377,7 +379,7 @@ const SubmitUrl = () => {
                 <div className="my-6 md:mb-0">
                   <Slider
                     disabled={creatingTag}
-                    error={submissionError.showError}
+                    hasError={submissionError.showError}
                     onSubmit={onClickShareItHandler}
                     sending={sendStatus === "sending"}
                     sent={sendStatus === "sent"}

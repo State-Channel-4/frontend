@@ -47,6 +47,7 @@ const Toolbar = ({
   const labelText = useMemo(() => {
     // Map route to toolbar label
     const labelMap: { [path: string]: string } = {
+      "/browse": "Browse topics",
       "/landing": "Welcome to Channel 4",
       "/submit-url": "Add a website",
     }
@@ -90,7 +91,7 @@ const Toolbar = ({
         </div>
         <div className="min-w-0">
           <div className="truncate font-medium">{labelText}</div>
-          {isDiscover && !isLoading && (
+          {isDiscover && !isLoading && currentSite && (
             <button
               className="truncate text-xs text-shark-300"
               onClick={() => togglePopup("site-details")}
@@ -101,7 +102,7 @@ const Toolbar = ({
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-8">
-        {isDiscover && !isLoading && (
+        {isDiscover && !isLoading && currentSite && (
           <Popover>
             <PopoverTrigger
               className="relative flex cursor-pointer items-center gap-2 text-sm disabled:cursor-not-allowed"

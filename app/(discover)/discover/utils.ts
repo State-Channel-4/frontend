@@ -1,8 +1,6 @@
-import { TagMap } from "@/types"
-
 import { createProxyUrls } from "@/app/utils"
 
-export const fetchMix = async (tags: TagMap, limit: number) => {
+export const fetchMix = async (tags: string[], limit: number) => {
   const mixParams = createMixParams(tags, limit)
   try {
     const response = await fetch(
@@ -68,16 +66,13 @@ export const updateLikesInApi = async (
 
 export const feedbackMessages = {
   "not-found":
-    "Oops! We couldn't find any content... Let's try again — maybe some other tags.",
+    "Oops! We couldn't find any content with these tags... Try using a different one",
   loading: "Loading content...",
 }
 
-export const createMixParams = (tags: TagMap, mixLimit: number) => {
+export const createMixParams = (tags: string[], mixLimit: number) => {
   const mixParams = new URLSearchParams()
-
-  const tagIds =
-    tags.size > 0 ? Array.from(tags, ([tagId, tagName]) => tagId) : ["all"]
-  tagIds.forEach((tagId) => mixParams.append("tags", tagId))
+  tags.forEach((tag) => mixParams.append("tags", tag))
   mixParams.append("limit", mixLimit.toString())
 
   return mixParams
