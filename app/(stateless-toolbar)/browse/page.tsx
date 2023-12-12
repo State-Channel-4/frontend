@@ -14,7 +14,7 @@ const fetchTags = async () => {
 const Browse = async () => {
   const tags = await fetchTags()
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <div className="sticky top-0 z-10 bg-shark-950 p-4 md:p-10">
         <div className="w-fit bg-c4-gradient-green bg-clip-text text-[56px] font-extrabold leading-none text-transparent">
           Topics
@@ -24,7 +24,7 @@ const Browse = async () => {
           let’s start watching
         </div>
       </div>
-      <div className="h-full overflow-auto">
+      <div className="overflow-y-auto grow">
         {tags
           .filter(({ urls }) => !!urls.length)
           .map(({ name, urls }) => (
