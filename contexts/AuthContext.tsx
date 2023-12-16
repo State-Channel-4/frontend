@@ -117,8 +117,12 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
         },
         uiConfig: {
           appName: "Channel 4",
+          loginMethodsOrder: ["google", "discord", "facebook", "reddit"],
           logoDark: Channel4Icon.src,
           logoLight: Channel4Icon.src,
+          theme: {
+            primary: "#50C440",
+          },
         },
       })
       await client.initModal()
