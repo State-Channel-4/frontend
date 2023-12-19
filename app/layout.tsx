@@ -47,13 +47,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "h-screen bg-shark-950 font-sans antialiased",
-            fontSans.variable, fontDM.variable
+            "h-[100dvh] bg-shark-950 font-sans antialiased",
+            fontSans.variable,
+            fontDM.variable
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <AuthProvider>
-              <div className="flex h-screen flex-col">
+              <div className="flex h-full flex-col">
                 <AnalyticWrapper>{children}</AnalyticWrapper>
               </div>
             </AuthProvider>
