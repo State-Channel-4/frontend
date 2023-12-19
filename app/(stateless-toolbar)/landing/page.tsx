@@ -8,7 +8,7 @@ export default function Landing() {
   return (
     <main className="min-h-full bg-[hsl(124,61%,36%)] lg:h-full">
       <div className="container flex h-full max-w-7xl flex-col items-center justify-center space-y-16 px-3 py-8 lg:flex-row lg:justify-between lg:space-x-6 lg:px-16 xl:px-24">
-        <article className="flex flex-col items-center text-center">
+        <article className="flex flex-col items-center justify-center text-center h-full">
           <p className="font-dm font-medium tracking-wide xl:text-lg">
             THESE WEBSITES HAVE BEEN ADDED BY
           </p>
