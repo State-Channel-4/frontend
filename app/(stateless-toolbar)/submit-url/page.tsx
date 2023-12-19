@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/popover"
 import RequireAuth from "@/components/helper/RequireAuth"
 import Select from "@/app/(stateless-toolbar)/submit-url/components/TagSelect"
+import { isValidUrl } from "@/app/utils"
 
 import { SubmitSiteFrame } from "./components/SubmitSiteFrame"
 import Slider from "./components/slider"
@@ -34,6 +35,7 @@ const PLACEHOLDER_URL = {
 
 type WebsiteSubmissionError = {
   duplicateUrl: boolean
+  invalidUrl: boolean
   missingRequired: boolean
   showError: boolean
 }
@@ -63,6 +65,22 @@ const SubmitUrl = () => {
   const addSelected = (option: string) => {
     const tag = tags.find((tag: Tag) => tag.name === option)
     setSelectedTags((prev: Tag[]) => [...prev, tag!])
+  }
+
+  const checkSubmissionError = () => {
+    const invalidUrl = !isValidUrl(url.input)
+    const missingRequired = !hasRequired()
+    if (invalidUrl || missingRequired) {
+      setSubmissionError((prev: WebsiteSubmissionError) => ({
+        ...prev,
+        invalidUrl,
+        missingRequired: missingRequired,
+        showError: true,
+      }))
+      hideErrorDisplay()
+      return true
+    }
+    return false
   }
 
   const createTag = async () => {
@@ -107,6 +125,7 @@ const SubmitUrl = () => {
     setSubmissionError((prev: WebsiteSubmissionError) => ({
       ...prev,
       duplicateUrl: false,
+      invalidUrl: false,
     }))
   }
 
@@ -135,15 +154,7 @@ const SubmitUrl = () => {
   }
 
   const onClickShareItHandler = async () => {
-    if (!hasRequired()) {
-      setSubmissionError((prev: WebsiteSubmissionError) => ({
-        ...prev,
-        missingRequired: true,
-        showError: true,
-      }))
-      hideErrorDisplay()
-      return
-    }
+    if (checkSubmissionError()) return
     setSendStatus("sending")
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/url", {
       method: "POST",
@@ -207,8 +218,11 @@ const SubmitUrl = () => {
       return "* Url already exists"
     } else if (submissionError.missingRequired && !url.input) {
       return "* Url required"
+    } else if (submissionError.invalidUrl) {
+      return "* Invalid url format (must be https)"
+    } else {
+      return ""
     }
-    return ""
   }, [submissionError, url])
 
   useEffect(() => {
