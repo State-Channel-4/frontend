@@ -24,6 +24,7 @@ import Slider from "./components/slider"
 
 const PLACEHOLDER_ERROR: WebsiteSubmissionError = {
   duplicateUrl: false,
+  invalidUrl: false,
   missingRequired: false,
   showError: false,
 }
