@@ -4,7 +4,7 @@ import { siteConfig } from "@/config/site"
 
 export default function Loading() {
   return (
-    <main className="flex h-screen flex-col items-center justify-center gap-4">
+    <main className="flex h-[100dvh] flex-col items-center justify-center gap-4">
       <h1 className="text-5xl font-bold">{siteConfig.name}</h1>
       <p>Loading...</p>
       {/* <Image

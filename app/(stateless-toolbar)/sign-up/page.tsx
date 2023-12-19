@@ -3,22 +3,21 @@
 import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import BustOfWomanWithFlowers from "@/assets/bust-of-woman-with-flowers.svg"
+import Channel4IconBlack from "@/assets/channel-4-icon-black.svg"
 import { useEncryptedStore } from "@/store/encrypted"
-import { usePasswordStore } from "@/store/password"
-import { Wallet } from "ethers"
 
 import { siteConfig } from "@/config/site"
 import { Button } from "@/components/ui/button"
-
-import BustOfWomanWithFlowers from "../../assets/bust-of-woman-with-flowers.svg"
-import Channel4IconBlack from "../../assets/channel-4-icon-black.svg"
 
 const SignUp = () => {
   const router = useRouter()
   const [isKeyDownloaded, setIsKeyDownloaded] = useState(false)
   const [isWalletCreated, setIsWalletCreated] = useState(false)
-  const { password, updateUserId, updateToken, updatePassword } =
-    usePasswordStore()
+  /*
+  ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
+  const { updateUserId, updateToken } = useJwtStore()
+  */
   const [error, setError] = useState<string | null>(null)
   const { encrypted, createEncrypted } = useEncryptedStore()
   const [isLoading, setIsLoading] = useState(false)
@@ -46,11 +45,16 @@ const SignUp = () => {
   }
 
   const onPasswordChangeHandler = (e: { target: { value: string } }) => {
+    /*
+    ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
     updatePassword(e.target.value)
+    */
   }
 
   const clickCreateAccountHandler = async () => {
     setIsLoading(true)
+    /*
+    ** This is replaced with web3Auth in /components/main-menu.tsx Sign in / Sign up button
     const encryptedWallet = await createEncrypted(password!)
     if (encryptedWallet) {
       setIsWalletCreated(true)
@@ -71,6 +75,7 @@ const SignUp = () => {
         "There is already a wallet created internally. Please login and delete it to create a new one."
       )
     }
+    */
     setIsLoading(false)
   }
 

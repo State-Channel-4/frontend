@@ -1,18 +1,25 @@
-import { cn } from "@/lib/utils"
+import Link from "next/link"
 import { C4Content } from "@/types"
 import { ThumbsUpIcon } from "lucide-react"
-import Link from "next/link"
+
+import { cn } from "@/lib/utils"
+
 import { Button } from "./ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 interface LikeButtonProps {
-  signedIn: boolean,
-  likeOrUnlike: (arg0: string) => void
+  signedIn: boolean
+  likeOrUnlike: (contentId: string) => void
   site: C4Content | null
   userLikes: string[]
 }
 
-const LikeButton = ({ signedIn, likeOrUnlike, site, userLikes }: LikeButtonProps) => {
+const LikeButton = ({
+  signedIn,
+  likeOrUnlike,
+  site,
+  userLikes,
+}: LikeButtonProps) => {
   if (!site) return null
   const isLiked = userLikes.includes(site?._id)
 
@@ -31,17 +38,14 @@ const LikeButton = ({ signedIn, likeOrUnlike, site, userLikes }: LikeButtonProps
         )}
         aria-label="Like"
       />
-      <p>
-        {isLiked ? "Liked" : "Like"}
-      </p>
+      <p>{isLiked ? "Liked" : "Like"}</p>
       <p>•</p>
       <p>{site.likes}</p>
     </Button>
-  );
-
+  )
 
   if (signedIn) {
-    return <LikeButtonContent />;
+    return <LikeButtonContent />
   } else {
     return (
       <Popover>
@@ -59,9 +63,8 @@ const LikeButton = ({ signedIn, likeOrUnlike, site, userLikes }: LikeButtonProps
           </Link>
         </PopoverContent>
       </Popover>
-    );
+    )
   }
 }
 
 export default LikeButton
-
