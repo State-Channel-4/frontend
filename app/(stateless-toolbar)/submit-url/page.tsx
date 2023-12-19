@@ -244,7 +244,7 @@ const SubmitUrl = () => {
                     }))
                   }
                   onChange={(e) => handleUrlInput(e.target.value)}
-                  placeholder="Paste URL here"
+                  placeholder="https://example.com"
                   value={url.input}
                 />
                 {urlError && (
