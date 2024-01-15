@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useEffect } from "react"
 
@@ -23,5 +23,5 @@ export default function AnalyticWrapper({
       if (s.parentNode) s.parentNode.insertBefore(g, s)
     })()
   }, [])
-  return <div className="flex-1">{children}</div>
+  return <>{children}</>
 }

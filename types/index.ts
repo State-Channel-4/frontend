@@ -1,14 +1,16 @@
 export interface Tag {
   _id: string
   name: string
+  urls: string[]
 }
 
-export interface TagMap extends Map<string, Tag> {}
+export interface TagMap extends Map<string, Tag> { }
 
 export interface C4Content {
   _id: string
   title: string
   url: string
+  proxyUrl?: string
   submittedBy: string
   likes: number
   tags: Tag[]

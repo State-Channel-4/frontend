@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useEncryptedStore } from "@/store/encrypted"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 import { Copy } from "lucide-react"
 import { QRCodeSVG } from "qrcode.react"
 
@@ -16,7 +16,7 @@ const Account = () => {
   const [submittedURLs, setSubmittedURLs] = useState(0)
   const [likedURLs, setLikedURLs] = useState(0)
   const { address } = useEncryptedStore()
-  const { userId, token } = usePasswordStore()
+  const { userId, token } = useJwtStore()
   const [shownAddress, setShownAddress] = useState("No address found")
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePasswordStore } from "@/store/password"
+import { useJwtStore } from "@/store/jwt"
 
 import { siteConfig } from "@/config/site"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -11,11 +11,9 @@ import { MainNav } from "@/components/main-nav"
 import { SecondaryNav } from "./secondary-nav"
 
 export function SiteHeader() {
-  const { password, token, userId, updatePassword, updateToken, updateUserId } =
-    usePasswordStore()
+  const { token, userId, updateToken, updateUserId } = useJwtStore()
 
   const onLogOutClickHandler = () => {
-    updatePassword(null)
     updateToken(null)
     updateUserId(null)
   }
@@ -23,7 +21,7 @@ export function SiteHeader() {
   return (
     <header className="w-full border-b bg-background">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <MainNav items={siteConfig.mainNav} />
+        {/* <MainNav items={siteConfig.mainNav} /> */}
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
             <Link
@@ -72,8 +70,9 @@ export function SiteHeader() {
               </div>
             </Link>
             {/* <ThemeToggle /> */}
-            {!(password && userId && token) ? (
-              <SecondaryNav items={siteConfig.secondaryNav} />
+            {!(userId && token) ? (
+              // <SecondaryNav items={siteConfig.secondaryNav} />
+              <></>
             ) : (
               <Button variant="ghost" onClick={onLogOutClickHandler}>
                 <Icons.logout className="h-5 w-5" />

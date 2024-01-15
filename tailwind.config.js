@@ -13,7 +13,23 @@ module.exports = {
       },
     },
     extend: {
+      boxShadow: {
+        menuShadow:
+          "1px 5px 4px 0px #00000040 inset, 0px -1px 4px 0px #8B8B8B40 inset",
+      },
       colors: {
+        "c4-green": "#5BF34E",
+        "shark-50": "#f6f7f9",
+        "shark-100": "#edeef1",
+        "shark-200": "#d6dae1",
+        "shark-300": "#b2bac7",
+        "shark-400": "#8894a8",
+        "shark-500": "#6a778d",
+        "shark-600": "#546075",
+        "shark-700": "#454e5f",
+        "shark-800": "#3c4350",
+        "shark-900": "#353a45",
+        "shark-950": "#21242b",
         dark: "#151616",
         gray: "#282A2D",
         light: "#373A3E",
@@ -59,6 +75,12 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        dm: ["var(--font-dm)", ...fontFamily.sans],
+      },
+      fontSize: {
+        lg: ["18px", "21.6px"],
+        sm: ["14px", "15.4px"],
+        xl: ["20px", "24px"],
       },
       keyframes: {
         "accordion-down": {
@@ -79,8 +101,12 @@ module.exports = {
           "linear-gradient(77.41deg, #FB2BFF -5.41%, #E5F344 21.24%, #37FF4B 47.31%, #4D89FF 74.54%, #8F00FF 105.82%)",
         "c4-gradient-separator":
           "linear-gradient(256.85deg, #FB2BFF 9.09%, #E5F344 38.43%, #37FF4B 67.14%, #4D89FF 97.12%, #8F00FF 131.56%)",
+        "c4-gradient-submitter":
+          "linear-gradient(to bottom, #FFF 19.28%, #37FF4B 91.76%)",
         "c4-gradient-green":
           "linear-gradient(91.38deg, #E5F344 -4.98%, #37FF4B 98.82%)",
+        "c4-gradient-green-rev":
+          "linear-gradient(91.38deg, #37FF4B  -4.98%, #E5F344 98.82%)",
         "c4-gradient-blue":
           "linear-gradient(91.38deg, #4D89FF -4.98%, #8F00FF 98.82%)",
       },

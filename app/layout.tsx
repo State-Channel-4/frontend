@@ -1,19 +1,13 @@
-import "@/styles/globals.css";
-import { Metadata } from "next";
+import "@/styles/globals.css"
+import { Metadata } from "next"
+import { AuthProvider } from "@/contexts/AuthContext"
 
+import { siteConfig } from "@/config/site"
+import { fontDM, fontSans } from "@/lib/fonts"
+import { cn } from "@/lib/utils"
+import { ThemeProvider } from "@/components/theme-provider"
 
-
-import { siteConfig } from "@/config/site";
-import { fontSans } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
-import Feedback from "@/components/feedback";
-import { SiteHeader } from "@/components/site-header";
-import { ThemeProvider } from "@/components/theme-provider";
-
-
-
-import AnalyticWrapper from "./analytics";
-
+import AnalyticWrapper from "./analytics"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://app.channel4.wtf"),
@@ -53,16 +47,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "h-screen bg-background font-sans antialiased",
-            fontSans.variable
+            "h-[100dvh] bg-shark-950 font-sans antialiased",
+            fontSans.variable,
+            fontDM.variable
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <div className="relative flex h-screen flex-col">
-              <SiteHeader />
-              <AnalyticWrapper>{children}</AnalyticWrapper>
-              <Feedback />
-            </div>
+            <AuthProvider>
+              <div className="flex h-full flex-col">
+                <AnalyticWrapper>{children}</AnalyticWrapper>
+              </div>
+            </AuthProvider>
           </ThemeProvider>
         </body>
       </html>
